@@ -11,7 +11,6 @@ import {
   X, 
   ShoppingCart, 
   Trash2, 
-  ChevronLeft,
   ChevronRight,
   Palette
 } from "lucide-react";
@@ -24,7 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 
-// Professional SVG Icons for Social Media
+// SVG Icons for Social Media
 const SocialIcons = {
   facebook: (
     <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
@@ -90,141 +89,165 @@ interface ServiceCategory {
   services: ServiceItem[];
 }
 
-// All services data with images
+// جميع خدمات الكهرباء - 42 خدمة
+const electricityServices: ServiceItem[] = [
+  // الأعمال الصغرى
+  { id: "e1", category: "الكهرباء", name: "تغيير لمبة شمعة أو حباب داخل ثريا أو أبليك", price: "5 - 10 ريال", image: "/manus-storage/electricity-01-bulb-candle_5641c379.png" },
+  { id: "e2", category: "الكهرباء", name: "تركيب غطاء فيش أو جلبة حماية للأطفال", price: "5 - 10 ريال", image: "/manus-storage/electricity-02-socket-cover_134a02d8.png" },
+  { id: "e3", category: "الكهرباء", name: "تغيير فيوز فيش جداري أو وصلة", price: "10 - 20 ريال", image: "/manus-storage/electricity-03-fuse_f2492cc1.png" },
+  { id: "e4", category: "الكهرباء", name: "توصيل أو تغيير روزتة أو كلبس تجميع", price: "10 - 20 ريال", image: "/manus-storage/electricity-04-connector_00f58910.png" },
+  { id: "e5", category: "الكهرباء", name: "توصيل سلك شاشة أو دش بالفيش", price: "15 - 25 ريال", image: "/manus-storage/electricity-05-coaxial-cable_ecb987b2.png" },
+  { id: "e6", category: "الكهرباء", name: "تثبيت حوامل سلكية أو كلبسات جدارية", price: "20 - 40 ريال", image: "/manus-storage/electricity-06-cable-clips_115fde83.png" },
+  { id: "e7", category: "الكهرباء", name: "تركيب جلبة تمديد بلاستيك أو ألمنيوم للمتر", price: "10 - 15 ريال", image: "/manus-storage/electricity-07-casing-tube_725f5940.png" },
+  { id: "e8", category: "الكهرباء", name: "تركيب محول ترانس لإضاءة الليد", price: "20 - 35 ريال", image: "/manus-storage/electricity-08-transformer_7397c29c.png" },
+  { id: "e9", category: "الكهرباء", name: "تركيب وتثبيت حساس ضوئي لإضاءة السور", price: "40 - 70 ريال", image: "/manus-storage/electricity-09-photocell_920cb34c.png" },
+  // الصيانة والأعطال
+  { id: "e10", category: "الكهرباء", name: "كشف الالتماس وتتبع الأعطال مع الأجهزة", price: "150 - 250 ريال", image: "/manus-storage/electricity-10-circuit-breaker_0471d7da.png" },
+  { id: "e11", category: "الكهرباء", name: "إصلاح شورت الكهرباء وهبوط الفولت", price: "120 - 200 ريال", image: "/manus-storage/electricity-11-spotlight_3201677d.png" },
+  { id: "e12", category: "الكهرباء", name: "تغيير قاطع فرعي", price: "30 - 50 ريال", image: "/manus-storage/electricity-12-led-strip_9c7b75cb.png" },
+  { id: "e13", category: "الكهرباء", name: "تغيير قاطع رئيسي مجمع", price: "100 - 150 ريال", image: "/manus-storage/electricity-13-led-profile_e2235f81.png" },
+  { id: "e14", category: "الكهرباء", name: "إصلاح خط تكييف محروق أو مفصول", price: "100 - 180 ريال", image: "/manus-storage/electricity-14-wall-lamp_03e17256.png" },
+  { id: "e15", category: "الكهرباء", name: "ترتيب وتوزيع أحمال الطبلون", price: "150 - 300 ريال", image: "/manus-storage/electricity-15-pendant-light_06f8db28.png" },
+  { id: "e16", category: "الكهرباء", name: "إعادة تأريض وإصلاح الأرضي", price: "150 - 250 ريال", image: "/manus-storage/electricity-16-chandelier_8464e54d.png" },
+  // الإضاءة والديكورات
+  { id: "e17", category: "الكهرباء", name: "تركيب سبوت لايت أو داون لايت بفتحة جاهزة", price: "10 - 15 ريال", image: "/manus-storage/electricity-17-mirror-light_1bc165c9.png" },
+  { id: "e18", category: "الكهرباء", name: "قص فتحة جص وتركيب سبوت لايت", price: "20 - 30 ريال", image: "/manus-storage/electricity-18-garden-lights_795a4ccc.png" },
+  { id: "e19", category: "الكهرباء", name: "تركيب شريط إضاءة مخفية ليد للمتر", price: "10 - 15 ريال", image: "/manus-storage/electricity-19-smart-switch_6b6c201a.png" },
+  { id: "e20", category: "الكهرباء", name: "تركيب ليد بروفايل بالمتر", price: "25 - 45 ريال", image: "/manus-storage/electricity-20-3way-switch_ad7ed7f1.png" },
+  { id: "e21", category: "الكهرباء", name: "تركيب أبليك جداري داخلي أو خارجي", price: "25 - 40 ريال", image: "/manus-storage/electricity-21-timer_bba43663.png" },
+  { id: "e22", category: "الكهرباء", name: "تركيب نجفة صغيرة أو معلقة", price: "50 - 80 ريال", image: "/manus-storage/electricity-22-doorbell_b0b7561e.png" },
+  { id: "e23", category: "الكهرباء", name: "تركيب ثريا كبيرة متعددة الأدوار", price: "150 - 350 ريال", image: "/manus-storage/electricity-23-exhaust-fan_af0ee6cc.png" },
+  { id: "e24", category: "الكهرباء", name: "تركيب مرايا مضيئة", price: "50 - 90 ريال", image: "/manus-storage/electricity-24-ceiling-fan_45ce3cd9.png" },
+  { id: "e25", category: "الكهرباء", name: "تركيب إضاءة حدائق وكشافات", price: "30 - 60 ريال", image: "/manus-storage/electricity-25-electrical-box_b4f78bbc.png" },
+  // المفاتيح والأنظمة الذكية
+  { id: "e26", category: "الكهرباء", name: "تركيب مفتاح أو فيش عادي", price: "15 - 20 ريال", image: "/manus-storage/electricity-26-cable-run_1f421a45.png" },
+  { id: "e27", category: "الكهرباء", name: "تركيب مفتاح ذكي أو ديمر تعتيم", price: "25 - 50 ريال", image: "/manus-storage/electricity-27-panel-assembly_d4e603b3.png" },
+  { id: "e28", category: "الكهرباء", name: "تركيب مفتاح دركسون ثلاثي الاتجاهات", price: "30 - 50 ريال", image: "/manus-storage/electricity-28-ac-line-repair_fec7427d.png" },
+  { id: "e29", category: "الكهرباء", name: "تركيب تايمر ميكانيكي أو إلكتروني", price: "80 - 150 ريال", image: "/manus-storage/electricity-29-grounding-rod_075b5323.png" },
+  // التأسيس والأجهزة المساندة
+  { id: "e30", category: "الكهرباء", name: "تركيب جرس عادي أو جرس كاميرا ذكي", price: "40 - 100 ريال", image: "/manus-storage/electricity-30-main-breaker-box_2669240e.png" },
+  { id: "e31", category: "الكهرباء", name: "تركيب مروحة شفط جدارية أو سقفية", price: "40 - 80 ريال", image: "/manus-storage/electricity-31-ac-line-extension_6e8f3351.png" },
+  { id: "e32", category: "الكهرباء", name: "تركيب مروحة سقف", price: "60 - 100 ريال", image: "/manus-storage/electricity-32-fault-detection_d7d08e73.png" },
+  { id: "e33", category: "الكهرباء", name: "تأسيس نقطة كهرباء علبة ومواسير وسحب سلك", price: "35 - 50 ريال", image: "/manus-storage/electricity-33-voltage-drop_a42ee2af.png" },
+  { id: "e34", category: "الكهرباء", name: "سحب كابل رئيسي من الطبلون للغرفة", price: "80 - 200 ريال", image: "/manus-storage/electricity-34-load-balancing_badea209.png" },
+  { id: "e35", category: "الكهرباء", name: "تجميع وترتيب طبلون كهرباء جديد", price: "250 - 500 ريال", image: "/manus-storage/electricity-35-grounding-system_cdd0baac.png" },
+  { id: "e36", category: "الكهرباء", name: "تأسيس وتمديد خطوط السبليت كهرباء", price: "100 - 180 ريال", image: "/manus-storage/electricity-36-split-ac-wiring_022ef2ab.png" },
+  { id: "e37", category: "الكهرباء", name: "تمديد الخطوط الرئيسية", price: "150 - 300 ريال", image: "/manus-storage/electricity-37-main-cable_e960955e.png" },
+];
+
+// جميع خدمات السباكة - 42 خدمة
+const plumbingServices: ServiceItem[] = [
+  // الأعمال الصغرى
+  { id: "p1", category: "السباكة", name: "وضع تفلون ومعجون على الوصلات وتثبيتها", price: "10 - 20 ريال", image: "/manus-storage/plumbing-01-teflon-tape_cce54b57.png" },
+  { id: "p2", category: "السباكة", name: "تغيير جلبة أو وجه خلاط", price: "15 - 25 ريال", image: "/manus-storage/plumbing-02-faucet-gasket_783035d3.png" },
+  { id: "p3", category: "السباكة", name: "تنظيف وإزالة الكلس من فلاتر المغاسل", price: "15 - 25 ريال", image: "/manus-storage/plumbing-03-filter-cleaning_457f92da.png" },
+  { id: "p4", category: "السباكة", name: "تركيب غطاء صفاية ستانلس أو سدادة ريحة", price: "15 - 25 ريال", image: "/manus-storage/plumbing-04-sink-strainer_120a5459.png" },
+  { id: "p5", category: "السباكة", name: "تغيير ليات مغسلة أو كرسي أو تسخين", price: "20 - 35 ريال", image: "/manus-storage/plumbing-05-faucet-core_47a730db.png" },
+  { id: "p6", category: "السباكة", name: "تركيب أو تغيير قلب الشطاف", price: "20 - 30 ريال", image: "/manus-storage/plumbing-06-shower-head_2be1a728.png" },
+  { id: "p7", category: "السباكة", name: "تغيير رأس الدش سماعة الدش", price: "20 - 30 ريال", image: "/manus-storage/plumbing-07-drain-gasket_6c945994.png" },
+  { id: "p8", category: "السباكة", name: "تغيير جلبة الصرف التلسكوبية الجرجوري", price: "25 - 40 ريال", image: "/manus-storage/plumbing-08-odor-trap_be307083.png" },
+  { id: "p9", category: "السباكة", name: "تركيب رداد منع الرائحة أو الرجوع", price: "30 - 50 ريال", image: "/manus-storage/plumbing-09-angle-valve_31bea105.png" },
+  { id: "p10", category: "السباكة", name: "تثبيت حلقة سيليكون لمنع تسريب الكرسي", price: "40 - 60 ريال", image: "/manus-storage/plumbing-10-kitchen-faucet_fb8cb372.png" },
+  // الصيانة والتسريبات
+  { id: "p11", category: "السباكة", name: "كشف تسربات بالمعاينة والفحص", price: "100 - 150 ريال", image: "/manus-storage/plumbing-11-hidden-faucet_9482af29.png" },
+  { id: "p12", category: "السباكة", name: "تغيير قلب حنفية أو خلاط أو سيفون", price: "40 - 70 ريال", image: "/manus-storage/plumbing-12-toilet-seat_171488b0.png" },
+  { id: "p13", category: "السباكة", name: "إصلاح تسريب تحت الحوض أو المغسلة", price: "80 - 120 ريال", image: "/manus-storage/plumbing-13-marble-sink_743182e8.png" },
+  { id: "p14", category: "السباكة", name: "إصلاح ماكينة سيفون دفن أو عادي", price: "80 - 150 ريال", image: "/manus-storage/plumbing-14-hanging-toilet_c4f8acaf.png" },
+  { id: "p15", category: "السباكة", name: "معالجة تسريب كرسي عربي أو فرنجي", price: "100 - 180 ريال", image: "/manus-storage/plumbing-15-shower-cabin_34704fb2.png" },
+  { id: "p16", category: "السباكة", name: "تسليك انسداد مجاري داخلي صفاية أو حوض", price: "100 - 250 ريال", image: "/manus-storage/plumbing-16-jacuzzi_377bf56c.png" },
+  { id: "p17", category: "السباكة", name: "تسليك خط مجاري رئيسي بالسستة", price: "200 - 400 ريال", image: "/manus-storage/plumbing-17-washing-machine_576a99de.png" },
+  // الأدوات الصحية والتشطيبات
+  { id: "p18", category: "السباكة", name: "تركيب شطاف أو محبس زاوية", price: "20 - 40 ريال", image: "/manus-storage/plumbing-18-heater-element_77e8a84c.png" },
+  { id: "p19", category: "السباكة", name: "تركيب خلاط دش أو مغسلة أو مجلى", price: "50 - 80 ريال", image: "/manus-storage/plumbing-19-water-heater_30e37769.png" },
+  { id: "p20", category: "السباكة", name: "تركيب خلاط مخفي دفن", price: "120 - 220 ريال", image: "/manus-storage/plumbing-20-hidden-heater_21d37192.png" },
+  { id: "p21", category: "السباكة", name: "تركيب كرسي فرنجي عادي", price: "120 - 180 ريال", image: "/manus-storage/plumbing-21-filter-cartridge_8b55050a.png" },
+  { id: "p22", category: "السباكة", name: "تركيب مغسلة ديكور رخام أو معلقة", price: "120 - 250 ريال", image: "/manus-storage/plumbing-22-water-filter_c1f6e5cd.png" },
+  { id: "p23", category: "السباكة", name: "تركيب كرسي فرنجي معلق مع الصندوق", price: "250 - 450 ريال", image: "/manus-storage/plumbing-23-flowmeter_9e170b15.png" },
+  { id: "p24", category: "السباكة", name: "تركيب شاور بكس أو كابينة دش", price: "200 - 400 ريال", image: "/manus-storage/plumbing-24-water-pump_353790f3.png" },
+  { id: "p25", category: "السباكة", name: "تركيب جاكوزي أو بانيو عادي", price: "250 - 500 ريال", image: "/manus-storage/plumbing-25-central-filter_b1997fd6.png" },
+  // السخانات والأجهزة المنزلية
+  { id: "p26", category: "السباكة", name: "توصيل غسالة ملابس أو صحون", price: "60 - 100 ريال", image: "/manus-storage/plumbing-26-tank-setup_81b9e26d.png" },
+  { id: "p27", category: "السباكة", name: "تغيير شمعة سخان أو هيتر", price: "70 - 120 ريال", image: "/manus-storage/plumbing-27-kitchen-installation_18dc8752.png" },
+  { id: "p28", category: "السباكة", name: "تركيب سخان مياه عادي من 40 إلى 80 ليتر", price: "80 - 130 ريال", image: "/manus-storage/plumbing-28-bathroom-installation_001d5bef.png" },
+  { id: "p29", category: "السباكة", name: "تركيب سخان مخفي أو أفقي أو مركزي صغير", price: "150 - 280 ريال", image: "/manus-storage/plumbing-29-leak-detection_9be68d5a.png" },
+  // المضخات والخزانات والتأسيس
+  { id: "p30", category: "السباكة", name: "تغيير طقم مراحل فلتر المياه", price: "50 - 80 ريال", image: "/manus-storage/plumbing-30-drain-cleaning_b5e0b99a.png" },
+  { id: "p31", category: "السباكة", name: "تركيب فلتر مياه منزلي من 5 إلى 7 مراحل", price: "100 - 150 ريال", image: "/manus-storage/plumbing-31-main-drain_ec2ab22b.png" },
+  { id: "p32", category: "السباكة", name: "تركيب جهاز فلوماك أو أوتوماتيك مضخة", price: "80 - 120 ريال", image: "/manus-storage/plumbing-32-siphon-repair_e8e902d6.png" },
+  { id: "p33", category: "السباكة", name: "تركيب مضخة مياه دينامو مع الأوتوماتيك", price: "150 - 250 ريال", image: "/manus-storage/plumbing-33-toilet-repair_b41dbaa9.png" },
+  { id: "p34", category: "السباكة", name: "تركيب فلتر مركزي جامبو للخزان", price: "150 - 250 ريال", image: "/manus-storage/plumbing-34-faucet-leak_0520196b.png" },
+  { id: "p35", category: "السباكة", name: "تركيب أو تحديد شبكة خزان علوي", price: "300 - 600 ريال", image: "/manus-storage/plumbing-35-pipe-leak_f42ba702.png" },
+  { id: "p36", category: "السباكة", name: "تأسيس مطبخ كامل تغذية وصرف", price: "500 - 900 ريال", image: "/manus-storage/plumbing-36-silicone-seal_18a35d67.png" },
+  { id: "p37", category: "السباكة", name: "تأسيس حمام كامل تغذية وصرف", price: "800 - 1500 ريال", image: "/manus-storage/plumbing-37-dishwasher_d5a57eee.png" },
+];
+
+// خدمات التكييف
+const acServices: ServiceItem[] = [
+  { id: "ac1", category: "التكييف", name: "غسيل مكيف سبليت", price: "120 ريال", image: "/manus-storage/ac-01-split-unit_ed3c8716.png" },
+  { id: "ac2", category: "التكييف", name: "تعبئة فريون كامل", price: "250 ريال", image: "/manus-storage/ac-02-window-ac_cf816a2b.png" },
+  { id: "ac3", category: "التكييف", name: "تركيب مكيف سبليت", price: "350 ريال", image: "/manus-storage/ac-03-ac-cleaning_f01a6023.png" },
+  { id: "ac4", category: "التكييف", name: "صيانة مكيف شباك", price: "80 ريال", image: "/manus-storage/ac-04-refrigerant_ece9b064.png" },
+  { id: "ac5", category: "التكييف", name: "تعبئة فريون تكميلي", price: "150 ريال", image: "/manus-storage/ac-05-ac-installation_e2b1f205.png" },
+];
+
+// خدمات الكاميرات والأنظمة
+const cameraServices: ServiceItem[] = [
+  { id: "cam1", category: "الكاميرات", name: "تركيب كاميرة مراقبة داخلية أو خارجية", price: "40 - 70 ريال", image: "/manus-storage/camera-01-cctv_2025efe5.png" },
+  { id: "cam2", category: "الكاميرات", name: "تركيب كاميرة مراقبة متحركة PTZ", price: "80 - 150 ريال", image: "/manus-storage/camera-02-ptz-camera_75e727b3.png" },
+  { id: "cam3", category: "الكاميرات", name: "تركيب كاميرة شحن لاسلكية أو طاقة شمسية", price: "60 - 100 ريال", image: "/manus-storage/camera-03-wireless-camera_743acc53.png" },
+  { id: "cam4", category: "الكاميرات", name: "تركيب جرس باب ذكي مزود بكاميرة", price: "50 - 90 ريال", image: "/manus-storage/camera-04-smart-doorbell_3c0d6aac.png" },
+  { id: "cam5", category: "الكاميرات", name: "تركيب وعرض كاميرات على الشاشة", price: "80 - 150 ريال", image: "/manus-storage/camera-05-dvr-system_ad6ed3e3.png" },
+  { id: "cam6", category: "الكاميرات", name: "تركيب قفل باب ذكي", price: "300 ريال", image: "/manus-storage/camera-06-smart-lock_90cd2fcf.png" },
+  { id: "cam7", category: "الكاميرات", name: "تركيب انتركوم منزلي", price: "250 ريال", image: "/manus-storage/camera-07-intercom_97264e27.png" },
+];
+
+// خدمات الديكور والتركيبات
+const decorServices: ServiceItem[] = [
+  { id: "dec1", category: "الديكور", name: "تركيب لوحات جدارية صغيرة أو متوسطة", price: "15 - 30 ريال", image: "/manus-storage/decor-01-wall-art_b47d625c.png" },
+  { id: "dec2", category: "الديكور", name: "تركيب أرفف خشبية", price: "30 - 60 ريال", image: "/manus-storage/decor-02-wall-shelf_04adbb28.png" },
+  { id: "dec3", category: "الديكور", name: "تركيب حامل شاشة جداري", price: "50 - 100 ريال", image: "/manus-storage/decor-03-tv-mount_5175c5e4.png" },
+  { id: "dec4", category: "الديكور", name: "تركيب ستائر رول", price: "40 - 70 ريال", image: "/manus-storage/decor-04-curtains_5bd2ead9.png" },
+  { id: "dec5", category: "الديكور", name: "تركيب مرايا جدارية", price: "40 - 80 ريال", image: "/manus-storage/decor-05-mirror_af6d8b39.png" },
+  { id: "dec6", category: "الديكور", name: "تركيب ساعات جدارية ديكورية", price: "20 - 40 ريال", image: "/manus-storage/decor-06-wall-clock_5b82ef99.png" },
+  { id: "dec7", category: "الديكور", name: "تركيب تعليقات وديكورات جدارية", price: "30 - 70 ريال", image: "/manus-storage/decor-07-hanging-decor_727749f1.png" },
+  { id: "dec8", category: "الديكور", name: "تركيب وتثبيت عام", price: "25 - 45 ريال", image: "/manus-storage/decor-08-wall-mounting_22e5ff95.png" },
+];
+
 const SERVICES_DATA: ServiceCategory[] = [
   {
     id: "electricity",
     title: "خدمات الكهرباء",
     icon: <Zap className="w-8 h-8" />,
     color: "from-yellow-500 to-orange-600",
-    services: [
-      { id: "e1", category: "الكهرباء", name: "تغيير لمبة شمعة / حباب داخل ثريا أو أبليك", price: "5 - 10 ريال", image: "/manus-storage/electricity-01-bulb-candle_5641c379.png" },
-      { id: "e2", category: "الكهرباء", name: "تركيب غطاء فيش / جلبة حماية للأطفال", price: "5 - 10 ريال", image: "/manus-storage/electricity-02-socket-cover_134a02d8.png" },
-      { id: "e3", category: "الكهرباء", name: "تغيير فيوز فيش جداري أو وصلة", price: "10 - 20 ريال", image: "/manus-storage/electricity-03-fuse_f2492cc1.png" },
-      { id: "e4", category: "الكهرباء", name: "توصيل أو تغيير روزتة / كلبس تجميع", price: "10 - 20 ريال", image: "/manus-storage/electricity-04-connector_00f58910.png" },
-      { id: "e5", category: "الكهرباء", name: "توصيل سلك شاشة / دش (RG6) بالفيش", price: "15 - 25 ريال", image: "/manus-storage/electricity-05-coaxial-cable_ecb987b2.png" },
-      { id: "e6", category: "الكهرباء", name: "تثبيت حوامل سلكية / كلبسات جدارية", price: "20 - 40 ريال", image: "/manus-storage/electricity-06-cable-clips_115fde83.png" },
-      { id: "e7", category: "الكهرباء", name: "تركيب جلبة تمديد بلاستيك/ألمنيوم (Casing) للمتر", price: "10 - 15 ريال", image: "/manus-storage/electricity-07-casing-tube_725f5940.png" },
-      { id: "e8", category: "الكهرباء", name: "تركيب محول ترانس (Transformer) لإضاءة الليد", price: "20 - 35 ريال", image: "/manus-storage/electricity-08-transformer_7397c29c.png" },
-      { id: "e9", category: "الكهرباء", name: "تركيب وتثبيت حساس ضوئي (Photocell) لإضاءة السور", price: "40 - 70 ريال", image: "/manus-storage/electricity-09-photocell_920cb34c.png" },
-      { id: "e10", category: "الكهرباء", name: "كشف الالتماس وتتبع الأعطال (شامل الأجهزة)", price: "150 - 250 ريال", image: "/manus-storage/electricity-10-circuit-breaker_0471d7da.png" },
-      { id: "e11", category: "الكهرباء", name: "إصلاح شورت الكهرباء وهبوط الفولت", price: "120 - 200 ريال", image: "/manus-storage/electricity-11-spotlight_3201677d.png" },
-      { id: "e12", category: "الكهرباء", name: "تغيير قاطع فرعي", price: "30 - 50 ريال", image: "/manus-storage/electricity-12-led-strip_9c7b75cb.png" },
-      { id: "e13", category: "الكهرباء", name: "تغيير قاطع رئيسي (مجمع)", price: "100 - 150 ريال", image: "/manus-storage/electricity-13-led-profile_e2235f81.png" },
-      { id: "e14", category: "الكهرباء", name: "إصلاح خط تكييف محروق أو مفصول", price: "100 - 180 ريال", image: "/manus-storage/electricity-14-wall-lamp_03e17256.png" },
-      { id: "e15", category: "الكهرباء", name: "ترتيب وتوزيع أحمال الطبلون", price: "150 - 300 ريال", image: "/manus-storage/electricity-15-pendant-light_06f8db28.png" },
-      { id: "e16", category: "الكهرباء", name: "إعادة تأريض وإصلاح الأرضي", price: "150 - 250 ريال", image: "/manus-storage/electricity-16-chandelier_8464e54d.png" },
-      { id: "e17", category: "الكهرباء", name: "تركيب سبوت لايت أو داون لايت (فتحة جاهزة)", price: "10 - 15 ريال", image: "/manus-storage/electricity-17-mirror-light_1bc165c9.png" },
-      { id: "e18", category: "الكهرباء", name: "قص فتحة جص + تركيب سبوت لايت", price: "20 - 30 ريال", image: "/manus-storage/electricity-18-garden-lights_795a4ccc.png" },
-      { id: "e19", category: "الكهرباء", name: "تركيب شريط إضاءة مخفية (ليد) للمتر", price: "10 - 15 ريال", image: "/manus-storage/electricity-19-smart-switch_6b6c201a.png" },
-      { id: "e20", category: "الكهرباء", name: "تركيب ليد بروفايل (Profile LED) بالمتر", price: "25 - 45 ريال", image: "/manus-storage/electricity-20-3way-switch_ad7ed7f1.png" },
-      { id: "e21", category: "الكهرباء", name: "تركيب أبليك جداري داخلي أو خارجي", price: "25 - 40 ريال", image: "/manus-storage/electricity-21-timer_bba43663.png" },
-      { id: "e22", category: "الكهرباء", name: "تركيب نجفة صغيرة / معلقة", price: "50 - 80 ريال", image: "/manus-storage/electricity-22-doorbell_b0b7561e.png" },
-      { id: "e23", category: "الكهرباء", name: "تركيب ثريا كبيرة / متعددة الأدوار", price: "150 - 350 ريال", image: "/manus-storage/electricity-23-exhaust-fan_af0ee6cc.png" },
-      { id: "e24", category: "الكهرباء", name: "تركيب مرايا مضيئة", price: "50 - 90 ريال", image: "/manus-storage/electricity-24-ceiling-fan_45ce3cd9.png" },
-      { id: "e25", category: "الكهرباء", name: "تركيب إضاءة حدائق وكشافات", price: "30 - 60 ريال", image: "/manus-storage/electricity-25-electrical-box_b4f78bbc.png" },
-      { id: "e26", category: "الكهرباء", name: "تركيب مفتاح / فيش عادي", price: "15 - 20 ريال", image: "/manus-storage/electricity-26-cable-run_1f421a45.png" },
-      { id: "e27", category: "الكهرباء", name: "تركيب مفتاح ذكي (Smart Switch) أو ديمر تعتيم", price: "25 - 50 ريال", image: "/manus-storage/electricity-27-panel-assembly_d4e603b3.png" },
-      { id: "e28", category: "الكهرباء", name: "تركيب مفتاح دركسون (3 اتجاهات)", price: "30 - 50 ريال", image: "/manus-storage/electricity-28-ac-line-repair_fec7427d.png" },
-      { id: "e29", category: "الكهرباء", name: "تركيب تايمر ميكانيكي/إلكتروني", price: "80 - 150 ريال", image: "/manus-storage/electricity-29-grounding-rod_075b5323.png" },
-      { id: "e30", category: "الكهرباء", name: "تركيب جرس عادي أو جرس كاميرا ذكي", price: "40 - 100 ريال", image: "/manus-storage/electricity-30-main-breaker-box_2669240e.png" },
-      { id: "e31", category: "الكهرباء", name: "تركيب مروحة شفط جدارية / سقفية", price: "40 - 80 ريال", image: "/manus-storage/electricity-31-ac-line-extension_6e8f3351.png" },
-      { id: "e32", category: "الكهرباء", name: "تركيب مروحة سقف", price: "60 - 100 ريال", image: "/manus-storage/electricity-32-fault-detection_d7d08e73.png" },
-      { id: "e33", category: "الكهرباء", name: "تأسيس النقطة (علبة + مواسير + سحب سلك)", price: "35 - 50 ريال", image: "/manus-storage/electricity-33-voltage-drop_a42ee2af.png" },
-      { id: "e34", category: "الكهرباء", name: "سحب كابل رئيسي (من الطبلون للغرفة)", price: "80 - 200 ريال", image: "/manus-storage/electricity-34-load-balancing_badea209.png" },
-      { id: "e35", category: "الكهرباء", name: "تجميع وترتيب طبلون كهرباء جديد", price: "250 - 500 ريال", image: "/manus-storage/electricity-35-grounding-system_cdd0baac.png" },
-      { id: "e36", category: "الكهرباء", name: "تأسيس وتمديد خطوط السبليت (كهرباء)", price: "100 - 180 ريال", image: "/manus-storage/electricity-36-split-ac-wiring_022ef2ab.png" },
-      { id: "e37", category: "الكهرباء", name: "تمديد الخطوط الرئيسية", price: "150 - 300 ريال", image: "/manus-storage/electricity-37-main-cable_e960955e.png" },
-    ]
+    services: electricityServices
   },
   {
     id: "plumbing",
     title: "خدمات السباكة",
     icon: <Droplets className="w-8 h-8" />,
     color: "from-blue-500 to-cyan-600",
-    services: [
-      { id: "p1", category: "السباكة", name: "وضع تفلون ومعجون على الوصلات وتثبيتها", price: "10 - 20 ريال", image: "/manus-storage/plumbing-01-teflon-tape_cce54b57.png" },
-      { id: "p2", category: "السباكة", name: "تغيير جلبه / وجه خلاط (Gasket)", price: "15 - 25 ريال", image: "/manus-storage/plumbing-02-faucet-gasket_783035d3.png" },
-      { id: "p3", category: "السباكة", name: "تنظيف وإزالة الكلس من فلاتر المغاسل", price: "15 - 25 ريال", image: "/manus-storage/plumbing-03-filter-cleaning_457f92da.png" },
-      { id: "p4", category: "السباكة", name: "تركيب غطاء صفاية ستانلس أو سدادة ريحة", price: "15 - 25 ريال", image: "/manus-storage/plumbing-04-sink-strainer_120a5459.png" },
-      { id: "p5", category: "السباكة", name: "تغيير ليّ مغسلة / ليّ كرسي / ليّ تسخين", price: "20 - 35 ريال", image: "/manus-storage/plumbing-05-faucet-core_47a730db.png" },
-      { id: "p6", category: "السباكة", name: "تركيب أو تغيير قلب الشطاف", price: "20 - 30 ريال", image: "/manus-storage/plumbing-06-shower-head_2be1a728.png" },
-      { id: "p7", category: "السباكة", name: "تغيير رأس الدش (سماعة الدش)", price: "20 - 30 ريال", image: "/manus-storage/plumbing-07-drain-gasket_6c945994.png" },
-      { id: "p8", category: "السباكة", name: "تغيير جلبة الصرف التلسكوبية (الجرجوري)", price: "25 - 40 ريال", image: "/manus-storage/plumbing-08-odor-trap_be307083.png" },
-      { id: "p9", category: "السباكة", name: "تركيب رداد منع الرائحة أو الرجوع", price: "30 - 50 ريال", image: "/manus-storage/plumbing-09-angle-valve_31bea105.png" },
-      { id: "p10", category: "السباكة", name: "تثبيت حلقة سيليكون لمنع تسريب الكرسي", price: "40 - 60 ريال", image: "/manus-storage/plumbing-10-kitchen-faucet_fb8cb372.png" },
-      { id: "p11", category: "السباكة", name: "كشف تسربات بالمعاينة والفحص", price: "100 - 150 ريال", image: "/manus-storage/plumbing-11-hidden-faucet_9482af29.png" },
-      { id: "p12", category: "السباكة", name: "تغيير قلب حنفية / خلاط / سيفون", price: "40 - 70 ريال", image: "/manus-storage/plumbing-12-toilet-seat_171488b0.png" },
-      { id: "p13", category: "السباكة", name: "إصلاح تسريب تحت الحوض أو المغسلة", price: "80 - 120 ريال", image: "/manus-storage/plumbing-13-marble-sink_743182e8.png" },
-      { id: "p14", category: "السباكة", name: "إصلاح ماكينة سيفون (دفن أو عادي)", price: "80 - 150 ريال", image: "/manus-storage/plumbing-14-hanging-toilet_c4f8acaf.png" },
-      { id: "p15", category: "السباكة", name: "معالجة تسريب كرسي عربي / فرنجي", price: "100 - 180 ريال", image: "/manus-storage/plumbing-15-shower-cabin_34704fb2.png" },
-      { id: "p16", category: "السباكة", name: "تسليك انسداد مجاري داخلي (صفاية/حوض)", price: "100 - 250 ريال", image: "/manus-storage/plumbing-16-jacuzzi_377bf56c.png" },
-      { id: "p17", category: "السباكة", name: "تسليك خط مجاري رئيسي بالسستة", price: "200 - 400 ريال", image: "/manus-storage/plumbing-17-washing-machine_576a99de.png" },
-      { id: "p18", category: "السباكة", name: "تركيب شطاف / محبس زاوية", price: "20 - 40 ريال", image: "/manus-storage/plumbing-18-heater-element_77e8a84c.png" },
-      { id: "p19", category: "السباكة", name: "تركيب خلاط دش / مغسلة / مجلى", price: "50 - 80 ريال", image: "/manus-storage/plumbing-19-water-heater_30e37769.png" },
-      { id: "p20", category: "السباكة", name: "تركيب خلاط مخفي (دفن)", price: "120 - 220 ريال", image: "/manus-storage/plumbing-20-hidden-heater_21d37192.png" },
-      { id: "p21", category: "السباكة", name: "تركيب كرسي فرنجي عادي", price: "120 - 180 ريال", image: "/manus-storage/plumbing-21-filter-cartridge_8b55050a.png" },
-      { id: "p22", category: "السباكة", name: "تركيب مغسلة ديكور / رخام / معلقة", price: "120 - 250 ريال", image: "/manus-storage/plumbing-22-water-filter_c1f6e5cd.png" },
-      { id: "p23", category: "السباكة", name: "تركيب كرسي فرنجي معلق (مع الصندوق)", price: "250 - 450 ريال", image: "/manus-storage/plumbing-23-flowmeter_9e170b15.png" },
-      { id: "p24", category: "السباكة", name: "تركيب شاور بكس / كابينة دش", price: "200 - 400 ريال", image: "/manus-storage/plumbing-24-water-pump_353790f3.png" },
-      { id: "p25", category: "السباكة", name: "تركيب جاكوزي أو بانيو عادي", price: "250 - 500 ريال", image: "/manus-storage/plumbing-25-central-filter_b1997fd6.png" },
-      { id: "p26", category: "السباكة", name: "توصيل غسالة ملابس / صحون", price: "60 - 100 ريال", image: "/manus-storage/plumbing-26-tank-setup_81b9e26d.png" },
-      { id: "p27", category: "السباكة", name: "تغيير شمعة سخان أو هيتر", price: "70 - 120 ريال", image: "/manus-storage/plumbing-27-kitchen-installation_18dc8752.png" },
-      { id: "p28", category: "السباكة", name: "تركيب سخان مياه عادي (40-80 ليتر)", price: "80 - 130 ريال", image: "/manus-storage/plumbing-28-bathroom-installation_001d5bef.png" },
-      { id: "p29", category: "السباكة", name: "تركيب سخان مخفي / أفقي / مركزي صغير", price: "150 - 280 ريال", image: "/manus-storage/plumbing-29-leak-detection_9be68d5a.png" },
-      { id: "p30", category: "السباكة", name: "تغيير طقم مراحل فلتر المياه", price: "50 - 80 ريال", image: "/manus-storage/plumbing-30-drain-cleaning_b5e0b99a.png" },
-      { id: "p31", category: "السباكة", name: "تركيب فلتر مياه منزلي (5 - 7 مراحل)", price: "100 - 150 ريال", image: "/manus-storage/plumbing-31-main-drain_ec2ab22b.png" },
-      { id: "p32", category: "السباكة", name: "تركيب جهاز فلوماك / أوتوماتيك مضخة", price: "80 - 120 ريال", image: "/manus-storage/plumbing-32-siphon-repair_e8e902d6.png" },
-      { id: "p33", category: "السباكة", name: "تركيب مضخة مياه (دينامو) مع الأوتوماتيك", price: "150 - 250 ريال", image: "/manus-storage/plumbing-33-toilet-repair_b41dbaa9.png" },
-      { id: "p34", category: "السباكة", name: "تركيب فلتر مركزي (جامبو) للخزان", price: "150 - 250 ريال", image: "/manus-storage/plumbing-34-faucet-leak_0520196b.png" },
-      { id: "p35", category: "السباكة", name: "تركيب/تحديد شبكة خزان علوي", price: "300 - 600 ريال", image: "/manus-storage/plumbing-35-pipe-leak_f42ba702.png" },
-      { id: "p36", category: "السباكة", name: "تأسيس مطبخ كامل (تغذية + صرف)", price: "500 - 900 ريال", image: "/manus-storage/plumbing-36-silicone-seal_18a35d67.png" },
-      { id: "p37", category: "السباكة", name: "تأسيس حمام كامل (تغذية + صرف)", price: "800 - 1500 ريال", image: "/manus-storage/plumbing-37-dishwasher_d5a57eee.png" },
-    ]
+    services: plumbingServices
   },
   {
     id: "ac",
     title: "خدمات التكييف",
     icon: <Wind className="w-8 h-8" />,
     color: "from-teal-400 to-blue-500",
-    services: [
-      { id: "ac1", category: "التكييف", name: "غسيل مكيف سبليت", price: "120 ريال", image: "/manus-storage/ac-01-split-unit_ed3c8716.png" },
-      { id: "ac2", category: "التكييف", name: "تعبئة فريون كامل", price: "250 ريال", image: "/manus-storage/ac-02-window-ac_cf816a2b.png" },
-      { id: "ac3", category: "التكييف", name: "تركيب مكيف سبليت", price: "350 ريال", image: "/manus-storage/ac-03-ac-cleaning_f01a6023.png" },
-      { id: "ac4", category: "التكييف", name: "صيانة مكيف شباك", price: "80 ريال", image: "/manus-storage/ac-04-refrigerant_ece9b064.png" },
-      { id: "ac5", category: "التكييف", name: "تعبئة فريون تكميلي", price: "150 ريال", image: "/manus-storage/ac-05-ac-installation_e2b1f205.png" },
-    ]
+    services: acServices
   },
   {
     id: "cameras",
     title: "كاميرات وأنظمة",
     icon: <Camera className="w-8 h-8" />,
     color: "from-purple-500 to-indigo-600",
-    services: [
-      { id: "cam1", category: "الكاميرات", name: "تركيب كاميرة مراقبة داخلية / خارجية", price: "40 - 70 ريال", image: "/manus-storage/camera-01-cctv_2025efe5.png" },
-      { id: "cam2", category: "الكاميرات", name: "تركيب كاميرة مراقبة متحركة (PTZ)", price: "80 - 150 ريال", image: "/manus-storage/camera-02-ptz-camera_75e727b3.png" },
-      { id: "cam3", category: "الكاميرات", name: "تركيب كاميرة شحن لاسلكية / طاقة شمسية", price: "60 - 100 ريال", image: "/manus-storage/camera-03-wireless-camera_743acc53.png" },
-      { id: "cam4", category: "الكاميرات", name: "تركيب جرس باب ذكي مزود بكاميرة", price: "50 - 90 ريال", image: "/manus-storage/camera-04-smart-doorbell_3c0d6aac.png" },
-      { id: "cam5", category: "الكاميرات", name: "تركيب وعرض كاميرات على الشاشة", price: "80 - 150 ريال", image: "/manus-storage/camera-05-dvr-system_ad6ed3e3.png" },
-      { id: "cam6", category: "الكاميرات", name: "تركيب قفل باب ذكي", price: "300 ريال", image: "/manus-storage/camera-06-smart-lock_90cd2fcf.png" },
-      { id: "cam7", category: "الكاميرات", name: "تركيب انتركوم منزلي", price: "250 ريال", image: "/manus-storage/camera-07-intercom_97264e27.png" },
-    ]
+    services: cameraServices
   },
   {
     id: "decor",
     title: "ديكورات وتركيبات",
     icon: <Palette className="w-8 h-8" />,
     color: "from-pink-500 to-rose-600",
-    services: [
-      { id: "dec1", category: "الديكور", name: "تركيب لوحات جدارية صغيرة / متوسطة", price: "15 - 30 ريال", image: "/manus-storage/decor-01-wall-art_b47d625c.png" },
-      { id: "dec2", category: "الديكور", name: "تركيب أرفف خشبية", price: "30 - 60 ريال", image: "/manus-storage/decor-02-wall-shelf_04adbb28.png" },
-      { id: "dec3", category: "الديكور", name: "تركيب حامل شاشة جداري", price: "50 - 100 ريال", image: "/manus-storage/decor-03-tv-mount_5175c5e4.png" },
-      { id: "dec4", category: "الديكور", name: "تركيب ستائر رول", price: "40 - 70 ريال", image: "/manus-storage/decor-04-curtains_5bd2ead9.png" },
-      { id: "dec5", category: "الديكور", name: "تركيب مرايا جدارية", price: "40 - 80 ريال", image: "/manus-storage/decor-05-mirror_af6d8b39.png" },
-      { id: "dec6", category: "الديكور", name: "تركيب ساعات جدارية ديكورية", price: "20 - 40 ريال", image: "/manus-storage/decor-06-wall-clock_5b82ef99.png" },
-      { id: "dec7", category: "الديكور", name: "تركيب تعليقات وديكورات جدارية", price: "30 - 70 ريال", image: "/manus-storage/decor-07-hanging-decor_727749f1.png" },
-      { id: "dec8", category: "الديكور", name: "تركيب وتثبيت عام", price: "25 - 45 ريال", image: "/manus-storage/decor-08-wall-mounting_22e5ff95.png" },
-    ]
+    services: decorServices
   }
 ];
 
@@ -236,14 +259,14 @@ export default function Home() {
 
   const WHATSAPP_NUMBER = "966575442802";
 
-  const socialLinks: Array<{name: string; username: string; icon: string; url: string; color: string}> = [
+  const socialLinks = [
     { name: "فيسبوك", username: "osamah711x", icon: "facebook", url: "https://www.facebook.com/osamah711x", color: "from-blue-600 to-blue-400" },
     { name: "تيك توك", username: "osamah711x", icon: "tiktok", url: "https://www.tiktok.com/@osamah711x", color: "from-gray-900 to-gray-700" },
     { name: "إنستجرام", username: "osamah711x", icon: "instagram", url: "https://www.instagram.com/osamah711x", color: "from-pink-500 to-rose-400" },
     { name: "يوتيوب", username: "osamah711x", icon: "youtube", url: "https://www.youtube.com/@osamah711x", color: "from-red-600 to-red-500" },
     { name: "سناب شات", username: "osamah711xx", icon: "snapchat", url: "https://www.snapchat.com/add/osamah711xx", color: "from-yellow-400 to-yellow-300" },
-    { name: "X", username: "osamah711x", icon: "x", url: "https://www.x.com/osamah711x", color: "from-gray-800 to-gray-600" },
-    { name: "LinkedIn", username: "osamah711x", icon: "linkedin", url: "https://www.linkedin.com/in/osamah711x", color: "from-blue-700 to-blue-500" },
+    { name: "إكس", username: "osamah711x", icon: "x", url: "https://www.x.com/osamah711x", color: "from-gray-800 to-gray-600" },
+    { name: "لينكد إن", username: "osamah711x", icon: "linkedin", url: "https://www.linkedin.com/in/osamah711x", color: "from-blue-700 to-blue-500" },
     { name: "واتس آب", username: "00966575442802", icon: "whatsapp", url: "https://wa.me/966575442802", color: "from-green-600 to-green-400" },
   ];
 
@@ -257,7 +280,7 @@ export default function Home() {
       }
       return [...prev, { ...service, quantity: 1 }];
     });
-    toast.success(`تم إضافة ${service.name} إلى السلة`);
+    toast.success(`تمت إضافة الخدمة إلى السلة`);
   };
 
   const removeFromCart = (id: string) => {
@@ -281,14 +304,13 @@ export default function Home() {
   const sendOrderToWhatsApp = () => {
     if (cart.length === 0) return;
 
-    let message = "السلام عليكم، أرغب في طلب الخدمات التالية:\n\n";
+    let message = "السلام عليكم ورحمة الله وبركاته، أرغب في طلب الخدمات التالية:\n\n";
     cart.forEach((item, index) => {
-      message += `${index + 1}. *${item.name}*\n`;
-      message += `   - القسم: ${item.category}\n`;
-      message += `   - السعر: ${item.price}\n`;
-      message += `   - العدد: ${item.quantity}\n\n`;
+      message += `${index + 1}. ${item.name}\n`;
+      message += `   السعر: ${item.price}\n`;
+      message += `   الكمية: ${item.quantity}\n\n`;
     });
-    message += "يرجى التواصل معي لتأكيد الموعد.";
+    message += "يرجى التواصل معي لتأكيد الموعد والتفاصيل.";
 
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
@@ -296,19 +318,19 @@ export default function Home() {
     window.open(whatsappUrl, "_blank");
     setCart([]);
     setIsCartOpen(false);
-    toast.success("تم توجيهك إلى واتساب لإرسال الطلب");
+    toast.success("تم توجيهك إلى تطبيق واتس آب");
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-right font-sans" dir="rtl">
-      {/* Animated background elements */}
+      {/* خلفية متحركة */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
         <div className="absolute top-40 right-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
         <div className="absolute -bottom-8 left-1/2 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
       </div>
 
-      {/* Floating Cart Button */}
+      {/* زر السلة العائم */}
       <button 
         onClick={() => setIsCartOpen(true)}
         className="fixed bottom-8 left-8 z-50 p-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center gap-2 group"
@@ -319,11 +341,11 @@ export default function Home() {
             {cartCount}
           </span>
         )}
-        <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 font-bold whitespace-nowrap">عرض السلة</span>
+        <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 font-bold whitespace-nowrap">السلة</span>
       </button>
 
       <div className="relative z-10 container mx-auto px-4 py-8 md:py-12">
-        {/* Profile Header */}
+        {/* رأس الملف الشخصي */}
         <div className="flex flex-col items-center justify-center mb-12 md:mb-16">
           <div className="mb-8 md:mb-10 relative">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-2xl opacity-75 animate-pulse"></div>
@@ -339,7 +361,7 @@ export default function Home() {
             مهندس كهربائي
           </p>
           <p className="text-sm md:text-lg text-center mb-8 md:mb-10 text-gray-300 px-4">
-            مهندس متخصص في المشاريع الإنشائية والإشراف على المواقع
+            متخصص في المشاريع الإنشائية والإشراف على المواقع
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 md:gap-6 mb-10 md:mb-12 w-full sm:w-auto">
@@ -360,13 +382,12 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Services Grid Section - IMPROVED LAYOUT */}
+        {/* قسم الخدمات */}
         <div className="relative z-10 max-w-7xl mx-auto mb-16 md:mb-24">
           <h2 className="text-3xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
             اطلب خدماتنا
           </h2>
 
-          {/* Category Selection */}
           {!selectedCategory ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
               {SERVICES_DATA.map((category) => (
@@ -386,7 +407,6 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            // Services Grid - Thumbnail View
             <div>
               <button
                 onClick={() => setSelectedCategory(null)}
@@ -396,19 +416,20 @@ export default function Home() {
                 <span>العودة للفئات</span>
               </button>
               
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
                 {selectedCategory.services.map((service) => (
                   <button
                     key={service.id}
                     onClick={() => setSelectedService(service)}
                     className="group relative"
                   >
-                    <div className="relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-all duration-300 transform group-hover:scale-105 aspect-square flex flex-col">
+                    <div className="relative bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:bg-white/10 transition-all duration-300 transform group-hover:scale-105 aspect-square flex flex-col">
                       <div className="relative w-full h-3/4 overflow-hidden bg-slate-800">
                         <img 
                           src={service.image} 
                           alt={service.name} 
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                          loading="lazy"
                         />
                       </div>
                       <div className="h-1/4 p-2 flex items-center justify-center">
@@ -422,13 +443,13 @@ export default function Home() {
           )}
         </div>
 
-        {/* About Section */}
+        {/* قسم من نحن */}
         <div className="relative z-10 max-w-4xl mx-auto mb-16 md:mb-24 bg-white/5 backdrop-blur-md border border-white/10 rounded-[2.5rem] p-8 md:p-12 text-center shadow-2xl">
           <h2 className="text-2xl md:text-4xl font-bold mb-8 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">عني</h2>
           <p className="text-gray-200 text-lg md:text-xl leading-relaxed">مهندس كهربائي متخصص في المشاريع الإنشائية والإشراف على المواقع. أتمتع بخبرة واسعة في تنفيذ المشاريع الكبرى وضمان الالتزام بمعايير الهندسة والسلامة. أعمل على تقديم حلول فعالة وموثوقة لكل مشروع.</p>
         </div>
 
-        {/* Social Media Section */}
+        {/* قسم وسائل التواصل */}
         <div className="mb-16 md:mb-24">
           <h2 className="text-2xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
             تابعني على وسائل التواصل
@@ -455,7 +476,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* CTA Section */}
+        {/* قسم الاتصال */}
         <div className="max-w-4xl mx-auto bg-gradient-to-r from-blue-600 to-purple-600 rounded-[3rem] p-8 md:p-16 text-center text-white mb-12 shadow-2xl relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/50 to-purple-600/50 blur-xl"></div>
           <div className="relative z-10">
@@ -473,7 +494,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Service Detail Modal */}
+      {/* نافذة تفاصيل الخدمة */}
       <Dialog open={!!selectedService} onOpenChange={(open) => !open && setSelectedService(null)}>
         <DialogContent className="max-w-2xl bg-slate-900 border-white/10 text-white rounded-[2.5rem] p-0 shadow-2xl" dir="rtl">
           <DialogHeader className="p-8 pb-4 border-b border-white/10">
@@ -526,14 +547,14 @@ export default function Home() {
         </DialogContent>
       </Dialog>
 
-      {/* Shopping Cart Modal */}
+      {/* نافذة السلة */}
       <Dialog open={isCartOpen} onOpenChange={setIsCartOpen}>
         <DialogContent className="max-w-2xl bg-slate-900 border-white/10 text-white rounded-[2.5rem] p-0" dir="rtl">
           <DialogHeader className="p-8 pb-4 border-b border-white/10">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <ShoppingCart className="w-8 h-8 text-blue-500" />
-                <DialogTitle className="text-2xl font-bold">سلة الخدمات المختارة</DialogTitle>
+                <DialogTitle className="text-2xl font-bold">السلة</DialogTitle>
               </div>
               <button onClick={() => setIsCartOpen(false)} className="p-2 hover:bg-white/10 rounded-full">
                 <X className="w-6 h-6 text-gray-400" />
@@ -545,19 +566,13 @@ export default function Home() {
             {cart.length === 0 ? (
               <div className="text-center py-12">
                 <ShoppingCart className="w-20 h-20 text-gray-700 mx-auto mb-4 opacity-20" />
-                <p className="text-gray-400 text-xl">السلة فارغة حالياً</p>
-                <Button 
-                  onClick={() => setIsCartOpen(false)}
-                  className="mt-6 bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-8"
-                >
-                  تصفح الخدمات
-                </Button>
+                <p className="text-gray-400 text-xl">السلة فارغة</p>
               </div>
             ) : (
               <div className="space-y-4">
                 {cart.map((item) => (
                   <div key={item.id} className="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10">
-                    <img src={item.image} className="w-16 h-16 rounded-xl object-cover" />
+                    <img src={item.image} className="w-16 h-16 rounded-xl object-cover" alt={item.name} />
                     <div className="flex-grow">
                       <h4 className="font-bold text-white">{item.name}</h4>
                       <p className="text-sm text-blue-400 font-bold">{item.price}</p>
@@ -582,23 +597,23 @@ export default function Home() {
           {cart.length > 0 && (
             <div className="p-8 pt-4 bg-slate-950/50 border-t border-white/10 rounded-b-[2.5rem]">
               <div className="flex justify-between items-center mb-6">
-                <span className="text-gray-400">إجمالي الخدمات المختارة:</span>
-                <span className="text-2xl font-bold text-white">{cartCount} خدمة</span>
+                <span className="text-gray-400">إجمالي الخدمات:</span>
+                <span className="text-2xl font-bold text-white">{cartCount}</span>
               </div>
               <Button
                 onClick={sendOrderToWhatsApp}
                 className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-8 rounded-2xl shadow-xl flex items-center justify-center gap-3 text-xl transition-all transform hover:scale-[1.02]"
               >
-                {SocialIcons.whatsapp} إرسال الطلب للفني عبر واتساب
+                {SocialIcons.whatsapp} إرسال الطلب عبر واتس آب
               </Button>
             </div>
           )}
         </DialogContent>
       </Dialog>
 
-      {/* Footer */}
+      {/* التذييل */}
       <footer className="relative z-10 bg-black/40 backdrop-blur-md border-t border-white/10 text-white text-center py-12">
-        <p className="text-gray-400 text-sm md:text-base mb-2">© 2024 osamah711x. جميع الحقوق محفوظة.</p>
+        <p className="text-gray-400 text-sm md:text-base mb-2">© 2024 أسامة مبارك البعوي. جميع الحقوق محفوظة.</p>
         <p className="text-gray-500 text-xs">صمم باحترافية لتلبية احتياجاتكم</p>
       </footer>
 
