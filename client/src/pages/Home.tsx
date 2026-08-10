@@ -26,40 +26,40 @@ import { toast } from "sonner";
 // SVG Icons for Social Media
 const SocialIcons = {
   facebook: (
-    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
     </svg>
   ),
   tiktok: (
-    <img src="/manus-storage/tiktok-3d-icon_e9dd35cb.png" alt="TikTok" className="w-6 h-6" />
+    <img src="/manus-storage/tiktok-3d-icon_e9dd35cb.png" alt="TikTok" className="w-4 h-4" />
   ),
   instagram: (
-    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
       <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.117.6c-.89.266-1.688.616-2.34 1.285-.656.656-1.015 1.45-1.287 2.34-.266.78-.47 1.713-.57 2.993C.04 8.333.025 8.74 0 12c0 3.26.015 3.667.072 4.947.06 1.277.261 2.148.528 2.927.266.79.604 1.45 1.272 2.097.661.662 1.325 1.004 2.344 1.272.78.267 1.85.47 3.127.528 1.28.06 1.688.072 4.947.072s3.667-.015 4.947-.072c1.277-.06 2.148-.261 2.927-.528.79-.268 1.45-.61 2.097-1.272.662-.662 1.015-1.325 1.287-2.344.267-.78.47-1.85.528-3.127.06-1.28.072-1.688.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.261-2.148-.528-2.927-.268-.79-.604-1.45-1.272-2.097-.662-.661-1.325-1.004-2.344-1.272-.78-.267-1.85-.47-3.127-.528C15.667.04 15.26.025 12 0zm0 2.16c3.203 0 3.585.009 4.849.07 1.171.054 1.805.244 2.227.408.56.217.96.477 1.382.896.419.42.679.822.896 1.381.164.422.354 1.057.408 2.227.061 1.264.07 1.646.07 4.849 0 3.203-.009 3.585-.07 4.849-.054 1.171-.244 1.805-.408 2.227-.217.56-.477.96-.896 1.382-.42.419-.822.679-1.381.896-.422.164-1.057.354-2.227.408-1.264.061-1.646.07-4.849.07-3.203 0-3.585-.009-4.849-.07-1.171-.054-1.805-.244-2.227-.408-.56-.217-.96-.477-1.382-.896-.419-.42-.679-.822-.896-1.381-.164-.422-.354-1.057-.408-2.227-.061-1.264-.07-1.646-.07-4.849 0-3.203.009-3.585.07-4.849.054-1.171.244-1.805.408-2.227.217-.56.477-.96.896-1.382.42-.419.822-.679 1.381-.896.422-.164 1.057-.354 2.227-.408 1.264-.061 1.646-.07 4.849-.07z"/>
       <circle cx="12" cy="12" r="3.846"/>
       <circle cx="18.613" cy="5.387" r=".923"/>
     </svg>
   ),
   youtube: (
-    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
       <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
     </svg>
   ),
   snapchat: (
-    <img src="/manus-storage/snapchat-3d-icon_c4665972.png" alt="Snapchat" className="w-6 h-6" />
+    <img src="/manus-storage/snapchat-3d-icon_c4665972.png" alt="Snapchat" className="w-4 h-4" />
   ),
   x: (
-    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.627l-5.1-6.694-5.867 6.694h-3.306l7.73-8.835L.316 2.25h6.888l4.59 6.062L17.77 2.25h.474zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
     </svg>
   ),
   linkedin: (
-    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.475-2.236-1.986-2.236-1.081 0-1.722.722-2.004 1.418-.103.249-.129.597-.129.946v5.441h-3.554s.05-8.81 0-9.728h3.554v1.375c.427-.659 1.191-1.595 2.897-1.595 2.117 0 3.704 1.385 3.704 4.362v5.586zM5.337 9.433c-1.144 0-1.915-.758-1.915-1.71 0-.956.77-1.71 1.954-1.71 1.184 0 1.915.754 1.94 1.71 0 .952-.756 1.71-1.979 1.71zm1.581 11.019H3.757V9.724h3.161v10.728zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/>
     </svg>
   ),
   whatsapp: (
-    <img src="/manus-storage/whatsapp-3d-icon_394d76c5.png" alt="WhatsApp" className="w-6 h-6" />
+    <img src="/manus-storage/whatsapp-3d-icon_394d76c5.png" alt="WhatsApp" className="w-4 h-4" />
   ),
 };
 
@@ -329,7 +329,7 @@ export default function Home() {
         onClick={() => setIsCartOpen(true)}
         className="fixed bottom-8 left-8 z-50 p-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center gap-2 group"
       >
-        <ShoppingCart className="w-6 h-6" />
+        <ShoppingCart className="w-4 h-4" />
         {cartCount > 0 && (
           <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-slate-900">
             {cartCount}
@@ -540,7 +540,7 @@ export default function Home() {
                 }}
                 className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-6 rounded-xl shadow-lg flex items-center justify-center gap-3 text-lg transition-all transform hover:scale-[1.02]"
               >
-                <Plus className="w-6 h-6" /> إضافة للسلة
+                <Plus className="w-4 h-4" /> إضافة للسلة
               </Button>
             </div>
           </div>
