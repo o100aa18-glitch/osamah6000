@@ -216,35 +216,35 @@ const decorServices: ServiceItem[] = [
 const SERVICES_DATA: ServiceCategory[] = [
   {
     id: "electricity",
-    title: "خدمات الكهرباء",
+    title: "<span translate='no'>خدمات الكهرباء</span>",
     icon: <Zap className="w-8 h-8" />,
     color: "from-yellow-500 to-orange-600",
     services: electricityServices
   },
   {
     id: "plumbing",
-    title: "خدمات السباكة",
+    title: "<span translate='no'>خدمات السباكة</span>",
     icon: <Droplets className="w-8 h-8" />,
     color: "from-blue-500 to-cyan-600",
     services: plumbingServices
   },
   {
     id: "ac",
-    title: "خدمات التكييف",
+    title: "<span translate='no'>خدمات التكييف</span>",
     icon: <Wind className="w-8 h-8" />,
     color: "from-teal-400 to-blue-500",
     services: acServices
   },
   {
     id: "cameras",
-    title: "كاميرات وأنظمة",
+    title: "<span translate='no'>كاميرات وأنظمة</span>",
     icon: <Camera className="w-8 h-8" />,
     color: "from-purple-500 to-indigo-600",
     services: cameraServices
   },
   {
     id: "decor",
-    title: "ديكورات وتركيبات",
+    title: "<span translate='no'>ديكورات وتركيبات</span>",
     icon: <Palette className="w-8 h-8" />,
     color: "from-pink-500 to-rose-600",
     services: decorServices
@@ -350,7 +350,7 @@ export default function Home() {
           <div className="mb-8 md:mb-10 relative">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-2xl opacity-75 animate-pulse"></div>
             <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-2xl border-4 border-white/20 overflow-hidden shadow-2xl bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center">
-              <img src="/manus-storage/profile-photo.png" alt="أسامة" className="w-full h-full object-cover" />
+              <div className="w-full h-full bg-cover bg-center" style={{backgroundImage: 'url(/manus-storage/profile-photo.png)'}} />
             </div>
           </div>
 
@@ -384,13 +384,13 @@ export default function Home() {
 
         {/* قسم من نحن */}
         <div className="relative z-10 max-w-4xl mx-auto mb-16 md:mb-24 bg-white/5 backdrop-blur-md border border-white/10 rounded-[2.5rem] p-8 md:p-12 text-center shadow-2xl">
-          <h2 className="text-2xl md:text-4xl font-bold mb-8 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">عني</h2>
+          <h2 className="text-2xl md:text-4xl font-bold mb-8 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent" translate="no">عني</h2>
           <p className="text-gray-200 text-lg md:text-xl leading-relaxed">مهندس كهربائي متخصص في المشاريع الإنشائية والإشراف على المواقع. أتمتع بخبرة واسعة في تنفيذ المشاريع الكبرى وضمان الالتزام بمعايير الهندسة والسلامة. أعمل على تقديم حلول فعالة وموثوقة لكل مشروع.</p>
         </div>
 
         {/* قسم وسائل التواصل */}
         <div className="mb-16 md:mb-24">
-          <h2 className="text-2xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+          <h2 className="text-2xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent" translate="no">
             تابعني على وسائل التواصل
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 max-w-5xl mx-auto">
@@ -417,7 +417,7 @@ export default function Home() {
 
         {/* قسم الخدمات - في الأسفل */}
         <div className="relative z-10 max-w-7xl mx-auto mb-16 md:mb-24">
-          <h2 className="text-3xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent" translate="no">
             اطلب خدماتنا
           </h2>
 
