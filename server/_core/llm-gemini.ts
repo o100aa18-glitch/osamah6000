@@ -11,7 +11,7 @@ const getApiKey = () => {
   return key;
 };
 
-export async function invokeGemini(messages: any[], model: string = 'gemini-2.5-flash') {
+export async function invokeGemini(messages: any[], model: string = 'gemini-3.5-flash') {
   const apiKey = getApiKey();
   
   // تحويل صيغة الرسائل من OpenAI إلى Gemini
