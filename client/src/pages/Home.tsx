@@ -350,7 +350,7 @@ export default function Home() {
           <div className="mb-8 md:mb-10 relative">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-2xl opacity-75 animate-pulse"></div>
             <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-2xl border-4 border-white/20 overflow-hidden shadow-2xl bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center">
-              <div className="w-full h-full bg-cover bg-center" style={{backgroundImage: 'url(/manus-storage/profile-photo.png)'}} />
+              <div className="w-full h-full bg-cover bg-center" style={{backgroundImage: 'url(https://files.manuscdn.com/user_upload_by_module/session_file/310519663816443346/PAJWkVOQNmXHZgbg.png)'}} />
             </div>
           </div>
 
