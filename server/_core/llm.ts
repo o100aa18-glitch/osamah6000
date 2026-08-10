@@ -212,31 +212,21 @@ const normalizeToolChoice = (
   return toolChoice;
 };
 
+// استخدام Gemini API مباشرة فقط
 const resolveApiUrl = () => {
-  // Check if we should use Gemini API directly
-  if (process.env.GEMINI_API_KEY) {
-    return "https://generativelanguage.googleapis.com/v1beta/openai/";
-  }
-  // Fallback to Manus Forge API
-  return ENV.forgeApiUrl && ENV.forgeApiUrl.trim().length > 0
-    ? `${ENV.forgeApiUrl.replace(/\/$/, "")}/v1/chat/completions`
-    : "https://forge.manus.im/v1/chat/completions";
+  return "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions";
 };
 
 const getApiKey = () => {
-  // Use Gemini API key if available
-  if (process.env.GEMINI_API_KEY) {
-    return process.env.GEMINI_API_KEY;
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) {
+    throw new Error("GEMINI_API_KEY is not configured");
   }
-  // Fallback to Manus Forge API key
-  return ENV.forgeApiKey;
+  return key;
 };
 
 const assertApiKey = () => {
-  const key = getApiKey();
-  if (!key) {
-    throw new Error("API_KEY is not configured (neither GEMINI_API_KEY nor BUILT_IN_FORGE_API_KEY)");
-  }
+  getApiKey(); // سيرمي خطأ إذا لم يكن موجود
 };
 
 const normalizeResponseFormat = ({
@@ -420,19 +410,13 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
   const apiUrl = resolveApiUrl();
   const apiKey = getApiKey();
   
-  // Determine if using Gemini API
-  const isGeminiApi = process.env.GEMINI_API_KEY && apiUrl.includes("generativelanguage");
-  
-  let finalUrl = apiUrl;
-  if (isGeminiApi) {
-    finalUrl = `${apiUrl}chat/completions?key=${apiKey}`;
-  }
+  // استخدام Gemini API مع المفتاح
+  const finalUrl = `${apiUrl}?key=${apiKey}`;
 
   const response = await fetchWithBackoff(finalUrl, {
     method: "POST",
     headers: {
       "content-type": "application/json",
-      ...(isGeminiApi ? {} : { authorization: `Bearer ${apiKey}` }),
     },
     body: JSON.stringify(payload),
   });
@@ -463,19 +447,10 @@ export async function listLLMModels(): Promise<ModelsResponse> {
   assertApiKey();
 
   const apiKey = getApiKey();
-  const isGeminiApi = process.env.GEMINI_API_KEY;
-  
-  let url: string;
-  if (isGeminiApi) {
-    url = `https://generativelanguage.googleapis.com/v1beta/openai/models?key=${apiKey}`;
-  } else {
-    url = ENV.forgeApiUrl && ENV.forgeApiUrl.trim().length > 0
-      ? `${ENV.forgeApiUrl.replace(/\/$/, "")}/v1/models`
-      : "https://forge.manus.im/v1/models";
-  }
+  const url = `https://generativelanguage.googleapis.com/v1beta/openai/models?key=${apiKey}`;
 
   const response = await fetchWithBackoff(url, {
-    headers: isGeminiApi ? {} : { authorization: `Bearer ${apiKey}` },
+    headers: {},
   });
 
   if (!response.ok) {
@@ -487,13 +462,8 @@ export async function listLLMModels(): Promise<ModelsResponse> {
 
   const data = await response.json();
   
-  // If using Gemini API, transform response format
-  if (process.env.GEMINI_API_KEY) {
-    return {
-      object: "list",
-      data: data.data || data.models || []
-    };
-  }
-  
-  return data as ModelsResponse;
+  return {
+    object: "list",
+    data: data.data || data.models || []
+  };
 }
