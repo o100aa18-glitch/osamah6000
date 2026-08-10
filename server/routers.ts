@@ -30,8 +30,8 @@ export const appRouter = router({
         })).optional()
       }))
       .mutation(async ({ input }) => {
-        // استخدام gemini-1.5-flash (متوافق مع الخطة المجانية)
-        const selectedModel = 'gemini-1.5-flash';
+        // استخدام gemini-2.0-flash (الأحدث والأسرع)
+        const selectedModel = 'gemini-2.0-flash';
         
         const systemPrompt = `أنت مساعد ذكي باسم مهندس أسامة البعوي (م/أسامة البعوي). تقدم استشارات هندسية متخصصة وخدمات متعلقة بـ:
 
@@ -59,7 +59,7 @@ export const appRouter = router({
         try {
           const response = await invokeLLM({
             messages: messages as any,
-            model: 'gemini-1.5-flash'
+            model: 'gemini-2.0-flash'
           });
           
           const reply = response.choices[0]?.message?.content || 'عذراً، حدث خطأ في الرد. يرجى المحاولة مجدداً.';
@@ -68,11 +68,11 @@ export const appRouter = router({
             success: true,
             reply: reply,
             timestamp: new Date(),
-            model: 'gemini-1.5-flash' as const
+            model: 'gemini-2.0-flash' as const
           };
         } catch (error: any) {
           console.error('[Chat Error]', error);
-          console.error('[Model: gemini-1.5-flash]', error?.message || 'Unknown error');
+          console.error('[Model: gemini-2.0-flash]', error?.message || 'Unknown error');
           return {
             success: false,
             reply: 'عذراً، حدث خطأ في الاتصال. يرجى المحاولة مجدداً لاحقاً.',
