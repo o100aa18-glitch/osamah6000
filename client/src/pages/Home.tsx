@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { AIChatAssistant } from "@/components/AIChatAssistant";
 import { Button } from "@/components/ui/button";
 import { 
   Mail, 
@@ -246,6 +247,13 @@ const SERVICES_DATA: ServiceCategory[] = [
 ];
 
 export default function Home() {
+  // The useAuth hook provides authentication state.
+  // To implement login/logout, call logout(), or start login from an event
+  // handler: onClick={() => startLogin()} (imported from "@/const"). Never call
+  // startLogin() during render (no href={startLogin()}) — it mints a one-time
+  // nonce cookie and must run only at the moment of navigation.
+  let { user, loading, error, isAuthenticated, logout } = useAuth();
+
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory | null>(null);
   const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -317,6 +325,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-right font-sans" dir="rtl">
+      {/* AI Chat Assistant */}
+      <AIChatAssistant />
       {/* خلفية متحركة */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
