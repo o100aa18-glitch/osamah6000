@@ -350,7 +350,7 @@ export default function Home() {
           <div className="mb-8 md:mb-10 relative">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-2xl opacity-75 animate-pulse"></div>
             <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-2xl border-4 border-white/20 overflow-hidden shadow-2xl bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center">
-              <img src="/manus-storage/e9020620-900b-11f1-ae70-e38d80dd29c3_profile.png" alt="أسامة" className="w-full h-full object-cover" />
+              <img src="/manus-storage/e9020620-900b-11f1-ae70-e38d80dd29c3_profile.png" alt="أسامة" className="w-full h-full object-cover" onError={(e) => (e.target as HTMLImageElement).style.display='none'} />
             </div>
           </div>
 
@@ -358,7 +358,7 @@ export default function Home() {
             أسامة مبارك البعوي
           </h1>
           <p className="text-lg md:text-2xl font-semibold text-center mb-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            مهندس كهربائي متخصص
+            مهندس متخصص
           </p>
           <p className="text-sm md:text-lg text-center mb-8 md:mb-10 text-gray-300 px-4">
             متخصص في خدمات الكهرباء والسباكة والتكييف والكاميرات
