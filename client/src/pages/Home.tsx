@@ -518,16 +518,14 @@ export default function Home() {
           </DialogHeader>
 
           <div className="p-8">
-                    <div className="relative w-full h-80 overflow-hidden rounded-2xl bg-slate-800 mb-6">
-              <img 
-                src={selectedService?.image} 
-                alt={selectedService?.name} 
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  const img = e.currentTarget;
-                  img.style.display = 'none';
-                }}
-              />
+                    <div className="relative w-full h-80 overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-purple-600 mb-6 flex items-center justify-center">
+              <div className="text-9xl">
+                {selectedService?.category === 'الكهرباء' && '⚡'}
+                {selectedService?.category === 'السباكة' && '🚰'}
+                {selectedService?.category === 'التكييف' && '❄️'}
+                {selectedService?.category === 'الكاميرات والأنظمة' && '📹'}
+                {selectedService?.category === 'الديكورات والتركيبات' && '🎨'}
+              </div>
             </div>
             
             <div className="space-y-4">
