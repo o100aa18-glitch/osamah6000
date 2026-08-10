@@ -183,10 +183,10 @@ const plumbingServices: ServiceItem[] = [
 
 // خدمات التكييف
 const acServices: ServiceItem[] = [
-  { id: "ac1", category: "التكييف", name: "غسيل مكيف سبليت", price: "120 ريال", image: "/manus-storage/ac-01-split-unit_ed3c8716.png" },
-  { id: "ac2", category: "التكييف", name: "تعبئة فريون كامل", price: "250 ريال", image: "/manus-storage/ac-02-window-ac_cf816a2b.png" },
-  { id: "ac3", category: "التكييف", name: "تركيب مكيف سبليت", price: "350 ريال", image: "/manus-storage/ac-03-ac-cleaning_f01a6023.png" },
-  { id: "ac4", category: "التكييف", name: "صيانة مكيف شباك", price: "80 ريال", image: "/manus-storage/ac-04-refrigerant_ece9b064.png" },
+  { id: "ac1", category: "التكييف", name: "غسيل مكيف سبليت", price: "120 ريال", image: "/manus-storage/ac-03-ac-cleaning_f01a6023.png" },
+  { id: "ac2", category: "التكييف", name: "تعبئة فريون كامل", price: "250 ريال", image: "/manus-storage/ac-04-refrigerant_ece9b064.png" },
+  { id: "ac3", category: "التكييف", name: "تركيب مكيف سبليت", price: "350 ريال", image: "/manus-storage/ac-01-split-unit_ed3c8716.png" },
+  { id: "ac4", category: "التكييف", name: "صيانة مكيف شباك", price: "80 ريال", image: "/manus-storage/ac-02-window-ac_cf816a2b.png" },
   { id: "ac5", category: "التكييف", name: "تعبئة فريون تكميلي", price: "150 ريال", image: "/manus-storage/ac-05-ac-installation_e2b1f205.png" },
 ];
 
@@ -350,7 +350,7 @@ export default function Home() {
           <div className="mb-8 md:mb-10 relative">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-2xl opacity-75 animate-pulse"></div>
             <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-2xl border-4 border-white/20 overflow-hidden shadow-2xl bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center">
-              <div className="text-6xl md:text-8xl font-bold text-white/50">أ</div>
+              <img src="/manus-storage/e9020620-900b-11f1-ae70-e38d80dd29c3_profile.png" alt="أسامة" className="w-full h-full object-cover" />
             </div>
           </div>
 
@@ -358,10 +358,10 @@ export default function Home() {
             أسامة مبارك البعوي
           </h1>
           <p className="text-lg md:text-2xl font-semibold text-center mb-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            مهندس كهربائي
+            مهندس كهربائي متخصص
           </p>
           <p className="text-sm md:text-lg text-center mb-8 md:mb-10 text-gray-300 px-4">
-            متخصص في المشاريع الإنشائية والإشراف على المواقع
+            متخصص في خدمات الكهرباء والسباكة والتكييف والكاميرات
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 md:gap-6 mb-10 md:mb-12 w-full sm:w-auto">
