@@ -30,6 +30,15 @@ export const appRouter = router({
         })).optional()
       }))
       .mutation(async ({ input }) => {
+        // اختيار النموذج تلقائياً - يحاول الأفضل أولاً
+        const availableModels = [
+          'gemini-2.0-flash',      // الأسرع والأحدث
+          'gemini-1.5-pro',        // قوي وموثوق
+          'gemini-1.5-flash',      // سريع
+          'gemini-pro'             // الخيار الأخير
+        ];
+        let selectedModel = availableModels[0]; // الافتراضي
+        
         const systemPrompt = `أنت مساعد ذكي باسم مهندس أسامة البعوي (م/أسامة البعوي). تقدم استشارات هندسية متخصصة وخدمات متعلقة بـ:
 
 1. **الكهرباء**: تركيب الأفياش، المفاتيح، النجف، الإضاءة، الصيانة الكهربائية
@@ -56,7 +65,7 @@ export const appRouter = router({
         try {
           const response = await invokeLLM({
             messages: messages as any,
-            model: 'gemini-2.0-flash'
+            model: selectedModel
           });
           
           const reply = response.choices[0]?.message?.content || 'عذراً، حدث خطأ في الرد. يرجى المحاولة مجدداً.';
@@ -68,6 +77,7 @@ export const appRouter = router({
           };
         } catch (error) {
           console.error('[Chat Error]', error);
+          console.error('[Used Model]', selectedModel);
           return {
             success: false,
             reply: 'عذراً، حدث خطأ في الاتصال. يرجى المحاولة مجدداً لاحقاً.',
