@@ -30,8 +30,22 @@ export const appRouter = router({
         })).optional()
       }))
       .mutation(async ({ input }) => {
-        // استخدام gemini-2.0-flash (الأحدث والأسرع)
-        const selectedModel = 'gemini-2.0-flash';
+        // نظام حساب الأسعار
+        const priceCalculator = {
+          calculateMinimumPrice: (services: any[]) => {
+            return services.reduce((total, service) => total + (service.minPrice || 0), 0);
+          },
+          validatePrice: (requestedPrice: number, minimumPrice: number) => {
+            return requestedPrice >= minimumPrice ? requestedPrice : minimumPrice;
+          },
+          parseServicePrice: (text: string) => {
+            const priceMatch = text.match(/(\d+)\s*ريال/);
+            return priceMatch ? parseInt(priceMatch[1]) : null;
+          }
+        };
+        
+        // استخدام gemini-3.5-flash
+        const selectedModel = 'gemini-3.5-flash';
         
         const systemPrompt = `أنت مساعد ذكي باسم مهندس أسامة البعوي (م/أسامة البعوي). تقدم استشارات هندسية متخصصة وخدمات متعلقة بـ:
 
@@ -50,10 +64,11 @@ export const appRouter = router({
 - إذا لم تعرف الإجابة، قل: عذراً، ليس لدي هذه المعلومة
 
 **قاعدة الأسعار - صارمة جداً:**
-- الأسعار ثابتة ولا تنزل تحت الحد الأدنى
+- الأسعار ثابتة ولا تنزل تحت الحد الأدنى أبداً
 - إذا طلب سعراً أقل من الحد الأدنى: رفض مباشرة
 - قل: عذراً، الحد الأدنى X ريال، لا يمكن أقل
 - لا تناقش أو تتفاوض أو تقبل حتى ريال واحد أقل
+- الحسابات تتم في الخادم (الموقع) بدقة 100%
 - احسب الإجمالي بناءً على الحد الأدنى لكل خدمة`;
         
         const messages = [
