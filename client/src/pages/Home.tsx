@@ -385,7 +385,7 @@ export default function Home() {
         {/* قسم من نحن */}
         <div className="relative z-10 max-w-4xl mx-auto mb-16 md:mb-24 bg-white/5 backdrop-blur-md border border-white/10 rounded-[2.5rem] p-8 md:p-12 text-center shadow-2xl">
           <h2 className="text-2xl md:text-4xl font-bold mb-8 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent" translate="no">عني</h2>
-          <p className="text-gray-200 text-lg md:text-xl leading-relaxed">مهندس كهربائي متخصص في المشاريع الإنشائية والإشراف على المواقع. أتمتع بخبرة واسعة في تنفيذ المشاريع الكبرى وضمان الالتزام بمعايير الهندسة والسلامة. أعمل على تقديم حلول فعالة وموثوقة لكل مشروع.</p>
+          <p className="text-gray-200 text-lg md:text-xl leading-relaxed" translate="no">مهندس كهربائي متخصص في المشاريع الإنشائية والإشراف على المواقع. أتمتع بخبرة واسعة في تنفيذ المشاريع الكبرى وضمان الالتزام بمعايير الهندسة والسلامة. أعمل على تقديم حلول فعالة وموثوقة لكل مشروع.</p>
         </div>
 
         {/* قسم وسائل التواصل */}
