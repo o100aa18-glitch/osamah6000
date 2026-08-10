@@ -57,7 +57,7 @@ export const appRouter = router({
         ];
         
         try {
-          const response = await invokeGemini(messages as any, 'gemini-2.0-flash');
+          const response = await invokeGemini(messages as any, 'gemini-2.5-flash');
           
           const reply = response?.choices?.[0]?.message?.content || 'عذراً، حدث خطأ في الرد. يرجى المحاولة مجدداً.';
           
@@ -65,11 +65,11 @@ export const appRouter = router({
             success: true,
             reply: reply,
             timestamp: new Date(),
-            model: 'gemini-2.0-flash' as const
+            model: 'gemini-2.5-flash' as const
           };
         } catch (error: any) {
           console.error('[Chat Error]', error);
-          console.error('[Model: gemini-2.0-flash]', error?.message || 'Unknown error');
+          console.error('[Model: gemini-2.5-flash]', error?.message || 'Unknown error');
           return {
             success: false,
             reply: 'عذراً، حدث خطأ في الاتصال. يرجى المحاولة مجدداً لاحقاً.',
