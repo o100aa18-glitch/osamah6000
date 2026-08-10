@@ -11,10 +11,9 @@ import {
   X, 
   ShoppingCart, 
   Trash2, 
-  CheckCircle2,
+  ChevronLeft,
   ChevronRight,
-  Palette,
-  Monitor
+  Palette
 } from "lucide-react";
 import {
   Dialog,
@@ -231,6 +230,7 @@ const SERVICES_DATA: ServiceCategory[] = [
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory | null>(null);
+  const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -360,29 +360,66 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Services Grid Section - NOON STYLE */}
+        {/* Services Grid Section - IMPROVED LAYOUT */}
         <div className="relative z-10 max-w-7xl mx-auto mb-16 md:mb-24">
           <h2 className="text-3xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
             اطلب خدماتنا
           </h2>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
-            {SERVICES_DATA.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category)}
-                className="group relative"
-              >
-                <div className={`absolute inset-0 bg-gradient-to-r ${category.color} rounded-[2rem] blur-xl opacity-0 group-hover:opacity-40 transition-all duration-500`}></div>
-                <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 flex flex-col items-center gap-4 hover:bg-white/10 transition-all duration-300 transform group-hover:scale-105 group-hover:-translate-y-2 h-full aspect-square justify-center">
-                  <div className={`p-4 rounded-2xl bg-gradient-to-br ${category.color} text-white shadow-lg`}>
-                    {category.icon}
+          {/* Category Selection */}
+          {!selectedCategory ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+              {SERVICES_DATA.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => setSelectedCategory(category)}
+                  className="group relative"
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-r ${category.color} rounded-[2rem] blur-xl opacity-0 group-hover:opacity-40 transition-all duration-500`}></div>
+                  <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 flex flex-col items-center gap-4 hover:bg-white/10 transition-all duration-300 transform group-hover:scale-105 group-hover:-translate-y-2 h-full aspect-square justify-center">
+                    <div className={`p-4 rounded-2xl bg-gradient-to-br ${category.color} text-white shadow-lg`}>
+                      {category.icon}
+                    </div>
+                    <h3 className="text-lg md:text-xl font-bold text-white text-center">{category.title}</h3>
                   </div>
-                  <h3 className="text-lg md:text-xl font-bold text-white text-center">{category.title}</h3>
-                </div>
+                </button>
+              ))}
+            </div>
+          ) : (
+            // Services Grid - Thumbnail View
+            <div>
+              <button
+                onClick={() => setSelectedCategory(null)}
+                className="mb-8 flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                <ChevronRight className="w-5 h-5" />
+                <span>العودة للفئات</span>
               </button>
-            ))}
-          </div>
+              
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {selectedCategory.services.map((service) => (
+                  <button
+                    key={service.id}
+                    onClick={() => setSelectedService(service)}
+                    className="group relative"
+                  >
+                    <div className="relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-all duration-300 transform group-hover:scale-105 aspect-square flex flex-col">
+                      <div className="relative w-full h-3/4 overflow-hidden bg-slate-800">
+                        <img 
+                          src={service.image} 
+                          alt={service.name} 
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        />
+                      </div>
+                      <div className="h-1/4 p-2 flex items-center justify-center">
+                        <p className="text-xs font-bold text-white text-center line-clamp-2">{service.name}</p>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* About Section */}
@@ -436,64 +473,55 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Services Modal - NOON STYLE GRID */}
-      <Dialog open={!!selectedCategory} onOpenChange={(open) => !open && setSelectedCategory(null)}>
-        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-slate-900 border-white/10 text-white rounded-[2.5rem] p-0 shadow-2xl" dir="rtl">
-          <DialogHeader className="p-8 pb-4 sticky top-0 bg-slate-900/95 backdrop-blur-xl z-30 border-b border-white/10">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-4">
-                <div className={`p-3 rounded-xl bg-gradient-to-br ${selectedCategory?.color} text-white`}>
-                  {selectedCategory?.icon}
-                </div>
-                <div>
-                  <DialogTitle className="text-3xl font-bold text-white">
-                    {selectedCategory?.title}
-                  </DialogTitle>
-                  <DialogDescription className="text-gray-400 text-lg">
-                    اختر الخدمات التي ترغب بها وأضفها للسلة
-                  </DialogDescription>
-                </div>
+      {/* Service Detail Modal */}
+      <Dialog open={!!selectedService} onOpenChange={(open) => !open && setSelectedService(null)}>
+        <DialogContent className="max-w-2xl bg-slate-900 border-white/10 text-white rounded-[2.5rem] p-0 shadow-2xl" dir="rtl">
+          <DialogHeader className="p-8 pb-4 border-b border-white/10">
+            <div className="flex items-center justify-between">
+              <div>
+                <DialogTitle className="text-2xl font-bold text-white">
+                  {selectedService?.name}
+                </DialogTitle>
+                <DialogDescription className="text-blue-400 text-lg font-bold mt-2">
+                  {selectedService?.price}
+                </DialogDescription>
               </div>
-              <button 
-                onClick={() => setSelectedCategory(null)}
-                className="p-3 hover:bg-white/10 rounded-full transition-colors"
-              >
-                <X className="w-8 h-8 text-gray-400" />
+              <button onClick={() => setSelectedService(null)} className="p-2 hover:bg-white/10 rounded-full">
+                <X className="w-6 h-6 text-gray-400" />
               </button>
             </div>
           </DialogHeader>
-          
-          <div className="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {selectedCategory?.services.map((service) => (
-              <div 
-                key={service.id}
-                className="group bg-white/5 border border-white/10 rounded-3xl overflow-hidden hover:bg-white/10 transition-all duration-300 flex flex-col"
-              >
-                <div className="relative aspect-square overflow-hidden bg-slate-800">
-                  <img 
-                    src={service.image} 
-                    alt={service.name} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                      {service.price}
-                    </span>
-                  </div>
-                </div>
-                <div className="p-5 flex flex-col flex-grow gap-4">
-                  <h4 className="text-lg font-bold text-white line-clamp-2 min-h-[3.5rem]">
-                    {service.name}
-                  </h4>
-                  <Button
-                    onClick={() => addToCart(service)}
-                    className="w-full bg-white/10 hover:bg-blue-600 text-white border-none rounded-xl py-6 text-base font-bold transition-all flex items-center gap-2"
-                  >
-                    <Plus className="w-5 h-5" /> إضافة للسلة
-                  </Button>
-                </div>
+
+          <div className="p-8">
+            <div className="relative w-full h-80 overflow-hidden rounded-2xl bg-slate-800 mb-6">
+              <img 
+                src={selectedService?.image} 
+                alt={selectedService?.name} 
+                className="w-full h-full object-cover"
+              />
+            </div>
+            
+            <div className="space-y-4">
+              <div className="bg-white/5 rounded-xl p-4">
+                <p className="text-gray-400 text-sm mb-1">الفئة</p>
+                <p className="text-white font-bold">{selectedService?.category}</p>
               </div>
-            ))}
+              
+              <div className="bg-white/5 rounded-xl p-4">
+                <p className="text-gray-400 text-sm mb-1">السعر</p>
+                <p className="text-white font-bold text-lg">{selectedService?.price}</p>
+              </div>
+
+              <Button
+                onClick={() => {
+                  if (selectedService) addToCart(selectedService);
+                  setSelectedService(null);
+                }}
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-6 rounded-xl shadow-lg flex items-center justify-center gap-3 text-lg transition-all transform hover:scale-[1.02]"
+              >
+                <Plus className="w-6 h-6" /> إضافة للسلة
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
