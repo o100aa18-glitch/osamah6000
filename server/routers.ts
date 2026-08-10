@@ -49,7 +49,7 @@ export const appRouter = router({
         try {
           const response = await invokeLLM({
             messages: messages as any,
-            model: 'gpt-4o-mini'
+            model: 'gemini-2.0-flash'
           });
           
           const reply = response.choices[0]?.message?.content || 'عذراً، حدث خطأ في الرد. يرجى المحاولة مجدداً.';
