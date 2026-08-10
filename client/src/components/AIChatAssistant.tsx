@@ -45,7 +45,7 @@ export function AIChatAssistant() {
       console.error('Chat error:', error);
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: 'عذراً، حدث خطأ في الاتصال. يرجى المحاولة مجدداً.' 
+                  content: '<span translate="no">عذراً، حدث خطأ في الاتصال. يرجى المحاولة مجدداً.</span>'
       }]);
     } finally {
       setIsLoading(false);
@@ -58,7 +58,7 @@ export function AIChatAssistant() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-24 left-8 z-40 p-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center"
-        title="مساعد م/أسامة البعوي الذكي"
+        title="مساعد م/أسامة البعوي الذكي" translate="no"
       >
         {isOpen ? (
           <X className="w-6 h-6" />
@@ -72,16 +72,16 @@ export function AIChatAssistant() {
         <div className="fixed bottom-40 left-8 z-40 w-96 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden" dir="rtl">
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4">
-            <h3 className="font-bold text-lg">مساعد م/أسامة البعوي الذكي</h3>
-            <p className="text-sm text-blue-100">استشارات هندسية متخصصة</p>
+            <h3 className="font-bold text-lg" translate="no">مساعد م/أسامة البعوي الذكي</h3>
+            <p className="text-sm text-blue-100" translate="no">استشارات هندسية متخصصة</p>
           </div>
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-96 bg-gray-50">
             {messages.length === 0 && (
               <div className="text-center text-gray-500 py-8">
-                <p className="mb-2">مرحباً! أنا مساعد م/أسامة البعوي الذكي</p>
-                <p className="text-sm">كيف يمكنني مساعدتك اليوم؟</p>
+                <p className="mb-2" translate="no">مرحباً! أنا مساعد م/أسامة البعوي الذكي</p>
+                <p className="text-sm" translate="no">كيف يمكنني مساعدتك اليوم؟</p>
               </div>
             )}
             
@@ -128,7 +128,7 @@ export function AIChatAssistant() {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="اكتب سؤالك هنا..."
+                placeholder="اكتب سؤالك هنا..." translate="no"
                 disabled={isLoading}
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
               />

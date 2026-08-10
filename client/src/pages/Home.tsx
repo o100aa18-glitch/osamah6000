@@ -450,7 +450,7 @@ export default function Home() {
                 className="mb-8 flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
               >
                 <ChevronRight className="w-5 h-5" />
-                <span>العودة للفئات</span>
+                <span translate="no">العودة للفئات</span>
               </button>
               
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
@@ -488,15 +488,15 @@ export default function Home() {
         <div className="max-w-4xl mx-auto bg-gradient-to-r from-blue-600 to-purple-600 rounded-[3rem] p-8 md:p-16 text-center text-white mb-12 shadow-2xl relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/50 to-purple-600/50 blur-xl"></div>
           <div className="relative z-10">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">تواصل معي</h2>
-            <p className="text-lg md:text-2xl mb-10 text-blue-100">تواصل معي عبر أي من قنوات التواصل الاجتماعية أو البريد الإلكتروني</p>
+            <h2 className="text-3xl md:text-5xl font-bold mb-6" translate="no">تواصل معي</h2>
+            <p className="text-lg md:text-2xl mb-10 text-blue-100" translate="no">تواصل معي عبر أي من قنوات التواصل الاجتماعية أو البريد الإلكتروني</p>
             <Button
               className="bg-yellow-400 text-gray-900 hover:bg-yellow-500 font-bold px-12 py-4 text-lg md:text-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
               onClick={() => {
                 window.location.href = "mailto:osamah711x@gmail.com";
               }}
             >
-              تواصل معي الآن
+              <span translate="no">تواصل معي الآن</span>
             </Button>
           </div>
         </div>
@@ -534,12 +534,12 @@ export default function Home() {
             
             <div className="space-y-4">
               <div className="bg-white/5 rounded-xl p-4">
-                <p className="text-gray-400 text-sm mb-1">الفئة</p>
-                <p className="text-white font-bold">{selectedService?.category}</p>
+                <p className="text-gray-400 text-sm mb-1" translate="no">الفئة</p>
+                <p className="text-white font-bold" translate="no">{selectedService?.category}</p>
               </div>
               
               <div className="bg-white/5 rounded-xl p-4">
-                <p className="text-gray-400 text-sm mb-1">السعر</p>
+                <p className="text-gray-400 text-sm mb-1" translate="no">السعر</p>
                 <p className="text-white font-bold text-lg">{selectedService?.price}</p>
               </div>
 
@@ -550,7 +550,7 @@ export default function Home() {
                 }}
                 className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-6 rounded-xl shadow-lg flex items-center justify-center gap-3 text-lg transition-all transform hover:scale-[1.02]"
               >
-                <Plus className="w-4 h-4" /> إضافة للسلة
+                <Plus className="w-4 h-4" /> <span translate="no">إضافة للسلة</span>
               </Button>
             </div>
           </div>
@@ -564,7 +564,7 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <ShoppingCart className="w-8 h-8 text-blue-500" />
-                <DialogTitle className="text-2xl font-bold">السلة</DialogTitle>
+                <DialogTitle className="text-2xl font-bold" translate="no">السلة</DialogTitle>
               </div>
               <button onClick={() => setIsCartOpen(false)} className="p-2 hover:bg-white/10 rounded-full">
                 <X className="w-6 h-6 text-gray-400" />
@@ -576,7 +576,7 @@ export default function Home() {
             {cart.length === 0 ? (
               <div className="text-center py-12">
                 <ShoppingCart className="w-20 h-20 text-gray-700 mx-auto mb-4 opacity-20" />
-                <p className="text-gray-400 text-xl">السلة فارغة</p>
+                <p className="text-gray-400 text-xl" translate="no">السلة فارغة</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -607,14 +607,14 @@ export default function Home() {
           {cart.length > 0 && (
             <div className="p-8 pt-4 bg-slate-950/50 border-t border-white/10 rounded-b-[2.5rem]">
               <div className="flex justify-between items-center mb-6">
-                <span className="text-gray-400">إجمالي الخدمات:</span>
+                <span className="text-gray-400" translate="no">إجمالي الخدمات:</span>
                 <span className="text-2xl font-bold text-white">{cartCount}</span>
               </div>
               <Button
                 onClick={sendOrderToWhatsApp}
                 className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-8 rounded-2xl shadow-xl flex items-center justify-center gap-3 text-xl transition-all transform hover:scale-[1.02]"
               >
-                {SocialIcons.whatsapp} إرسال الطلب عبر واتس آب
+                {SocialIcons.whatsapp} <span translate="no">إرسال الطلب عبر واتس آب</span>
               </Button>
             </div>
           )}
@@ -623,8 +623,8 @@ export default function Home() {
 
       {/* التذييل */}
       <footer className="relative z-10 bg-black/40 backdrop-blur-md border-t border-white/10 text-white text-center py-12">
-        <p className="text-gray-400 text-sm md:text-base mb-2">© 2024 أسامة مبارك البعوي. جميع الحقوق محفوظة.</p>
-        <p className="text-gray-500 text-xs">صمم باحترافية لتلبية احتياجاتكم</p>
+        <p className="text-gray-400 text-sm md:text-base mb-2" translate="no">© 2024 أسامة مبارك البعوي. جميع الحقوق محفوظة.</p>
+        <p className="text-gray-500 text-xs" translate="no">صمم باحترافية لتلبية احتياجاتكم</p>
       </footer>
 
       <style>{`
