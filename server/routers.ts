@@ -30,8 +30,25 @@ export const appRouter = router({
         })).optional()
       }))
       .mutation(async ({ input }) => {
-        // استخدام gemini-2.0-flash (الأحدث والأسرع)
-        const selectedModel = 'gemini-2.0-flash';
+        // قاموس الخدمات مع الصور
+        const servicesDatabase = {
+          'فيش': { name: 'تركيب فيش', price: '40-70', image: '/manus-storage/electricity-01-bulb-candle_5641c379.png' },
+          'مفتاح': { name: 'تركيب مفتاح', price: '30-60', image: '/manus-storage/electricity-02-switch_5641c379.png' },
+          'لمبة': { name: 'تركيب لمبة', price: '20-40', image: '/manus-storage/electricity-03-bulb_5641c379.png' },
+        };
+        
+        // فهم الخدمة من الرسالة
+        const messageText = input.message.toLowerCase();
+        let serviceResponse = '';
+        for (const [keyword, service] of Object.entries(servicesDatabase)) {
+          if (messageText.includes(keyword)) {
+            serviceResponse = `\n![${service.name}](${service.image})\nهل تقصد: **${service.name}** (${service.price} ريال)؟`;
+            break;
+          }
+        }
+        
+        // استخدام gemini-3.5-flash
+        const selectedModel = 'gemini-3.5-flash';
         
         const systemPrompt = `أنت مساعد ذكي باسم مهندس أسامة البعوي (م/أسامة البعوي). تقدم استشارات هندسية متخصصة وخدمات متعلقة بـ:
 
@@ -59,10 +76,11 @@ export const appRouter = router({
           const response = await invokeGemini(messages as any, 'gemini-3.5-flash');
           
           const reply = response?.choices?.[0]?.message?.content || 'عذراً، حدث خطأ في الرد. يرجى المحاولة مجدداً.';
+          const finalReply = serviceResponse ? reply + serviceResponse : reply;
           
           return {
             success: true,
-            reply: reply,
+            reply: finalReply,
             timestamp: new Date(),
             model: 'gemini-3.5-flash' as const
           };
