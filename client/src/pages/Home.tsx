@@ -350,17 +350,17 @@ export default function Home() {
           <div className="mb-8 md:mb-10 relative">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-2xl opacity-75 animate-pulse"></div>
             <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-2xl border-4 border-white/20 overflow-hidden shadow-2xl bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center">
-              <img src="/manus-storage/e9020620-900b-11f1-ae70-e38d80dd29c3_profile.png" alt="أسامة" className="w-full h-full object-cover" onError={(e) => (e.target as HTMLImageElement).style.display='none'} />
+              <img src="https://manus-storage.s3.amazonaws.com/e9020620-900b-11f1-ae70-e38d80dd29c3_profile.png" alt="أسامة" className="w-full h-full object-cover" />
             </div>
           </div>
 
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-center mb-2 md:mb-3 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-center mb-2 md:mb-3 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent" translate="no">
             أسامة مبارك البعوي
           </h1>
-          <p className="text-lg md:text-2xl font-semibold text-center mb-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <p className="text-lg md:text-2xl font-semibold text-center mb-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent" translate="no">
             مهندس متخصص
           </p>
-          <p className="text-sm md:text-lg text-center mb-8 md:mb-10 text-gray-300 px-4">
+          <p className="text-sm md:text-lg text-center mb-8 md:mb-10 text-gray-300 px-4" translate="no">
             متخصص في خدمات الكهرباء والسباكة والتكييف والكاميرات
           </p>
 
