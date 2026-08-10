@@ -30,22 +30,8 @@ export const appRouter = router({
         })).optional()
       }))
       .mutation(async ({ input }) => {
-        // نظام حساب الأسعار
-        const priceCalculator = {
-          calculateMinimumPrice: (services: any[]) => {
-            return services.reduce((total, service) => total + (service.minPrice || 0), 0);
-          },
-          validatePrice: (requestedPrice: number, minimumPrice: number) => {
-            return requestedPrice >= minimumPrice ? requestedPrice : minimumPrice;
-          },
-          parseServicePrice: (text: string) => {
-            const priceMatch = text.match(/(\d+)\s*ريال/);
-            return priceMatch ? parseInt(priceMatch[1]) : null;
-          }
-        };
-        
-        // استخدام gemini-3.5-flash
-        const selectedModel = 'gemini-3.5-flash';
+        // استخدام gemini-2.0-flash (الأحدث والأسرع)
+        const selectedModel = 'gemini-2.0-flash';
         
         const systemPrompt = `أنت مساعد ذكي باسم مهندس أسامة البعوي (م/أسامة البعوي). تقدم استشارات هندسية متخصصة وخدمات متعلقة بـ:
 
@@ -61,13 +47,7 @@ export const appRouter = router({
 - استخدم العربية الفصحى فقط
 - كن ودياً واحترافياً
 - رد قصير (جملة أو جملتين فقط)
-- إذا لم تعرف الإجابة، قل: عذراً، ليس لدي هذه المعلومة
-
-**قاعدة الأسعار:**
-- السعر المتوسط أولاً
-- لا تنزل تحت سعر السوق بمكة
-- إذا طلب تخفيف: انزل للحد الأدنى فقط
-- إذا طلب أقل: قل الحد الأدنى X ريال مع ضمان الجودة`;
+- إذا لم تعرف الإجابة، قل: عذراً، ليس لدي هذه المعلومة`;
         
         const messages = [
           { role: 'system' as const, content: systemPrompt },
