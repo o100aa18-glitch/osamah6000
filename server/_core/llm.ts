@@ -217,6 +217,11 @@ const resolveApiUrl = () => {
   return "https://generativelanguage.googleapis.com/v1beta/openai/";
 };
 
+// استخدام Bearer token بدلاً من URL parameter
+const getAuthHeader = (apiKey: string) => {
+  return `Bearer ${apiKey}`;
+};
+
 const getApiKey = () => {
   const key = process.env.GEMINI_API_KEY;
   if (!key) {
@@ -416,16 +421,17 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
   const apiUrl = resolveApiUrl();
   const apiKey = getApiKey();
   
-  // استخدام Gemini API مع المفتاح
-  const finalUrl = `${apiUrl}chat/completions?key=${apiKey}`;
+  // استخدام Gemini API مع Authorization header
+  const finalUrl = `${apiUrl}chat/completions`;
   
-  console.log('[Gemini Request] URL:', finalUrl.replace(apiKey, '***'));
+  console.log('[Gemini Request] URL:', finalUrl);
   console.log('[Gemini Request] Model:', payload.model);
 
   const response = await fetchWithBackoff(finalUrl, {
     method: "POST",
     headers: {
       "content-type": "application/json",
+      "authorization": `Bearer ${apiKey}`,
     },
     body: JSON.stringify(payload),
   });
@@ -459,10 +465,12 @@ export async function listLLMModels(): Promise<ModelsResponse> {
   assertApiKey();
 
   const apiKey = getApiKey();
-  const url = `https://generativelanguage.googleapis.com/v1beta/openai/models?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/openai/models`;
 
   const response = await fetchWithBackoff(url, {
-    headers: {},
+    headers: {
+      "authorization": `Bearer ${apiKey}`,
+    },
   });
 
   if (!response.ok) {
