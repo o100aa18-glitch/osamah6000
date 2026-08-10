@@ -216,35 +216,35 @@ const decorServices: ServiceItem[] = [
 const SERVICES_DATA: ServiceCategory[] = [
   {
     id: "electricity",
-    title: "<span translate='no'>خدمات الكهرباء</span>",
+    title: "خدمات الكهرباء",
     icon: <Zap className="w-8 h-8" />,
     color: "from-yellow-500 to-orange-600",
     services: electricityServices
   },
   {
     id: "plumbing",
-    title: "<span translate='no'>خدمات السباكة</span>",
+    title: "خدمات السباكة",
     icon: <Droplets className="w-8 h-8" />,
     color: "from-blue-500 to-cyan-600",
     services: plumbingServices
   },
   {
     id: "ac",
-    title: "<span translate='no'>خدمات التكييف</span>",
+    title: "خدمات التكييف",
     icon: <Wind className="w-8 h-8" />,
     color: "from-teal-400 to-blue-500",
     services: acServices
   },
   {
     id: "cameras",
-    title: "<span translate='no'>كاميرات وأنظمة</span>",
+    title: "كاميرات وأنظمة",
     icon: <Camera className="w-8 h-8" />,
     color: "from-purple-500 to-indigo-600",
     services: cameraServices
   },
   {
     id: "decor",
-    title: "<span translate='no'>ديكورات وتركيبات</span>",
+    title: "ديكورات وتركيبات",
     icon: <Palette className="w-8 h-8" />,
     color: "from-pink-500 to-rose-600",
     services: decorServices
@@ -434,7 +434,7 @@ export default function Home() {
                     <div className={`p-4 rounded-2xl bg-gradient-to-br ${category.color} text-white shadow-lg`}>
                       {category.icon}
                     </div>
-                    <h3 className="text-lg md:text-xl font-bold text-white text-center">{category.title}</h3>
+                    <h3 className="text-lg md:text-xl font-bold text-white text-center" translate="no">{category.title}</h3>
                   </div>
                 </button>
               ))}
