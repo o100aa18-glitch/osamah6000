@@ -30,22 +30,16 @@ export const appRouter = router({
         })).optional()
       }))
       .mutation(async ({ input }) => {
-        // اختيار النموذج تلقائياً - يحاول الأفضل أولاً
-        const availableModels = [
-          'gemini-2.0-flash',      // الأسرع والأحدث
-          'gemini-1.5-pro',        // قوي وموثوق
-          'gemini-1.5-flash',      // سريع
-          'gemini-pro'             // الخيار الأخير
-        ];
-        let selectedModel = availableModels[0]; // الافتراضي
+        // استخدام gemini-1.5-flash (متوافق مع الخطة المجانية)
+        const selectedModel = 'gemini-1.5-flash';
         
         const systemPrompt = `أنت مساعد ذكي باسم مهندس أسامة البعوي (م/أسامة البعوي). تقدم استشارات هندسية متخصصة وخدمات متعلقة بـ:
 
 1. **الكهرباء**: تركيب الأفياش، المفاتيح، النجف، الإضاءة، الصيانة الكهربائية
 2. **السباكة والصرف الصحي**: تركيب الخلاطات، السخانات، تسليك المجاري، الصيانة
-3. **التكييف**: غسيل المكيفات، تعبئة الفريون، الصيانة
+3. **التكييف**: غسيل المكيفات، تعبئة الفريون، الصيانة، إصلاح الأعطال
 4. **الكاميرات والأنظمة**: تركيب الكاميرات، أنظمة المراقبة، الأقفال الذكية
-5. **الديكور والتركيبات**: تركيب الشاشات، الستائر، الأثاث
+5. **الديكور والتركيبات**: تركيب الشاشات، الستائر، الأثاث، الرفوف
 
 **تعليمات مهمة جداً:**
 - أجب **بالعربية الفصحى فقط** - لا تستخدم كلمات غريبة أو غير معروفة
@@ -65,7 +59,7 @@ export const appRouter = router({
         try {
           const response = await invokeLLM({
             messages: messages as any,
-            model: selectedModel
+            model: 'gemini-1.5-flash'
           });
           
           const reply = response.choices[0]?.message?.content || 'عذراً، حدث خطأ في الرد. يرجى المحاولة مجدداً.';
@@ -73,15 +67,17 @@ export const appRouter = router({
           return {
             success: true,
             reply: reply,
-            timestamp: new Date()
+            timestamp: new Date(),
+            model: 'gemini-1.5-flash' as const
           };
-        } catch (error) {
+        } catch (error: any) {
           console.error('[Chat Error]', error);
-          console.error('[Used Model]', selectedModel);
+          console.error('[Model: gemini-1.5-flash]', error?.message || 'Unknown error');
           return {
             success: false,
             reply: 'عذراً، حدث خطأ في الاتصال. يرجى المحاولة مجدداً لاحقاً.',
-            timestamp: new Date()
+            timestamp: new Date(),
+            model: 'gemini-1.5-flash' as const
           };
         }
       })
