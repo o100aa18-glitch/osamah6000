@@ -455,29 +455,46 @@ export default function Home() {
               
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
                 {selectedCategory.services.map((service) => (
-                  <button
+                  <div
                     key={service.id}
-                    onClick={() => setSelectedService(service)}
                     className="group relative"
                   >
-                    <div className="relative bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:bg-white/10 transition-all duration-300 transform group-hover:scale-105 aspect-square flex flex-col">
-                      <div className="relative w-full h-3/4 overflow-hidden bg-slate-800">
-                        <img 
-                          src={service.image} 
-                          alt={service.name} 
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                          loading="lazy"
-                          onError={(e) => {
-                            const img = e.currentTarget;
-                            img.style.display = 'none';
-                          }}
-                        />
+                    <button
+                      onClick={() => setSelectedService(service)}
+                      className="w-full h-full"
+                    >
+                      <div className="relative bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:bg-white/10 transition-all duration-300 transform group-hover:scale-105 aspect-square flex flex-col">
+                        <div className="relative w-full h-3/4 overflow-hidden bg-slate-800">
+                          <img 
+                            src={service.image} 
+                            alt={service.name} 
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            loading="lazy"
+                            onError={(e) => {
+                              const img = e.currentTarget;
+                              img.style.display = 'none';
+                            }}
+                          />
+                        </div>
+                        <div className="h-1/4 p-2 flex items-center justify-center">
+                          <p className="text-xs font-bold text-white text-center line-clamp-2">{service.name}</p>
+                        </div>
                       </div>
-                      <div className="h-1/4 p-2 flex items-center justify-center">
-                        <p className="text-xs font-bold text-white text-center line-clamp-2">{service.name}</p>
-                      </div>
-                    </div>
-                  </button>
+                    </button>
+                    
+                    {/* زر إضافة للسلة المباشر */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addToCart(service);
+                        toast.success('تمت الإضافة للسلة!');
+                      }}
+                      className="absolute bottom-2 right-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform hover:scale-110"
+                      title="إضافة للسلة"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
                 ))}
               </div>
             </div>
@@ -522,14 +539,26 @@ export default function Home() {
           </DialogHeader>
 
           <div className="p-8">
-                    <div className="relative w-full h-80 overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-purple-600 mb-6 flex items-center justify-center">
-              <div className="text-9xl">
-                {selectedService?.category === 'الكهرباء' && '⚡'}
-                {selectedService?.category === 'السباكة' && '🚰'}
-                {selectedService?.category === 'التكييف' && '❄️'}
-                {selectedService?.category === 'الكاميرات والأنظمة' && '📹'}
-                {selectedService?.category === 'الديكورات والتركيبات' && '🎨'}
-              </div>
+                    <div className="relative w-full h-80 overflow-hidden rounded-2xl bg-slate-800 mb-6 flex items-center justify-center">
+              {selectedService?.image ? (
+                <img 
+                  src={selectedService.image} 
+                  alt={selectedService.name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    img.style.display = 'none';
+                  }}
+                />
+              ) : (
+                <div className="text-9xl">
+                  {selectedService?.category === 'الكهرباء' && '⚡'}
+                  {selectedService?.category === 'السباكة' && '🚰'}
+                  {selectedService?.category === 'التكييف' && '❄️'}
+                  {selectedService?.category === 'الكاميرات والأنظمة' && '📹'}
+                  {selectedService?.category === 'الديكورات والتركيبات' && '🎨'}
+                </div>
+              )}
             </div>
             
             <div className="space-y-4">
