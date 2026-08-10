@@ -382,7 +382,40 @@ export default function Home() {
           </div>
         </div>
 
-        {/* قسم الخدمات */}
+        {/* قسم من نحن */}
+        <div className="relative z-10 max-w-4xl mx-auto mb-16 md:mb-24 bg-white/5 backdrop-blur-md border border-white/10 rounded-[2.5rem] p-8 md:p-12 text-center shadow-2xl">
+          <h2 className="text-2xl md:text-4xl font-bold mb-8 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">عني</h2>
+          <p className="text-gray-200 text-lg md:text-xl leading-relaxed">مهندس كهربائي متخصص في المشاريع الإنشائية والإشراف على المواقع. أتمتع بخبرة واسعة في تنفيذ المشاريع الكبرى وضمان الالتزام بمعايير الهندسة والسلامة. أعمل على تقديم حلول فعالة وموثوقة لكل مشروع.</p>
+        </div>
+
+        {/* قسم وسائل التواصل */}
+        <div className="mb-16 md:mb-24">
+          <h2 className="text-2xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+            تابعني على وسائل التواصل
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 max-w-5xl mx-auto">
+            {socialLinks.map((social) => (
+              <a
+                key={social.name}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative"
+              >
+                <div className={`absolute inset-0 bg-gradient-to-r ${social.color} rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
+                <div className="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 text-center hover:bg-white/20 transition-all duration-300 transform group-hover:scale-105 group-hover:-translate-y-1">
+                  <div className={`bg-gradient-to-r ${social.color} text-white rounded-full p-4 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mx-auto mb-4 group-hover:shadow-lg transition-all duration-300`}>
+                    {SocialIcons[social.icon as keyof typeof SocialIcons]}
+                  </div>
+                  <p className="text-sm md:text-base font-bold text-white mb-2">{social.name}</p>
+                  <p className="text-xs text-gray-400 break-words">{social.username}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* قسم الخدمات - في الأسفل */}
         <div className="relative z-10 max-w-7xl mx-auto mb-16 md:mb-24">
           <h2 className="text-3xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
             اطلب خدماتنا
@@ -430,6 +463,10 @@ export default function Home() {
                           alt={service.name} 
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                           loading="lazy"
+                          onError={(e) => {
+                            const img = e.currentTarget;
+                            img.style.display = 'none';
+                          }}
                         />
                       </div>
                       <div className="h-1/4 p-2 flex items-center justify-center">
@@ -441,39 +478,6 @@ export default function Home() {
               </div>
             </div>
           )}
-        </div>
-
-        {/* قسم من نحن */}
-        <div className="relative z-10 max-w-4xl mx-auto mb-16 md:mb-24 bg-white/5 backdrop-blur-md border border-white/10 rounded-[2.5rem] p-8 md:p-12 text-center shadow-2xl">
-          <h2 className="text-2xl md:text-4xl font-bold mb-8 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">عني</h2>
-          <p className="text-gray-200 text-lg md:text-xl leading-relaxed">مهندس كهربائي متخصص في المشاريع الإنشائية والإشراف على المواقع. أتمتع بخبرة واسعة في تنفيذ المشاريع الكبرى وضمان الالتزام بمعايير الهندسة والسلامة. أعمل على تقديم حلول فعالة وموثوقة لكل مشروع.</p>
-        </div>
-
-        {/* قسم وسائل التواصل */}
-        <div className="mb-16 md:mb-24">
-          <h2 className="text-2xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
-            تابعني على وسائل التواصل
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 max-w-5xl mx-auto">
-            {socialLinks.map((social) => (
-              <a
-                key={social.name}
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative"
-              >
-                <div className={`absolute inset-0 bg-gradient-to-r ${social.color} rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
-                <div className="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 text-center hover:bg-white/20 transition-all duration-300 transform group-hover:scale-105 group-hover:-translate-y-1">
-                  <div className={`bg-gradient-to-r ${social.color} text-white rounded-full p-4 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mx-auto mb-4 group-hover:shadow-lg transition-all duration-300`}>
-                    {SocialIcons[social.icon as keyof typeof SocialIcons]}
-                  </div>
-                  <p className="text-sm md:text-base font-bold text-white mb-2">{social.name}</p>
-                  <p className="text-xs text-gray-400 break-words">{social.username}</p>
-                </div>
-              </a>
-            ))}
-          </div>
         </div>
 
         {/* قسم الاتصال */}
@@ -514,11 +518,15 @@ export default function Home() {
           </DialogHeader>
 
           <div className="p-8">
-            <div className="relative w-full h-80 overflow-hidden rounded-2xl bg-slate-800 mb-6">
+                    <div className="relative w-full h-80 overflow-hidden rounded-2xl bg-slate-800 mb-6">
               <img 
                 src={selectedService?.image} 
                 alt={selectedService?.name} 
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  const img = e.currentTarget;
+                  img.style.display = 'none';
+                }}
               />
             </div>
             
