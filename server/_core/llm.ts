@@ -214,19 +214,25 @@ const normalizeToolChoice = (
 
 // استخدام Gemini API مباشرة فقط
 const resolveApiUrl = () => {
-  return "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions";
+  return "https://generativelanguage.googleapis.com/v1beta/openai/";
 };
 
 const getApiKey = () => {
   const key = process.env.GEMINI_API_KEY;
   if (!key) {
+    console.error('[Gemini Error] GEMINI_API_KEY is not configured');
     throw new Error("GEMINI_API_KEY is not configured");
   }
   return key;
 };
 
 const assertApiKey = () => {
-  getApiKey(); // سيرمي خطأ إذا لم يكن موجود
+  try {
+    getApiKey();
+  } catch (error) {
+    console.error('[Gemini Error]', error);
+    throw error;
+  }
 };
 
 const normalizeResponseFormat = ({
@@ -411,7 +417,10 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
   const apiKey = getApiKey();
   
   // استخدام Gemini API مع المفتاح
-  const finalUrl = `${apiUrl}?key=${apiKey}`;
+  const finalUrl = `${apiUrl}chat/completions?key=${apiKey}`;
+  
+  console.log('[Gemini Request] URL:', finalUrl.replace(apiKey, '***'));
+  console.log('[Gemini Request] Model:', payload.model);
 
   const response = await fetchWithBackoff(finalUrl, {
     method: "POST",
@@ -423,12 +432,15 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
 
   if (!response.ok) {
     const errorText = await response.text();
+    console.error('[Gemini Error] Response:', response.status, errorText);
     throw new Error(
-      `LLM invoke failed: ${response.status} ${response.statusText} – ${errorText}`
+      `Gemini API failed: ${response.status} ${response.statusText} – ${errorText}`
     );
   }
 
-  return (await response.json()) as InvokeResult;
+  const result = (await response.json()) as InvokeResult;
+  console.log('[Gemini Success] Got response from model:', result.model);
+  return result;
 }
 
 export type ModelInfo = {
