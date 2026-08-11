@@ -4,6 +4,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { invokeGemini } from "./_core/llm-gemini";
+import { buildChatSystemPrompt, CHAT_MODEL, normalizeConversationHistory } from "./chatAssistant";
 
 export const appRouter = router({
   // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -30,45 +31,29 @@ export const appRouter = router({
         })).optional()
       }))
       .mutation(async ({ input }) => {
-        // استخدام gemini-2.0-flash (الأحدث والأسرع)
-        const selectedModel = 'gemini-2.0-flash';
-        
-        const systemPrompt = `أنت مساعد ذكي باسم مهندس أسامة البعوي (م/أسامة البعوي). تقدم استشارات هندسية متخصصة وخدمات متعلقة بـ:
-
-1. **الكهرباء**: تركيب الأفياش، المفاتيح، النجف، الإضاءة، الصيانة الكهربائية
-2. **السباكة والصرف الصحي**: تركيب الخلاطات، السخانات، تسليك المجاري، الصيانة
-3. **التكييف**: غسيل المكيفات، تعبئة الفريون، الصيانة، إصلاح الأعطال
-4. **الكاميرات والأنظمة**: تركيب الكاميرات، أنظمة المراقبة، الأقفال الذكية
-5. **الديكور والتركيبات**: تركيب الشاشات، الستائر، الأثاث، الرفوف
-
-**تعليمات مهمة جداً:**
-- رد مباشر وموجز من معلومات الموقع فقط
-- لا تخرج عن موضوع الخدمات
-- استخدم العربية الفصحى فقط
-- كن ودياً واحترافياً
-- رد قصير (جملة أو جملتين فقط)
-- إذا لم تعرف الإجابة، قل: عذراً، ليس لدي هذه المعلومة`;
+        const systemPrompt = buildChatSystemPrompt();
+        const conversationHistory = normalizeConversationHistory(input.conversationHistory);
         
         const messages = [
           { role: 'system' as const, content: systemPrompt },
-          ...(input.conversationHistory || []),
+          ...conversationHistory,
           { role: 'user' as const, content: input.message }
         ];
         
         try {
-          const response = await invokeGemini(messages as any, 'gemini-3.5-flash');
+          const response = await invokeGemini(messages as any, CHAT_MODEL);
           
-          const reply = response?.choices?.[0]?.message?.content || 'عذراً، حدث خطأ في الرد. يرجى المحاولة مجدداً.';
+          const reply = response?.choices?.[0]?.message?.content || 'لم يصلني رد واضح هذه المرة. اكتب طلبك مرة أخرى بتفصيل بسيط وسأساعدك.';
           
           return {
             success: true,
             reply: reply,
             timestamp: new Date(),
-            model: 'gemini-3.5-flash' as const
+            model: CHAT_MODEL
           };
         } catch (error: any) {
           console.error('[Chat Error]', error);
-          console.error('[Model: gemini-3.5-flash]', error?.message || 'Unknown error');
+          console.error(`[Model: ${CHAT_MODEL}]`, error?.message || 'Unknown error');
           return {
             success: false,
             reply: 'عذراً، حدث خطأ في الاتصال. يرجى المحاولة مجدداً لاحقاً.',
