@@ -8,7 +8,7 @@ const MODEL_VIEWER_SCRIPT_ID = 'google-model-viewer-script';
 const MODEL_VIEWER_SCRIPT_SRC =
   'https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js';
 const ROBOT_MODEL_SRC =
-  'https://modelviewer.dev/shared-assets/models/RobotExpressive.glb';
+  '/manus-storage/robot-polygonal-mind_897aa57d.glb';
 const BASE_ANIMATION = 'Wave';
 const INTERACTION_ANIMATION = 'Yes';
 
@@ -29,8 +29,13 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
     let disposed = false;
     let viewer: HTMLElement | null = null;
 
+    const availableAnimations = () =>
+      (viewer as (HTMLElement & { availableAnimations?: string[] }) | null)
+        ?.availableAnimations ?? [];
+
     const setAnimation = (name: string) => {
       if (viewer?.tagName.toLowerCase() !== 'model-viewer') return;
+      if (!availableAnimations().includes(name)) return;
       viewer.setAttribute('animation-name', name);
       viewer.setAttribute('autoplay', '');
     };
@@ -40,10 +45,20 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
       if (restoreAnimationTimerRef.current) {
         window.clearTimeout(restoreAnimationTimerRef.current);
       }
-      setAnimation(INTERACTION_ANIMATION);
-      restoreAnimationTimerRef.current = window.setTimeout(() => {
-        if (!disposed) setAnimation(BASE_ANIMATION);
-      }, 1100);
+      viewer.animate(
+        [
+          { transform: 'translateY(0) rotate(0deg) scale(1)' },
+          { transform: 'translateY(-6px) rotate(-3deg) scale(1.04)' },
+          { transform: 'translateY(0) rotate(0deg) scale(1)' },
+        ],
+        { duration: 650, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' },
+      );
+      if (availableAnimations().includes(INTERACTION_ANIMATION)) {
+        setAnimation(INTERACTION_ANIMATION);
+        restoreAnimationTimerRef.current = window.setTimeout(() => {
+          if (!disposed) setAnimation(BASE_ANIMATION);
+        }, 1100);
+      }
     };
 
     const mountViewer = () => {
@@ -54,7 +69,6 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
       viewer.setAttribute('src', ROBOT_MODEL_SRC);
       viewer.setAttribute('alt', 'روبوت مساعد لطيف AI OSAMAH711X');
       viewer.setAttribute('autoplay', '');
-      viewer.setAttribute('animation-name', BASE_ANIMATION);
       viewer.setAttribute('camera-controls', '');
       viewer.setAttribute('disable-zoom', '');
       viewer.setAttribute('shadow-intensity', '0.5');
@@ -86,6 +100,11 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
       });
 
       viewer.addEventListener('pointerenter', playFriendlyReaction);
+      viewer.addEventListener('load', () => {
+        if (availableAnimations().includes(BASE_ANIMATION)) {
+          setAnimation(BASE_ANIMATION);
+        }
+      });
       viewer.addEventListener('keydown', (event) => {
         const keyboardEvent = event as KeyboardEvent;
         if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {

@@ -13,12 +13,12 @@ describe('friendly interactive 3D assistant configuration', () => {
   );
 
   it('uses the cute expressive robot and friendly animations', () => {
-    expect(component).toContain('https://modelviewer.dev/shared-assets/models/RobotExpressive.glb');
+    expect(component).toContain('/manus-storage/robot-polygonal-mind_897aa57d.glb');
     expect(component).toContain("const BASE_ANIMATION = 'Wave'");
     expect(component).toContain("const INTERACTION_ANIMATION = 'Yes'");
     expect(component).toContain("viewer.setAttribute('autoplay', '')");
-    expect(component).toContain("viewer.setAttribute('animation-name', BASE_ANIMATION)");
     expect(component).toContain('playFriendlyReaction');
+    expect(component).toContain('viewer.animate(');
     expect(component).toContain('data-testid="friendly-smile"');
     expect(component).toContain("borderBottom: '2px solid rgba(255, 255, 255, 0.95)'");
   });
