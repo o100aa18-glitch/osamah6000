@@ -57,31 +57,38 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
         }
         .friendly-mascot:focus-visible { outline: 3px solid rgba(103, 232, 249, .95); outline-offset: 5px; border-radius: 18px; }
         .friendly-mascot:active { transform: scale(.97); }
-        .mascot-hole { position: absolute; z-index: 0; left: 50%; bottom: 18px; width: 72px; height: 15px; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(ellipse at 50% 35%, rgba(5, 18, 34, .98) 0 32%, rgba(9, 40, 67, .9) 48%, rgba(92, 194, 220, .35) 73%, transparent 76%); box-shadow: 0 2px 2px rgba(0,0,0,.28), 0 0 12px rgba(73, 220, 240, .23); }
+        .mascot-hole { position: absolute; z-index: 0; left: 50%; bottom: 24px; width: 72px; height: 15px; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(ellipse at 50% 35%, rgba(5, 18, 34, .98) 0 32%, rgba(9, 40, 67, .9) 48%, rgba(92, 194, 220, .35) 73%, transparent 76%); box-shadow: 0 2px 2px rgba(0,0,0,.28), 0 0 12px rgba(73, 220, 240, .23); }
         .mascot-stage { position: relative; z-index: 1; display: block; width: 100%; height: 100%; transform-origin: 70% 100%; animation: mascotPeek 13.8s cubic-bezier(.77,0,.175,1) infinite; }
-        .friendly-mascot svg { display: block; width: 100%; height: calc(100% - 18px); overflow: visible; }
+        .friendly-mascot svg { display: block; width: 100%; height: calc(100% - 24px); overflow: visible; }
         .mascot-peek { transform-origin: 70px 124px; }
         .mascot-float { transform-origin: 70px 118px; animation: mascotFloat 3.4s ease-in-out infinite; }
         .robot-wave-arm { transform-box: fill-box; transform-origin: 0% 0%; animation: robotWave 13.8s ease-in-out infinite; }
+        .robot-hand-wave { opacity: 0; animation: robotHandWave 13.8s steps(1, end) infinite; }
+        .robot-hand-rest { animation: robotHandRest 13.8s steps(1, end) infinite; }
         .robot-eye { transform-box: fill-box; transform-origin: center; animation: robotBlink 4.1s steps(1, end) infinite; }
         .robot-antenna { transform-origin: 70px 32px; animation: antennaWiggle 3.4s ease-in-out infinite; }
         .robot-glow { animation: chestGlow 2.4s ease-in-out infinite; }
         .robot-leg { transform-box: fill-box; transform-origin: 50% 0%; animation: robotLegSway 2.7s ease-in-out infinite alternate; }
         .robot-leg--right { animation-delay: -.8s; }
         .is-greeting .robot-wave-arm { animation: robotWaveFast .82s ease-in-out 2; }
+        .is-greeting .robot-hand-wave { animation: none; opacity: 1; }
+        .is-greeting .robot-hand-rest { animation: none; opacity: 0; }
         .is-greeting .mascot-float { animation: mascotHappyHop .6s cubic-bezier(.23,1,.32,1) 1; }
+        .mascot-copy { position: absolute; z-index: 3; right: 0; bottom: 0; left: 0; }
         .mascot-ask { display: table; margin: -5px auto 1px; padding: 2px 7px; border: 1px solid rgba(142, 244, 248, .7); border-radius: 999px; background: rgba(6, 41, 70, .82); color: #d8ffff; font: 700 10px/13px Arial, sans-serif; box-shadow: 0 2px 8px rgba(39, 223, 238, .22); }
         .mascot-label { display: block; margin-top: -1px; font: 700 10px/14px Arial, sans-serif; letter-spacing: .06em; text-shadow: 0 1px 3px rgba(0,0,0,.85); }
         @keyframes mascotFloat { 0%,100% { transform: translateY(0) rotate(0deg); } 35% { transform: translateY(-6px) rotate(-1.5deg); } 64% { transform: translateY(-2px) rotate(1deg); } }
         @keyframes mascotPeek { 0%,8%,54%,100% { opacity:1; transform: translateY(0) rotate(0deg) scale(1); clip-path: inset(0 0 0 0); } 12% { transform: translateY(-8px) rotate(-3deg) scale(1.04); } 16% { transform: translateY(-3px) rotate(3deg) scale(1.03); } 20% { opacity:1; transform: translateY(0) rotate(0deg) scale(1); } 59%,69% { opacity:0; transform: translateY(54px) rotate(9deg) scale(.62); clip-path: inset(100% 0 0 0); } 73% { opacity:1; transform: translateY(22px) rotate(-2deg) scale(1); clip-path: inset(0 0 70% 0); } 78% { opacity:1; transform: translateY(10px) rotate(2deg) scale(1.02); clip-path: inset(0 0 42% 0); } 84% { opacity:1; transform: translateY(-4px) rotate(-1deg) scale(1.03); clip-path: inset(0 0 0 0); } 90% { opacity:1; transform: translateY(0) rotate(0deg) scale(1); } }
-        @keyframes robotWave { 0%,82%,100% { transform: rotate(0deg); } 86% { transform: rotate(-25deg); } 89% { transform: rotate(20deg); } 92% { transform: rotate(-18deg); } 95% { transform: rotate(16deg); } 98% { transform: rotate(0deg); } }
-        @keyframes robotWaveFast { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(-28deg); } 50% { transform: rotate(24deg); } 75% { transform: rotate(-20deg); } }
+        @keyframes robotWave { 0%,82%,100% { transform: rotate(0deg); } 86% { transform: rotate(-58deg); } 89% { transform: rotate(46deg); } 92% { transform: rotate(-50deg); } 95% { transform: rotate(38deg); } 98% { transform: rotate(0deg); } }
+        @keyframes robotWaveFast { 0%,100% { transform: rotate(0deg); } 22% { transform: rotate(-62deg); } 48% { transform: rotate(50deg); } 72% { transform: rotate(-54deg); } 88% { transform: rotate(30deg); } }
+        @keyframes robotHandWave { 0%,84%,100% { opacity: 0; } 86%,98% { opacity: 1; } }
+        @keyframes robotHandRest { 0%,84%,100% { opacity: 1; } 86%,98% { opacity: 0; } }
         @keyframes robotBlink { 0%,43%,47%,72%,76%,100% { transform: scaleY(1); } 45%,74% { transform: scaleY(.08); } }
         @keyframes antennaWiggle { 0%,100% { transform: rotate(0deg); } 45% { transform: rotate(5deg); } 55% { transform: rotate(-5deg); } }
         @keyframes chestGlow { 0%,100% { opacity:.68; transform: scale(.9); } 50% { opacity:1; transform: scale(1.08); } }
         @keyframes robotLegSway { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
         @keyframes mascotHappyHop { 0%,100% { transform: translateY(0) rotate(0deg); } 45% { transform: translateY(-9px) rotate(-4deg); } 70% { transform: translateY(-2px) rotate(3deg); } }
-        @media (prefers-reduced-motion: reduce) { .mascot-stage, .mascot-peek, .mascot-float, .robot-wave-arm, .robot-eye, .robot-antenna, .robot-glow, .robot-leg { animation: none !important; } }
+        @media (prefers-reduced-motion: reduce) { .mascot-stage, .mascot-peek, .mascot-float, .robot-wave-arm, .robot-hand-wave, .robot-hand-rest, .robot-eye, .robot-antenna, .robot-glow, .robot-leg { animation: none !important; } }
       `}</style>
 
       <span className="mascot-hole" aria-hidden="true" />
@@ -160,15 +167,23 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
               <circle cx="94" cy="87" r="6" fill="#4b91c6" stroke="#b9efff" strokeWidth="1.5" />
               <g className="robot-wave-arm">
                 <path d="M95 88 C103 90 108 98 108 108" fill="none" stroke="url(#armShell)" strokeWidth="10" strokeLinecap="round" />
-                <circle cx="108" cy="113" r="8" fill="#eaffff" stroke="#5594c6" strokeWidth="1.5" />
-                <path d="M104 108 L100 103 M109 106 L108 99 M113 107 L116 102" fill="none" stroke="#d9faff" strokeWidth="2.8" strokeLinecap="round" />
+                <g className="robot-hand robot-hand-rest">
+                  <circle cx="108" cy="113" r="8" fill="#eaffff" stroke="#5594c6" strokeWidth="1.5" />
+                  <path d="M104 113 Q108 117 112 113" fill="none" stroke="#c7f0ff" strokeWidth="2" strokeLinecap="round" />
+                </g>
+                <g className="robot-hand robot-hand-wave">
+                  <circle cx="108" cy="113" r="8" fill="#eaffff" stroke="#5594c6" strokeWidth="1.5" />
+                  <path d="M104 108 L100 103 M109 106 L108 99 M113 107 L116 102" fill="none" stroke="#d9faff" strokeWidth="2.8" strokeLinecap="round" />
+                </g>
               </g>
             </g>
           </g>
         </g>
       </svg>
-      <span className="mascot-ask">اسألني</span>
-      <span className="mascot-label">osamah711x</span>
+      </span>
+      <span className="mascot-copy">
+        <span className="mascot-ask">اسألني</span>
+        <span className="mascot-label">osamah711x</span>
       </span>
     </button>
   );

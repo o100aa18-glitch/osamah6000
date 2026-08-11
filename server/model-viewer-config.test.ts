@@ -35,12 +35,17 @@ describe('programmatic friendly robot assistant', () => {
     expect(component).toContain('clip-path: inset(100% 0 0 0)');
     expect(component).toContain('clip-path: inset(0 0 70% 0)');
     expect(component).toContain('0%,82%,100%');
+    expect(component).toContain('transform: rotate(-58deg)');
+    expect(component).toContain('robot-hand-rest');
+    expect(component).toContain('robot-hand-wave');
+    expect(component).toContain('@keyframes robotHandWave');
   });
 
   it('stays opposite the cart and preserves the AI chat click flow', () => {
     expect(component).toContain('right: max(14px, env(safe-area-inset-right))');
     expect(component).toContain('osamah711x');
     expect(component).toContain('اسألني');
+    expect(component).toContain('mascot-copy');
     expect(assistant).toContain('<ModelViewer onClick={() => setIsOpen(true)} />');
     expect(component).toContain('onClick?.()');
   });
