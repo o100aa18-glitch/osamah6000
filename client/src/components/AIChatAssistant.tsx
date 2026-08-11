@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { MessageCircle, X, Send } from 'lucide-react';
 import { trpc } from '@/lib/trpc';
 import { Streamdown } from 'streamdown';
-import { Robot3D } from './Robot3D';
+import { AnimatedRobot } from './AnimatedRobot';
 
 export function AIChatAssistant() {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,7 +66,7 @@ export function AIChatAssistant() {
             <X className="w-6 h-6" />
           </div>
         ) : (
-          <Robot3D onClick={() => setIsOpen(true)} />
+          <AnimatedRobot onClick={() => setIsOpen(true)} />
         )}
       </button>
 
