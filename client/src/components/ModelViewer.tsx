@@ -1,272 +1,155 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface ModelViewerProps {
   onClick?: () => void;
 }
 
-const MODEL_VIEWER_SCRIPT_ID = 'google-model-viewer-script';
-const MODEL_VIEWER_SCRIPT_SRC =
-  'https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js';
-const ROBOT_MODEL_SRC =
-  '/manus-storage/robot-polygonal-mind_897aa57d.glb';
-const BASE_ANIMATION = 'Wave';
-const INTERACTION_ANIMATION = 'Yes';
-
 export function ModelViewer({ onClick }: ModelViewerProps) {
-  const hostRef = useRef<HTMLDivElement>(null);
-  const modelHostRef = useRef<HTMLDivElement>(null);
-  const onClickRef = useRef(onClick);
-  const restoreAnimationTimerRef = useRef<number | null>(null);
+  const [isGreeting, setIsGreeting] = useState(false);
   const greetingTimerRef = useRef<number | null>(null);
+  const openTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
-    onClickRef.current = onClick;
-  }, [onClick]);
-
-  useEffect(() => {
-    const host = modelHostRef.current;
-    if (!host) return;
-
-    let disposed = false;
-    let viewer: HTMLElement | null = null;
-
-    const availableAnimations = () =>
-      (viewer as (HTMLElement & { availableAnimations?: string[] }) | null)
-        ?.availableAnimations ?? [];
-
-    const setAnimation = (name: string) => {
-      if (viewer?.tagName.toLowerCase() !== 'model-viewer') return;
-      if (!availableAnimations().includes(name)) return;
-      viewer.setAttribute('animation-name', name);
-      viewer.setAttribute('autoplay', '');
-    };
-
-    const playFriendlyReaction = () => {
-      if (!viewer) return;
-      if (restoreAnimationTimerRef.current) {
-        window.clearTimeout(restoreAnimationTimerRef.current);
-      }
-      viewer.animate(
-        [
-          { transform: 'translateY(0) rotate(0deg) scale(1)' },
-          { transform: 'translateY(-6px) rotate(-3deg) scale(1.04)' },
-          { transform: 'translateY(0) rotate(0deg) scale(1)' },
-        ],
-        { duration: 650, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' },
-      );
-      if (availableAnimations().includes(INTERACTION_ANIMATION)) {
-        setAnimation(INTERACTION_ANIMATION);
-        restoreAnimationTimerRef.current = window.setTimeout(() => {
-          if (!disposed) setAnimation(BASE_ANIMATION);
-        }, 1100);
-      }
-    };
-
-    const mountViewer = () => {
-      if (disposed || !host) return;
-
-      host.replaceChildren();
-      viewer = document.createElement('model-viewer');
-      viewer.setAttribute('src', ROBOT_MODEL_SRC);
-      viewer.setAttribute('alt', 'روبوت مساعد لطيف AI OSAMAH711X');
-      viewer.setAttribute('autoplay', '');
-      viewer.setAttribute('camera-controls', '');
-      viewer.setAttribute('disable-zoom', '');
-      viewer.setAttribute('shadow-intensity', '0.5');
-      viewer.setAttribute('interaction-prompt', 'none');
-      viewer.setAttribute('touch-action', 'none');
-      viewer.setAttribute('data-testid', 'friendly-ai-robot');
-
-      Object.assign(viewer.style, {
-        position: 'absolute',
-        inset: '0 0 18px 0',
-        width: '100%',
-        height: 'calc(100% - 18px)',
-        display: 'block',
-        background: 'transparent',
-        backgroundColor: 'transparent',
-        border: '0',
-        outline: '0',
-        boxShadow: 'none',
-        borderRadius: '0',
-        overflow: 'visible',
-        cursor: 'pointer',
-        pointerEvents: 'auto',
-      });
-
-      viewer.addEventListener('click', (event) => {
-        event.stopPropagation();
-        playFriendlyReaction();
-        window.setTimeout(() => onClickRef.current?.(), 220);
-      });
-
-      viewer.addEventListener('pointerenter', playFriendlyReaction);
-      viewer.addEventListener('load', () => {
-        if (availableAnimations().includes(BASE_ANIMATION)) {
-          setAnimation(BASE_ANIMATION);
-        }
-      });
-      viewer.addEventListener('keydown', (event) => {
-        const keyboardEvent = event as KeyboardEvent;
-        if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {
-          keyboardEvent.preventDefault();
-          playFriendlyReaction();
-          window.setTimeout(() => onClickRef.current?.(), 220);
-        }
-      });
-
-      host.appendChild(viewer);
-
-      const runGreetingCycle = () => {
-        if (disposed) return;
-        playFriendlyReaction();
-        greetingTimerRef.current = window.setTimeout(runGreetingCycle, 6200);
-      };
-      greetingTimerRef.current = window.setTimeout(runGreetingCycle, 1400);
-    };
-
-    const existingScript = document.getElementById(MODEL_VIEWER_SCRIPT_ID);
-    if (customElements.get('model-viewer')) {
-      mountViewer();
-    } else {
-      if (!existingScript) {
-        const script = document.createElement('script');
-        script.id = MODEL_VIEWER_SCRIPT_ID;
-        script.type = 'module';
-        script.src = MODEL_VIEWER_SCRIPT_SRC;
-        script.async = true;
-        script.addEventListener('error', () => {
-          console.error('Failed to load Google model-viewer.');
-        });
-        document.head.appendChild(script);
-      }
-
-      customElements
-        .whenDefined('model-viewer')
-        .then(mountViewer)
-        .catch((error) => console.error('Failed to define model-viewer:', error));
-    }
-
     return () => {
-      disposed = true;
-      if (restoreAnimationTimerRef.current) {
-        window.clearTimeout(restoreAnimationTimerRef.current);
-      }
-      if (greetingTimerRef.current) {
-        window.clearTimeout(greetingTimerRef.current);
-      }
-      viewer?.remove();
-      viewer = null;
+      if (greetingTimerRef.current) window.clearTimeout(greetingTimerRef.current);
+      if (openTimerRef.current) window.clearTimeout(openTimerRef.current);
     };
   }, []);
 
+  const playGreeting = (openChat = false) => {
+    if (greetingTimerRef.current) window.clearTimeout(greetingTimerRef.current);
+    if (openTimerRef.current) window.clearTimeout(openTimerRef.current);
+
+    setIsGreeting(true);
+    greetingTimerRef.current = window.setTimeout(() => setIsGreeting(false), 1050);
+
+    if (openChat) {
+      openTimerRef.current = window.setTimeout(() => onClick?.(), 440);
+    }
+  };
+
   return (
-    <div
-      ref={hostRef}
-      role="button"
-      tabIndex={0}
+    <button
+      type="button"
+      onClick={() => playGreeting(true)}
+      onPointerEnter={() => playGreeting(false)}
+      className={`friendly-mascot ${isGreeting ? 'is-greeting' : ''}`}
       aria-label="فتح مساعد الذكاء الاصطناعي AI OSAMAH711X"
       title="AI OSAMAH711X"
       data-testid="friendly-ai-robot-host"
-      className="friendly-robot-host"
-      style={{
-        position: 'fixed',
-        right: 'max(14px, env(safe-area-inset-right))',
-        bottom: 'max(14px, env(safe-area-inset-bottom))',
-        width: 'clamp(84px, 20vw, 112px)',
-        height: 'clamp(104px, 24vw, 132px)',
-        zIndex: 9999,
-        pointerEvents: 'auto',
-        display: 'block',
-      }}
+      translate="no"
     >
       <style>{`
-        @keyframes robotFloat {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-5px); }
+        .friendly-mascot {
+          position: fixed;
+          right: max(14px, env(safe-area-inset-right));
+          bottom: max(14px, env(safe-area-inset-bottom));
+          z-index: 9999;
+          width: clamp(92px, 22vw, 126px);
+          height: clamp(132px, 30vw, 158px);
+          padding: 0;
+          border: 0;
+          background: transparent;
+          color: white;
+          cursor: pointer;
+          filter: drop-shadow(0 14px 16px rgba(15, 23, 42, 0.32));
+          -webkit-tap-highlight-color: transparent;
         }
-        @keyframes robotGreeting {
-          0%, 9%, 100% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
-          15% { transform: translateY(-7px) rotate(-5deg) scale(1.04); }
-          22% { transform: translateY(-3px) rotate(6deg) scale(1.03); }
-          30% { transform: translateY(0) rotate(0deg) scale(1); }
-          64% { opacity: 1; transform: translateY(0) scale(1); }
-          69% { opacity: 0; transform: translateY(10px) scale(0.84); }
-          75% { opacity: 0; transform: translateY(10px) scale(0.84); }
-          82% { opacity: 1; transform: translateY(-4px) scale(1.03); }
-          88% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        @keyframes robotBlink {
-          0%, 44%, 48%, 100% { transform: scaleY(1); opacity: 0.9; }
-          46% { transform: scaleY(0.08); opacity: 1; }
-          72% { transform: scaleY(0.08); opacity: 1; }
-          74% { transform: scaleY(1); opacity: 0.9; }
-        }
-        .friendly-robot-host { animation: robotFloat 3.1s ease-in-out infinite; }
-        .friendly-robot-model { animation: robotGreeting 10s cubic-bezier(0.77, 0, 0.175, 1) infinite; }
-        .friendly-robot-eye { animation: robotBlink 4.2s ease-in-out infinite; transform-origin: center; }
-        @media (prefers-reduced-motion: reduce) {
-          .friendly-robot-host, .friendly-robot-model, .friendly-robot-eye { animation: none !important; }
-        }
+        .friendly-mascot:focus-visible { outline: 3px solid rgba(103, 232, 249, .95); outline-offset: 5px; border-radius: 18px; }
+        .friendly-mascot:active { transform: scale(.97); }
+        .friendly-mascot svg { display: block; width: 100%; height: calc(100% - 18px); overflow: visible; }
+        .mascot-peek { transform-origin: 70px 124px; animation: mascotPeek 11.5s cubic-bezier(.77,0,.175,1) infinite; }
+        .mascot-float { transform-origin: 70px 118px; animation: mascotFloat 3.4s ease-in-out infinite; }
+        .robot-wave-arm { transform-box: fill-box; transform-origin: 20% 55%; animation: robotWave 4.8s ease-in-out infinite; }
+        .robot-eye { transform-box: fill-box; transform-origin: center; animation: robotBlink 4.1s steps(1, end) infinite; }
+        .robot-antenna { transform-origin: 70px 32px; animation: antennaWiggle 3.4s ease-in-out infinite; }
+        .robot-glow { animation: chestGlow 2.4s ease-in-out infinite; }
+        .is-greeting .robot-wave-arm { animation: robotWaveFast .82s ease-in-out 2; }
+        .is-greeting .mascot-float { animation: mascotHappyHop .6s cubic-bezier(.23,1,.32,1) 1; }
+        .mascot-label { display: block; margin-top: -2px; font: 700 10px/14px Arial, sans-serif; letter-spacing: .06em; text-shadow: 0 1px 3px rgba(0,0,0,.85); }
+        @keyframes mascotFloat { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-5px) rotate(-1deg); } }
+        @keyframes mascotPeek { 0%,72%,100% { opacity:1; transform: translateY(0) scale(1); } 76% { opacity:0; transform: translateY(24px) scale(.8); } 81% { opacity:0; transform: translateY(24px) scale(.8); } 87% { opacity:1; transform: translateY(-5px) scale(1.04); } 92% { opacity:1; transform: translateY(0) scale(1); } }
+        @keyframes robotWave { 0%,14%,100% { transform: rotate(0deg); } 18% { transform: rotate(-21deg); } 23% { transform: rotate(18deg); } 28% { transform: rotate(-18deg); } 34% { transform: rotate(0deg); } }
+        @keyframes robotWaveFast { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(-28deg); } 50% { transform: rotate(24deg); } 75% { transform: rotate(-20deg); } }
+        @keyframes robotBlink { 0%,43%,47%,72%,76%,100% { transform: scaleY(1); } 45%,74% { transform: scaleY(.08); } }
+        @keyframes antennaWiggle { 0%,100% { transform: rotate(0deg); } 45% { transform: rotate(5deg); } 55% { transform: rotate(-5deg); } }
+        @keyframes chestGlow { 0%,100% { opacity:.68; transform: scale(.9); } 50% { opacity:1; transform: scale(1.08); } }
+        @keyframes mascotHappyHop { 0%,100% { transform: translateY(0) rotate(0deg); } 45% { transform: translateY(-9px) rotate(-4deg); } 70% { transform: translateY(-2px) rotate(3deg); } }
+        @media (prefers-reduced-motion: reduce) { .mascot-peek, .mascot-float, .robot-wave-arm, .robot-eye, .robot-antenna, .robot-glow { animation: none !important; } }
       `}</style>
-      <div
-        ref={modelHostRef}
-        className="friendly-robot-model"
-        style={{ position: 'absolute', inset: 0 }}
-      />
-      <span
-        aria-hidden="true"
-        data-testid="robot-eyes"
-        style={{
-          position: 'absolute',
-          top: '27px',
-          left: '50%',
-          display: 'flex',
-          gap: '9px',
-          transform: 'translateX(-50%)',
-          pointerEvents: 'none',
-        }}
-      >
-        <i className="friendly-robot-eye" style={{ width: '7px', height: '4px', borderRadius: '999px', background: 'rgba(7, 27, 34, 0.85)' }} />
-        <i className="friendly-robot-eye" style={{ width: '7px', height: '4px', borderRadius: '999px', background: 'rgba(7, 27, 34, 0.85)' }} />
-      </span>
-      <span
-        aria-hidden="true"
-        data-testid="friendly-smile"
-        style={{
-          position: 'absolute',
-          top: '34px',
-          left: '50%',
-          width: '14px',
-          height: '7px',
-          transform: 'translateX(-50%)',
-          borderBottom: '2px solid rgba(255, 255, 255, 0.95)',
-          borderRadius: '0 0 14px 14px',
-          filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.75))',
-          pointerEvents: 'none',
-        }}
-      />
-      <span
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          right: '0',
-          bottom: '0',
-          width: '100%',
-          textAlign: 'center',
-          color: 'rgba(255, 255, 255, 0.88)',
-          fontSize: '10px',
-          lineHeight: '14px',
-          fontFamily: 'Arial, sans-serif',
-          letterSpacing: '0.04em',
-          textShadow: '0 1px 3px rgba(0,0,0,0.75)',
-          pointerEvents: 'none',
-        }}
-      >
-        osamah711x
-      </span>
-    </div>
+
+      <svg viewBox="0 0 140 142" aria-hidden="true" data-testid="programmatic-cute-robot">
+        <defs>
+          <linearGradient id="headShell" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stopColor="#f7fcff" />
+            <stop offset=".48" stopColor="#bfe8ff" />
+            <stop offset="1" stopColor="#78a9cf" />
+          </linearGradient>
+          <linearGradient id="screenFace" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stopColor="#0f2a42" />
+            <stop offset="1" stopColor="#06101f" />
+          </linearGradient>
+          <linearGradient id="bodyShell" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stopColor="#68e1e7" />
+            <stop offset=".5" stopColor="#2874b6" />
+            <stop offset="1" stopColor="#163b75" />
+          </linearGradient>
+          <linearGradient id="armShell" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stopColor="#f8fdff" />
+            <stop offset="1" stopColor="#8cc5e8" />
+          </linearGradient>
+          <radialGradient id="eyeGlow"><stop stopColor="#f0ffff" /><stop offset=".38" stopColor="#54f6ee" /><stop offset="1" stopColor="#0c9dd4" /></radialGradient>
+          <filter id="softGlow"><feGaussianBlur stdDeviation="1.6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+
+        <g className="mascot-peek">
+          <g className="mascot-float">
+            <ellipse cx="70" cy="132" rx="35" ry="5" fill="rgba(7,18,37,.24)" />
+
+            <g className="robot-antenna">
+              <path d="M70 32 L70 16" stroke="#5c9dd1" strokeWidth="3" strokeLinecap="round" />
+              <circle cx="70" cy="13" r="5" fill="#71f2f2" filter="url(#softGlow)" />
+              <circle cx="68.5" cy="11.5" r="1.5" fill="white" opacity=".9" />
+            </g>
+
+            <g>
+              <rect x="35" y="29" width="70" height="52" rx="21" fill="url(#headShell)" stroke="#416e9f" strokeWidth="2" />
+              <path d="M95 35 Q108 45 102 68 Q98 77 88 79 L91 40Z" fill="#6d9fc3" opacity=".72" />
+              <path d="M42 34 Q60 24 82 33" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" opacity=".75" />
+              <rect x="43" y="39" width="54" height="33" rx="14" fill="url(#screenFace)" stroke="#74cbef" strokeWidth="1.5" />
+              <ellipse cx="58" cy="54" rx="8" ry="8.4" fill="url(#eyeGlow)" filter="url(#softGlow)" className="robot-eye" />
+              <ellipse cx="82" cy="54" rx="8" ry="8.4" fill="url(#eyeGlow)" filter="url(#softGlow)" className="robot-eye" />
+              <circle cx="55.5" cy="51.5" r="2" fill="white" opacity=".95" />
+              <circle cx="79.5" cy="51.5" r="2" fill="white" opacity=".95" />
+              <path d="M61 63 Q70 70 79 63" fill="none" stroke="#8ffcf4" strokeWidth="2" strokeLinecap="round" />
+              <circle cx="37" cy="57" r="6" fill="#3e8fc3" />
+              <circle cx="103" cy="57" r="6" fill="#3e8fc3" />
+            </g>
+
+            <g>
+              <path d="M48 79 Q70 73 92 79 L98 111 Q70 121 42 111Z" fill="url(#bodyShell)" stroke="#184e8a" strokeWidth="2" />
+              <path d="M49 82 Q63 77 72 80 L67 113 Q52 114 43 110Z" fill="#77eff0" opacity=".38" />
+              <rect x="58" y="88" width="24" height="19" rx="8" fill="#0b315d" stroke="#87f5f2" strokeWidth="1.5" />
+              <circle cx="70" cy="97" r="5" fill="#74fff3" filter="url(#softGlow)" className="robot-glow" />
+            </g>
+
+            <g>
+              <path d="M45 86 Q33 90 29 104" fill="none" stroke="url(#armShell)" strokeWidth="10" strokeLinecap="round" />
+              <circle cx="28" cy="106" r="7" fill="#e9fbff" stroke="#5594c6" strokeWidth="1.5" />
+              <path d="M37 113 L36 127 M49 114 L50 128" stroke="#79bde8" strokeWidth="10" strokeLinecap="round" />
+              <ellipse cx="35" cy="130" rx="9" ry="4" fill="#2b699d" />
+              <ellipse cx="51" cy="131" rx="9" ry="4" fill="#2b699d" />
+            </g>
+
+            <g className="robot-wave-arm">
+              <path d="M94 85 Q110 80 114 64" fill="none" stroke="url(#armShell)" strokeWidth="10" strokeLinecap="round" />
+              <circle cx="115" cy="60" r="8" fill="#eaffff" stroke="#5594c6" strokeWidth="1.5" />
+              <path d="M112 53 L111 45 M116 52 L117 43 M120 54 L124 47" fill="none" stroke="#d9faff" strokeWidth="3" strokeLinecap="round" />
+            </g>
+          </g>
+        </g>
+      </svg>
+      <span className="mascot-label">osamah711x</span>
+    </button>
   );
 }
-
-export { ROBOT_MODEL_SRC };
