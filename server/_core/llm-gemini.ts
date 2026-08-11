@@ -11,6 +11,12 @@ const getApiKey = () => {
   return key;
 };
 
+const FALLBACK_MODELS = ["gemini-2.5-flash", "gemini-flash-latest"];
+
+export function getGeminiModelCandidates(preferredModel: string) {
+  return [preferredModel, ...FALLBACK_MODELS].filter((model, index, models) => models.indexOf(model) === index);
+}
+
 export async function invokeGemini(messages: any[], model: string = 'gemini-3.5-flash') {
   const apiKey = getApiKey();
   
@@ -26,24 +32,25 @@ export async function invokeGemini(messages: any[], model: string = 'gemini-3.5-
   const systemMessage = messages.find(msg => msg.role === 'system');
   const systemPrompt = systemMessage?.content || '';
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-  console.log('[Gemini] Using model:', model);
-  console.log('[Gemini] Sending request...');
-
   const payload = {
     systemInstruction: {
       parts: [{ text: systemPrompt }]
     },
     contents: contents,
     generationConfig: {
-      temperature: 0.7,
+      temperature: 0.45,
       topP: 0.95,
       topK: 40,
-      maxOutputTokens: 1024
+      maxOutputTokens: 320
     }
   };
 
-  try {
+  let lastError: Error | null = null;
+  for (const candidateModel of getGeminiModelCandidates(model)) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${candidateModel}:generateContent?key=${apiKey}`;
+    console.log('[Gemini] Using model:', candidateModel);
+    console.log('[Gemini] Sending request...');
+
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -57,7 +64,13 @@ export async function invokeGemini(messages: any[], model: string = 'gemini-3.5-
     if (!response.ok) {
       const errorData = await response.json();
       console.error('[Gemini Error]', errorData);
-      throw new Error(`Gemini API error: ${response.status} - ${JSON.stringify(errorData)}`);
+      const error = new Error(`Gemini API error: ${response.status} - ${JSON.stringify(errorData)}`);
+      if (response.status === 429 || response.status >= 500) {
+        lastError = error;
+        console.warn(`[Gemini] Retrying with a fallback after ${candidateModel} was unavailable.`);
+        continue;
+      }
+      throw error;
     }
 
     const data = await response.json();
@@ -75,7 +88,7 @@ export async function invokeGemini(messages: any[], model: string = 'gemini-3.5-
             }
           }
         ],
-        model: model,
+        model: candidateModel,
         usage: {
           prompt_tokens: 0,
           completion_tokens: 0,
@@ -83,10 +96,10 @@ export async function invokeGemini(messages: any[], model: string = 'gemini-3.5-
         }
       };
     } else {
-      throw new Error('No content in Gemini response');
+      lastError = new Error('No content in Gemini response');
     }
-  } catch (error) {
-    console.error('[Gemini Error]', error);
-    throw error;
   }
+
+  console.error('[Gemini Error]', lastError);
+  throw lastError || new Error('No Gemini model returned content');
 }

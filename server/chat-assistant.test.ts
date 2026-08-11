@@ -6,9 +6,10 @@ describe("natural service assistant guidance", () => {
     const prompt = buildChatSystemPrompt();
 
     expect(prompt).toContain("استخدم سوق مكة المكرمة مرجعاً رقمياً للأسعار");
-    expect(prompt).toContain("لا تذكر مكة أو اسم أي مدينة للعميل إطلاقاً");
+    expect(prompt).toContain("لا تذكر مكة أو اسم أي مدينة أو «سعر السوق»");
     expect(prompt).toContain("يمكنك التحدث بصورة طبيعية في الأسئلة العامة");
-    expect(prompt).toContain("لا تقل إن بياناتها غير متوفرة");
+    expect(prompt).toContain("افهمها ضمن المجال الأقرب");
+    expect(prompt).toContain("لا تتجاوز 45 كلمة");
     expect(prompt).not.toContain("رد قصير (جملة أو جملتين فقط)");
   });
 

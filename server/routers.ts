@@ -5,6 +5,8 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { invokeGemini } from "./_core/llm-gemini";
 import { buildChatSystemPrompt, CHAT_MODEL, normalizeConversationHistory, sanitizeClientReply } from "./chatAssistant";
+import { buildCompositePricingReply } from "./compositeOrderPricing";
+import { buildBookingReply } from "./bookingAssistant";
 
 export const appRouter = router({
   // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -33,7 +35,27 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         const systemPrompt = buildChatSystemPrompt();
         const conversationHistory = normalizeConversationHistory(input.conversationHistory);
-        
+        const compositePricingReply = buildCompositePricingReply(conversationHistory, input.message);
+
+        if (compositePricingReply) {
+          return {
+            success: true,
+            reply: compositePricingReply,
+            timestamp: new Date(),
+            model: CHAT_MODEL,
+          };
+        }
+
+        const bookingReply = buildBookingReply(conversationHistory, input.message);
+        if (bookingReply) {
+          return {
+            success: true,
+            reply: bookingReply,
+            timestamp: new Date(),
+            model: CHAT_MODEL,
+          };
+        }
+
         const messages = [
           { role: 'system' as const, content: systemPrompt },
           ...conversationHistory,
