@@ -66,7 +66,7 @@ export function AIChatAssistant() {
           </div>
         ) : (
           <img 
-            src="/manus-storage/chat-robot-engineer_c32eb060.png" 
+            src="/manus-storage/ai-assistant-icon_0d09c70f.png" 
             alt="مساعد ذكي" 
             className="w-full h-full object-cover"
           />
