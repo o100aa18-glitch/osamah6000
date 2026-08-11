@@ -21,12 +21,17 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
       // إنشاء عنصر model-viewer بعد تحميل المكتبة
       if (containerRef.current && !modelViewerRef.current) {
         const modelViewer = document.createElement('model-viewer');
-        modelViewer.setAttribute('src', 'https://models.readyplayer.me/63d9c2b3c0e8b9f2e1a3c4d5.glb');
-        modelViewer.setAttribute('alt', 'AI Robot Assistant');
+        
+        // استخدام رابط مجسم من Sketchfab - Oguri cap chibi
+        // رابط مباشر من CDN Sketchfab
+        modelViewer.setAttribute('src', 'https://cdn.sketchfab.com/models/1a1bf1651e8849d795997e79f8e182ca/1a1bf1651e8849d795997e79f8e182ca.glb');
+        modelViewer.setAttribute('alt', 'AI Robot Assistant - Oguri Cap Chibi');
         modelViewer.setAttribute('autoplay', '');
         modelViewer.setAttribute('auto-rotate', '');
         modelViewer.setAttribute('shadow-intensity', '1');
         modelViewer.setAttribute('camera-controls', '');
+        modelViewer.setAttribute('touch-action', 'pan-y');
+        modelViewer.setAttribute('exposure', '1');
         
         // تطبيق الأنماط
         Object.assign(modelViewer.style, {
@@ -71,7 +76,7 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
 
         containerRef.current.appendChild(modelViewer);
         modelViewerRef.current = modelViewer;
-        console.log('✅ model-viewer element created');
+        console.log('✅ model-viewer element created and displayed');
       }
     };
 
@@ -86,7 +91,11 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
         script.parentNode.removeChild(script);
       }
       if (containerRef.current && modelViewerRef.current) {
-        containerRef.current.removeChild(modelViewerRef.current);
+        try {
+          containerRef.current.removeChild(modelViewerRef.current);
+        } catch (e) {
+          console.warn('Error removing model viewer:', e);
+        }
         modelViewerRef.current = null;
       }
     };
@@ -102,6 +111,7 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
         width: '200px',
         height: '200px',
         zIndex: 9999,
+        pointerEvents: 'auto',
       }}
     />
   );
