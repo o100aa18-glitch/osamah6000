@@ -4,7 +4,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { invokeGemini } from "./_core/llm-gemini";
-import { buildChatSystemPrompt, CHAT_MODEL, normalizeConversationHistory } from "./chatAssistant";
+import { buildChatSystemPrompt, CHAT_MODEL, normalizeConversationHistory, sanitizeClientReply } from "./chatAssistant";
 
 export const appRouter = router({
   // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -43,7 +43,8 @@ export const appRouter = router({
         try {
           const response = await invokeGemini(messages as any, CHAT_MODEL);
           
-          const reply = response?.choices?.[0]?.message?.content || 'لم يصلني رد واضح هذه المرة. اكتب طلبك مرة أخرى بتفصيل بسيط وسأساعدك.';
+          const rawReply = response?.choices?.[0]?.message?.content || 'لم يصلني رد واضح هذه المرة. اكتب طلبك مرة أخرى بتفصيل بسيط وسأساعدك.';
+          const reply = sanitizeClientReply(rawReply);
           
           return {
             success: true,
