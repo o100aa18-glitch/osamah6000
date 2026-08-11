@@ -57,13 +57,19 @@ export function AIChatAssistant() {
       {/* Chat Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-24 left-8 z-40 p-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center"
+        className="fixed bottom-24 left-8 z-40 w-16 h-16 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center overflow-hidden border-2 border-blue-500"
         title="مساعد م/أسامة البعوي الذكي" translate="no"
       >
         {isOpen ? (
-          <X className="w-6 h-6" />
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 w-full h-full flex items-center justify-center text-white">
+            <X className="w-6 h-6" />
+          </div>
         ) : (
-          <MessageCircle className="w-6 h-6" />
+          <img 
+            src="/manus-storage/chat-robot-engineer_c32eb060.png" 
+            alt="مساعد ذكي" 
+            className="w-full h-full object-cover"
+          />
         )}
       </button>
 
