@@ -456,7 +456,7 @@ export default function Home() {
                 className="mb-8 flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
               >
                 <ChevronRight className="w-5 h-5" />
-                <span translate="no" translate="no">العودة للفئات</span>
+                <span translate="no">العودة للفئات</span>
               </button>
               
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
@@ -599,7 +599,7 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <ShoppingCart className="w-8 h-8 text-blue-500" />
-                <DialogTitle className="text-2xl font-bold" translate="no" translate="no">السلة</DialogTitle>
+                <DialogTitle className="text-2xl font-bold" translate="no">السلة</DialogTitle>
               </div>
               <button onClick={() => setIsCartOpen(false)} className="p-2 hover:bg-white/10 rounded-full">
                 <X className="w-6 h-6 text-gray-400" />
@@ -611,7 +611,7 @@ export default function Home() {
             {cart.length === 0 ? (
               <div className="text-center py-12">
                 <ShoppingCart className="w-20 h-20 text-gray-700 mx-auto mb-4 opacity-20" />
-                <p className="text-gray-400 text-xl" translate="no" translate="no">السلة فارغة</p>
+                <p className="text-gray-400 text-xl" translate="no">السلة فارغة</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -642,14 +642,14 @@ export default function Home() {
           {cart.length > 0 && (
             <div className="p-8 pt-4 bg-slate-950/50 border-t border-white/10 rounded-b-[2.5rem]">
               <div className="flex justify-between items-center mb-6">
-                <span className="text-gray-400" translate="no" translate="no">إجمالي الخدمات:</span>
+                <span className="text-gray-400" translate="no">إجمالي الخدمات:</span>
                 <span className="text-2xl font-bold text-white">{cartCount}</span>
               </div>
               <Button
                 onClick={sendOrderToWhatsApp}
                 className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-8 rounded-2xl shadow-xl flex items-center justify-center gap-3 text-xl transition-all transform hover:scale-[1.02]"
               >
-                {SocialIcons.whatsapp} <span translate="no" translate="no">إرسال الطلب عبر واتس آب</span>
+                {SocialIcons.whatsapp} <span translate="no">إرسال الطلب عبر واتس آب</span>
               </Button>
             </div>
           )}
