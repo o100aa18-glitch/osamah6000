@@ -409,7 +409,7 @@ export default function Home() {
           <h2 className="text-2xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent" translate="no">
             تابعني على وسائل التواصل
           </h2>
-          <div className="grid grid-cols-4 gap-2.5 md:gap-4 max-w-3xl mx-auto">
+          <div className="grid grid-cols-4 gap-2 md:gap-3 max-w-2xl mx-auto">
             {socialLinks.map((social) => (
               <a
                 key={social.name}
@@ -419,12 +419,12 @@ export default function Home() {
                 className="group relative"
               >
                 <div className={`absolute inset-0 bg-gradient-to-r ${social.color} rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
-                <div className="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-2.5 md:p-3 text-center hover:bg-white/20 transition-all duration-300 transform group-hover:scale-105 group-hover:-translate-y-1">
-                  <div className={`bg-gradient-to-r ${social.color} text-white rounded-full p-2.5 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center mx-auto mb-2 group-hover:shadow-lg transition-all duration-300 [&>svg]:!w-5 [&>svg]:!h-5`}>
+                <div className="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-lg p-2 md:p-2.5 text-center hover:bg-white/20 transition-all duration-300 transform group-hover:scale-105 group-hover:-translate-y-1">
+                  <div className={`bg-gradient-to-r ${social.color} text-white rounded-full p-2 w-9 h-9 md:w-10 md:h-10 flex items-center justify-center mx-auto mb-1.5 group-hover:shadow-lg transition-all duration-300 [&>svg]:!w-4 [&>svg]:!h-4`}>
                     {SocialIcons[social.icon as keyof typeof SocialIcons]}
                   </div>
-                  <p className="text-[10px] md:text-xs font-bold text-white leading-tight">{social.name}</p>
-                  <p className="hidden md:block mt-1 text-[10px] text-gray-400 break-words">{social.username}</p>
+                  <p className="text-[9px] md:text-[10px] font-bold text-white leading-tight">{social.name}</p>
+                  <p className="hidden md:block mt-0.5 text-[9px] text-gray-400 break-words">{social.username}</p>
                 </div>
               </a>
             ))}
