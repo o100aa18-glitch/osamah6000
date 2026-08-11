@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-describe('interactive 3D assistant configuration', () => {
+describe('friendly interactive 3D assistant configuration', () => {
   const component = readFileSync(
     resolve(process.cwd(), 'client/src/components/ModelViewer.tsx'),
     'utf8',
@@ -12,41 +12,48 @@ describe('interactive 3D assistant configuration', () => {
     'utf8',
   );
 
-  it('uses the animated RobotExpressive model and Wave animation', () => {
+  it('uses the cute expressive robot and friendly animations', () => {
     expect(component).toContain('https://modelviewer.dev/shared-assets/models/RobotExpressive.glb');
+    expect(component).toContain("const BASE_ANIMATION = 'Wave'");
+    expect(component).toContain("const INTERACTION_ANIMATION = 'Yes'");
     expect(component).toContain("viewer.setAttribute('autoplay', '')");
-    expect(component).toContain("viewer.setAttribute('animation-name', 'Wave')");
+    expect(component).toContain("viewer.setAttribute('animation-name', BASE_ANIMATION)");
+    expect(component).toContain('playFriendlyReaction');
+    expect(component).toContain('data-testid="friendly-smile"');
+    expect(component).toContain("borderBottom: '2px solid rgba(255, 255, 255, 0.95)'");
   });
 
-  it('keeps the model transparent, frameless, and responsive', () => {
+  it('places a compact transparent robot away from the cart and labels it', () => {
+    expect(component).toContain("right: 'max(14px, env(safe-area-inset-right))'");
+    expect(component).toContain("bottom: 'max(14px, env(safe-area-inset-bottom))'");
+    expect(component).toContain("width: 'clamp(84px, 20vw, 112px)'");
+    expect(component).toContain("height: 'clamp(104px, 24vw, 132px)'");
     expect(component).toContain("backgroundColor: 'transparent'");
+    expect(component).toContain('osamah711x');
     expect(component).toContain("border: '0'");
-    expect(component).toContain("right: 'max(20px, env(safe-area-inset-right))'");
-    expect(component).toContain("width: 'clamp(56px, 14vw, 88px)'");
-    expect(component).toContain("height: 'clamp(56px, 14vw, 88px)'");
   });
 
-  it('opens the AI assistant from the model without the old framed button', () => {
+  it('keeps the model connected to the AI chat click flow', () => {
     expect(assistant).toContain('<ModelViewer onClick={() => setIsOpen(true)} />');
-    expect(assistant).not.toContain('overflow-hidden border-2 border-blue-500');
+    expect(component).toContain('onClickRef.current?.()');
+    expect(component).toContain('window.setTimeout(() => onClickRef.current?.(), 220)');
   });
-});
 
-  it('keeps the compact mobile model away from the cart and primary CTAs', () => {
+  it('does not overlap the cart on a 390px mobile viewport', () => {
     const viewport = { width: 390, height: 844 };
-    const modelSize = Math.max(56, Math.min(14 * viewport.width / 100, 88));
-    const model = {
-      left: viewport.width - 20 - modelSize,
-      top: viewport.height - 20 - modelSize,
-      right: viewport.width - 20,
-      bottom: viewport.height - 20,
+    const hostWidth = Math.max(84, Math.min((20 * viewport.width) / 100, 112));
+    const hostHeight = Math.max(104, Math.min((24 * viewport.width) / 100, 132));
+    const robot = {
+      left: viewport.width - 14 - hostWidth,
+      top: viewport.height - 14 - hostHeight,
+      right: viewport.width - 14,
+      bottom: viewport.height - 14,
     };
-    const cart = { left: 16, top: 760, right: 88, bottom: 832 };
-    const primaryCta = { left: 16, top: 408, right: 374, bottom: 493 };
-    const overlaps = (a: typeof model, b: typeof model) =>
+    const cart = { left: 32, top: 756, right: 88, bottom: 812 };
+    const overlaps = (a: typeof robot, b: typeof robot) =>
       a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
 
-    expect(model.right - model.left).toBe(56);
-    expect(overlaps(model, cart)).toBe(false);
-    expect(overlaps(model, primaryCta)).toBe(false);
+    expect(robot.left).toBe(292);
+    expect(overlaps(robot, cart)).toBe(false);
   });
+});
