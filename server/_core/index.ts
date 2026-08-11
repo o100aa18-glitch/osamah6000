@@ -8,6 +8,7 @@ import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
+import { injectSocialMetadata, registerSocialPreviewRoutes } from "../socialPreview";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -36,6 +37,7 @@ async function startServer() {
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   registerStorageProxy(app);
   registerOAuthRoutes(app);
+  registerSocialPreviewRoutes(app);
   // tRPC API
   app.use(
     "/api/trpc",
@@ -46,9 +48,9 @@ async function startServer() {
   );
   // development mode uses Vite, production mode uses static files
   if (process.env.NODE_ENV === "development") {
-    await setupVite(app, server);
+    await setupVite(app, server, injectSocialMetadata);
   } else {
-    serveStatic(app);
+    serveStatic(app, injectSocialMetadata);
   }
 
   const preferredPort = parseInt(process.env.PORT || "3000");

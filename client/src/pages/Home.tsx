@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { getImageUrl } from "@/lib/images";
+import { siteMetadata } from "@shared/siteMetadata";
 
 // SVG Icons for Social Media
 const SocialIcons = {
@@ -366,18 +367,18 @@ export default function Home() {
           <div className="mb-8 md:mb-10 relative">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-2xl opacity-75 animate-pulse"></div>
             <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-2xl border-4 border-white/20 overflow-hidden shadow-2xl bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center">
-              <div className="w-full h-full bg-cover bg-center" style={{backgroundImage: 'url(https://files.manuscdn.com/user_upload_by_module/session_file/310519663816443346/PAJWkVOQNmXHZgbg.png)'}} />
+              <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: `url(${siteMetadata.profileImageUrl})` }} />
             </div>
           </div>
 
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-center mb-2 md:mb-3 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent" translate="no">
-            أسامة مبارك البعوي
+            {siteMetadata.name}
           </h1>
           <p className="text-lg md:text-2xl font-semibold text-center mb-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent" translate="no">
-            مهندس متخصص
+            {siteMetadata.title}
           </p>
           <p className="text-sm md:text-lg text-center mb-8 md:mb-10 text-gray-300 px-4" translate="no">
-            متخصص في خدمات الكهرباء والسباكة والتكييف والكاميرات
+            {siteMetadata.description}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 md:gap-6 mb-10 md:mb-12 w-full sm:w-auto">

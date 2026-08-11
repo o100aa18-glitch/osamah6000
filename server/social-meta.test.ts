@@ -8,13 +8,13 @@ describe('social sharing metadata', () => {
   it('includes the primary Open Graph fields and a social image', () => {
     expect(document).toContain('property="og:title"');
     expect(document).toContain('property="og:description"');
-    expect(document).toContain('property="og:image" content="https://osamah711x.com/manus-storage/osamah-social-preview_9c28c2f9.png"');
-    expect(document).toContain('property="og:url" content="https://osamah711x.com/"');
+    expect(document).toContain('property="og:image" content="{{SOCIAL_ORIGIN}}/social-preview.png?v={{SOCIAL_PREVIEW_VERSION}}"');
+    expect(document).toContain('property="og:url" content="{{SOCIAL_ORIGIN}}/"');
   });
 
   it('includes a large Twitter card and canonical primary domain', () => {
     expect(document).toContain('name="twitter:card" content="summary_large_image"');
-    expect(document).toContain('name="twitter:image" content="https://osamah711x.com/manus-storage/osamah-social-preview_9c28c2f9.png"');
-    expect(document).toContain('<link rel="canonical" href="https://osamah711x.com/"');
+    expect(document).toContain('name="twitter:image" content="{{SOCIAL_ORIGIN}}/social-preview.png?v={{SOCIAL_PREVIEW_VERSION}}"');
+    expect(document).toContain('<link rel="canonical" href="{{SOCIAL_ORIGIN}}/"');
   });
 });
