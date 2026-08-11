@@ -55,20 +55,20 @@ export function AIChatAssistant() {
 
   return (
     <>
-      {/* Chat Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-24 left-8 z-40 w-16 h-16 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center overflow-hidden border-2 border-blue-500"
-        title="AI OSAMAH711X" translate="no"
-      >
-        {isOpen ? (
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 w-full h-full flex items-center justify-center text-white">
-            <X className="w-6 h-6" />
-          </div>
-        ) : (
-          <ModelViewer onClick={() => setIsOpen(true)} />
-        )}
-      </button>
+      {/* Interactive 3D Robot */}
+      {!isOpen ? (
+        <ModelViewer onClick={() => setIsOpen(true)} />
+      ) : (
+        <button
+          type="button"
+          onClick={() => setIsOpen(false)}
+          className="fixed bottom-6 left-6 z-[10000] w-10 h-10 rounded-full bg-slate-900/80 text-white shadow-lg flex items-center justify-center hover:bg-slate-800 transition-colors"
+          title="إغلاق مساعد AI OSAMAH711X"
+          aria-label="إغلاق مساعد AI OSAMAH711X"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      )}
 
       {/* Chat Window */}
       {isOpen && (

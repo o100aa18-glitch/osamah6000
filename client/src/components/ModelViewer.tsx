@@ -4,101 +4,126 @@ interface ModelViewerProps {
   onClick?: () => void;
 }
 
+const MODEL_VIEWER_SCRIPT_ID = 'google-model-viewer-script';
+const MODEL_VIEWER_SCRIPT_SRC =
+  'https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js';
+const ROBOT_MODEL_SRC =
+  'https://modelviewer.dev/shared-assets/models/RobotExpressive.glb';
+
 export function ModelViewer({ onClick }: ModelViewerProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const hostRef = useRef<HTMLDivElement>(null);
+  const onClickRef = useRef(onClick);
 
   useEffect(() => {
-    // تحميل مكتبة model-viewer من Google
-    const script = document.createElement('script');
-    script.type = 'module';
-    script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js';
-    script.async = true;
-    
-    script.onload = () => {
-      console.log('✅ model-viewer loaded');
-      
-      // إنشاء عنصر model-viewer
-      if (containerRef.current) {
-        // تنظيف العناصر السابقة
-        containerRef.current.innerHTML = '';
-        
-        const modelViewer = document.createElement('model-viewer');
-        
-        // استخدام مجسم 3D من مصدر موثوق
-        modelViewer.setAttribute('src', 'https://modelviewer.dev/shared-assets/models/Astronaut.glb');
-        modelViewer.setAttribute('alt', 'AI OSAMAH711X');
-        modelViewer.setAttribute('autoplay', 'true');
-        modelViewer.setAttribute('auto-rotate', 'true');
-        modelViewer.setAttribute('shadow-intensity', '1');
-        modelViewer.setAttribute('camera-controls', 'true');
-        modelViewer.setAttribute('interaction-prompt', 'none');
-        
-        // تطبيق الأنماط - نفس الزاوية اليسرى السفلية
-        Object.assign(modelViewer.style, {
-          width: '200px',
-          height: '200px',
-          backgroundColor: 'transparent',
-          borderRadius: '50%',
-          overflow: 'hidden',
-          boxShadow: '0 8px 32px rgba(59, 130, 246, 0.5)',
-          border: '3px solid rgba(59, 130, 246, 0.8)',
-          cursor: 'pointer',
-          transition: 'all 0.3s ease',
-          display: 'block',
-        });
-
-        // إضافة حدث الضغط
-        modelViewer.addEventListener('click', (e: Event) => {
-          e.stopPropagation();
-          onClick?.();
-        });
-
-        // إضافة تأثير hover
-        modelViewer.addEventListener('mouseenter', () => {
-          Object.assign(modelViewer.style, {
-            boxShadow: '0 12px 48px rgba(59, 130, 246, 0.8)',
-            transform: 'scale(1.1)',
-          });
-        });
-
-        modelViewer.addEventListener('mouseleave', () => {
-          Object.assign(modelViewer.style, {
-            boxShadow: '0 8px 32px rgba(59, 130, 246, 0.5)',
-            transform: 'scale(1)',
-          });
-        });
-
-        containerRef.current.appendChild(modelViewer);
-        console.log('✅ model-viewer created and displayed');
-      }
-    };
-
-    script.onerror = () => {
-      console.error('❌ Failed to load model-viewer');
-    };
-
-    document.head.appendChild(script);
-
-    return () => {
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
+    onClickRef.current = onClick;
   }, [onClick]);
 
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+
+    let disposed = false;
+    let viewer: HTMLElement | null = null;
+
+    const mountViewer = () => {
+      if (disposed || !host) return;
+
+      host.replaceChildren();
+      viewer = document.createElement('model-viewer');
+      viewer.setAttribute('src', ROBOT_MODEL_SRC);
+      viewer.setAttribute('alt', 'AI OSAMAH711X - Cute Robot Assistant');
+      viewer.setAttribute('autoplay', '');
+      viewer.setAttribute('animation-name', 'Wave');
+      viewer.setAttribute('camera-controls', '');
+      viewer.setAttribute('shadow-intensity', '1');
+      viewer.setAttribute('interaction-prompt', 'none');
+      viewer.setAttribute('touch-action', 'pan-y');
+      viewer.setAttribute('ar', '');
+
+      Object.assign(viewer.style, {
+        position: 'fixed',
+        right: 'max(20px, env(safe-area-inset-right))',
+        bottom: 'max(20px, env(safe-area-inset-bottom))',
+        width: 'clamp(56px, 14vw, 88px)',
+        height: 'clamp(56px, 14vw, 88px)',
+        display: 'block',
+        background: 'transparent',
+        backgroundColor: 'transparent',
+        border: '0',
+        outline: '0',
+        boxShadow: 'none',
+        borderRadius: '0',
+        overflow: 'visible',
+        zIndex: '9999',
+        cursor: 'pointer',
+        pointerEvents: 'auto',
+      });
+
+      viewer.addEventListener('click', (event) => {
+        event.stopPropagation();
+        onClickRef.current?.();
+      });
+
+      viewer.addEventListener('keydown', (event) => {
+        const keyboardEvent = event as KeyboardEvent;
+        if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {
+          keyboardEvent.preventDefault();
+          onClickRef.current?.();
+        }
+      });
+
+      host.appendChild(viewer);
+    };
+
+    const existingScript = document.getElementById(MODEL_VIEWER_SCRIPT_ID);
+    const ready = customElements.get('model-viewer');
+
+    if (ready) {
+      mountViewer();
+    } else {
+      if (!existingScript) {
+        const script = document.createElement('script');
+        script.id = MODEL_VIEWER_SCRIPT_ID;
+        script.type = 'module';
+        script.src = MODEL_VIEWER_SCRIPT_SRC;
+        script.async = true;
+        script.addEventListener('error', () => {
+          console.error('Failed to load Google model-viewer.');
+        });
+        document.head.appendChild(script);
+      }
+
+      customElements
+        .whenDefined('model-viewer')
+        .then(mountViewer)
+        .catch((error) => console.error('Failed to define model-viewer:', error));
+    }
+
+    return () => {
+      disposed = true;
+      viewer?.remove();
+      viewer = null;
+    };
+  }, []);
+
   return (
-    <div 
-      ref={containerRef}
+    <div
+      ref={hostRef}
+      role="button"
+      tabIndex={0}
+      aria-label="فتح مساعد الذكاء الاصطناعي AI OSAMAH711X"
+      title="AI OSAMAH711X"
       style={{
         position: 'fixed',
-        bottom: '20px',
-        left: '20px',
-        width: '200px',
-        height: '200px',
+        left: '0',
+        bottom: '0',
+        width: '1px',
+        height: '1px',
         zIndex: 9999,
-        pointerEvents: 'auto',
+        pointerEvents: 'none',
       }}
-      title="AI OSAMAH711X"
     />
   );
 }
+
+export { ROBOT_MODEL_SRC };
