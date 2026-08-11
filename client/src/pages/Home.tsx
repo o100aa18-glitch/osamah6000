@@ -30,19 +30,28 @@ import { toast } from "sonner";
 
 // دالة لتحويل اسم الخدمة إلى صورة placeholder
 const getImageUrl = (imageName: string): string => {
-  // الصور الموجودة على Supabase
+  // الصور الموجودة على Supabase مع Signed URLs
   const supabaseImages: Record<string, string> = {
-    "ac-01-split-unit": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/ac-01-split-unit.png",
-    "ac-02-window-ac": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/ac-02-window-ac.png",
-    "ac-03-ac-cleaning": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/ac-03-ac-cleaning.png",
-    "ac-04-refrigerant": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/ac-04-refrigerant.png",
-    "ac-05-ac-installation": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/ac-05-ac-installation.png",
-    "camera-01-cctv": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/camera-01-cctv.png",
-    "camera-02-ptz-camera": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/camera-02-ptz-camera.png",
-    "camera-03-wireless-camera": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/camera-03-wireless-camera.png",
-    "camera-04-smart-doorbell": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/camera-04-smart-doorbell.png",
-    "camera-05-dvr-system": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/camera-05-dvr-system.png",
-  };
+    "ac-01-split-unit": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/sign/images/ac-01-split-unit.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zYzZmNzU2MC05NzVlLTQxZjktOTE3Zi0yNDlkMzBhNDgzYjAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvYWMtMDEtc3BsaXQtdW5pdC5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg2NDE5Mzg1LCJleHAiOjE4NDk0OTEzODV9.frbnDfP1WXSSVWrp2cYTFoeKXLfr_arsJeEsm4xHfUY",
+    "ac-02-window-ac": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/sign/images/ac-02-window-ac.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zYzZmNzU2MC05NzVlLTQxZjktOTE3Zi0yNDlkMzBhNDgzYjAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvYWMtMDItd2luZG93LWFjLnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODY0MTkzODUsImV4cCI6MTg0OTQ5MTM4NX0.ahI1suw9KXu0B71g9Y0PwWDMlPkI1VggL7GcFOJgGfc",
+    "ac-03-ac-cleaning": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/sign/images/ac-03-ac-cleaning.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zYzZmNzU2MC05NzVlLTQxZjktOTE3Zi0yNDlkMzBhNDgzYjAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvYWMtMDMtYWMtY2xlYW5pbmcucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NjQxOTM4NSwiZXhwIjoxODQ5NDkxMzg1fQ.DrRdPsMeOl5wRhhbzfQJTsSMKiyrRTu25QfRLg6_YtA",
+    "ac-04-refrigerant": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/sign/images/ac-04-refrigerant.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zYzZmNzU2MC05NzVlLTQxZjktOTE3Zi0yNDlkMzBhNDgzYjAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvYWMtMDQtcmVmcmlnZXJhbnQucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NjQxOTM4NSwiZXhwIjoxODQ5NDkxMzg1fQ.d_FJWmZYWpGy5GRTtalYbDdX8j_Go6UDeaNqRZ1YoXA",
+    "ac-05-ac-installation": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/sign/images/ac-05-ac-installation.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zYzZmNzU2MC05NzVlLTQxZjktOTE3Zi0yNDlkMzBhNDgzYjAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvYWMtMDUtYWMtaW5zdGFsbGF0aW9uLnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODY0MTkzODYsImV4cCI6MTg0OTQ5MTM4Nn0.XvJbzz6qJlZOrG-6RsmxHIIWem_J2OpXCvyAfI7Skpk",
+    "camera-01-cctv": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/sign/images/camera-01-cctv.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zYzZmNzU2MC05NzVlLTQxZjktOTE3Zi0yNDlkMzBhNDgzYjAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FtZXJhLTAxLWNjdHYucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NjQxOTM4NiwiZXhwIjoxODQ5NDkxMzg2fQ.baEA2cP2Houu27RihiCwFn5Tz6J-N5ZFWLDDftaYQ-g",
+    "camera-02-ptz-camera": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/sign/images/camera-02-ptz-camera.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zYzZmNzU2MC05NzVlLTQxZjktOTE3Zi0yNDlkMzBhNDgzYjAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FtZXJhLTAyLXB0ei1jYW1lcmEucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NjQxOTM4NiwiZXhwIjoxODQ5NDkxMzg2fQ.L6PJxVhGPJq7Klc2M6Of9XT_x6mAxtWrO5vHwyzIHtk",
+    "camera-03-wireless-camera": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/sign/images/camera-03-wireless-camera.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zYzZmNzU2MC05NzVlLTQxZjktOTE3Zi0yNDlkMzBhNDgzYjAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FtZXJhLTAzLXdpcmVsZXNzLWNhbWVyYS5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg2NDE5Mzg2LCJleHAiOjE4NDk0OTEzODZ9.AAaZe775ZhFsN4ccgpH3YJhQ9K2ur1E4VebtKS5KG_M",
+    "camera-04-smart-doorbell": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/sign/images/camera-04-smart-doorbell.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zYzZmNzU2MC05NzVlLTQxZjktOTE3Zi0yNDlkMzBhNDgzYjAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FtZXJhLTA0LXNtYXJ0LWRvb3JiZWxsLnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODY0MTkzODYsImV4cCI6MTg0OTQ5MTM4Nn0.VAY_c9BYdYj7ltmSlbTPOoA8REK8QAIiTK1ViwXWW-s",
+    "camera-05-dvr-system": "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/sign/images/camera-05-dvr-system.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zYzZmNzU2MC05NzVlLTQxZjktOTE3Zi0yNDlkMzBhNDgzYjAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FtZXJhLTA1LWR2ci1zeXN0ZW0ucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NjQxOTM4NiwiZXhwIjoxODQ5NDkxMzg2fQ.kfbvB3nQtnkZ4yRl_OAsYjqtA-Bstc1o14j7s_H5bDA"
+};
+  
+  // إذا كانت الصورة موجودة على Supabase، استخدم Signed URL
+  if (supabaseImages[imageName]) {
+    return supabaseImages[imageName];
+  }
+  
+  // وإلا، استخدم صورة placeholder
+  return `https://via.placeholder.com/400x300/3B82F6/FFFFFF?text=${imageName.replace(/-/g, ' ')}`;
+};
   
   // إذا كانت الصورة موجودة على Supabase، استخدمها
   if (supabaseImages[imageName]) {
