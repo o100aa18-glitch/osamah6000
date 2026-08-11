@@ -6,7 +6,6 @@ interface ModelViewerProps {
 
 export function ModelViewer({ onClick }: ModelViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const modelViewerRef = useRef<any>(null);
 
   useEffect(() => {
     // تحميل مكتبة model-viewer من Google
@@ -16,36 +15,33 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
     script.async = true;
     
     script.onload = () => {
-      console.log('✅ model-viewer loaded successfully');
+      console.log('✅ model-viewer loaded');
       
-      // إنشاء عنصر model-viewer بعد تحميل المكتبة
-      if (containerRef.current && !modelViewerRef.current) {
+      // إنشاء عنصر model-viewer
+      if (containerRef.current) {
+        // تنظيف العناصر السابقة
+        containerRef.current.innerHTML = '';
+        
         const modelViewer = document.createElement('model-viewer');
         
-        // استخدام رابط مجسم من Sketchfab - Oguri cap chibi
-        // رابط مباشر من CDN Sketchfab
-        modelViewer.setAttribute('src', 'https://cdn.sketchfab.com/models/1a1bf1651e8849d795997e79f8e182ca/1a1bf1651e8849d795997e79f8e182ca.glb');
-        modelViewer.setAttribute('alt', 'AI Robot Assistant - Oguri Cap Chibi');
-        modelViewer.setAttribute('autoplay', '');
-        modelViewer.setAttribute('auto-rotate', '');
+        // استخدام مجسم 3D من مصدر موثوق
+        modelViewer.setAttribute('src', 'https://modelviewer.dev/shared-assets/models/Astronaut.glb');
+        modelViewer.setAttribute('alt', 'AI OSAMAH711X');
+        modelViewer.setAttribute('autoplay', 'true');
+        modelViewer.setAttribute('auto-rotate', 'true');
         modelViewer.setAttribute('shadow-intensity', '1');
-        modelViewer.setAttribute('camera-controls', '');
-        modelViewer.setAttribute('touch-action', 'pan-y');
-        modelViewer.setAttribute('exposure', '1');
+        modelViewer.setAttribute('camera-controls', 'true');
+        modelViewer.setAttribute('interaction-prompt', 'none');
         
-        // تطبيق الأنماط
+        // تطبيق الأنماط - نفس الزاوية اليسرى السفلية
         Object.assign(modelViewer.style, {
-          position: 'fixed',
-          bottom: '10px',
-          left: '10px',
           width: '200px',
           height: '200px',
           backgroundColor: 'transparent',
-          zIndex: '9999',
-          borderRadius: '12px',
+          borderRadius: '50%',
           overflow: 'hidden',
-          boxShadow: '0 8px 32px rgba(59, 130, 246, 0.3)',
-          border: '2px solid rgba(59, 130, 246, 0.5)',
+          boxShadow: '0 8px 32px rgba(59, 130, 246, 0.5)',
+          border: '3px solid rgba(59, 130, 246, 0.8)',
           cursor: 'pointer',
           transition: 'all 0.3s ease',
           display: 'block',
@@ -60,28 +56,25 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
         // إضافة تأثير hover
         modelViewer.addEventListener('mouseenter', () => {
           Object.assign(modelViewer.style, {
-            boxShadow: '0 12px 48px rgba(59, 130, 246, 0.5)',
-            borderColor: 'rgba(59, 130, 246, 0.8)',
-            transform: 'scale(1.05)',
+            boxShadow: '0 12px 48px rgba(59, 130, 246, 0.8)',
+            transform: 'scale(1.1)',
           });
         });
 
         modelViewer.addEventListener('mouseleave', () => {
           Object.assign(modelViewer.style, {
-            boxShadow: '0 8px 32px rgba(59, 130, 246, 0.3)',
-            borderColor: 'rgba(59, 130, 246, 0.5)',
+            boxShadow: '0 8px 32px rgba(59, 130, 246, 0.5)',
             transform: 'scale(1)',
           });
         });
 
         containerRef.current.appendChild(modelViewer);
-        modelViewerRef.current = modelViewer;
-        console.log('✅ model-viewer element created and displayed');
+        console.log('✅ model-viewer created and displayed');
       }
     };
 
     script.onerror = () => {
-      console.error('❌ Failed to load model-viewer library');
+      console.error('❌ Failed to load model-viewer');
     };
 
     document.head.appendChild(script);
@@ -89,14 +82,6 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
     return () => {
       if (script.parentNode) {
         script.parentNode.removeChild(script);
-      }
-      if (containerRef.current && modelViewerRef.current) {
-        try {
-          containerRef.current.removeChild(modelViewerRef.current);
-        } catch (e) {
-          console.warn('Error removing model viewer:', e);
-        }
-        modelViewerRef.current = null;
       }
     };
   }, [onClick]);
@@ -106,13 +91,14 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
       ref={containerRef}
       style={{
         position: 'fixed',
-        bottom: '10px',
-        left: '10px',
+        bottom: '20px',
+        left: '20px',
         width: '200px',
         height: '200px',
         zIndex: 9999,
         pointerEvents: 'auto',
       }}
+      title="AI OSAMAH711X"
     />
   );
 }
