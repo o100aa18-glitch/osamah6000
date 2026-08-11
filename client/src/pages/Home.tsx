@@ -54,9 +54,9 @@ const SocialIcons = {
     </svg>
   ),
   snapchat: (
-    <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-      <circle cx="256" cy="256" r="256" fill="#FFFC00"/>
-      <path d="M256 50c113.6 0 206 92.4 206 206 0 113.6-92.4 206-206 206S50 369.6 50 256 142.4 50 256 50zm0 30c-97 0-176 79-176 176s79 176 176 176 176-79 176-176-79-176-176-176zm-40 120c-11 0-20 9-20 20s9 20 20 20 20-9 20-20-9-20-20-20zm80 0c-11 0-20 9-20 20s9 20 20 20 20-9 20-20-9-20-20-20zm-40 80c-33 0-60 27-60 60 0 11 9 20 20 20h80c11 0 20-9 20-20 0-33-27-60-60-60z" fill="#000000"/>
+    <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" aria-label="Snapchat">
+      <rect x="1" y="1" width="46" height="46" rx="11" fill="#FFFC00" />
+      <path d="M24 7.8c-6.25 0-10.35 4.7-10.35 10.67 0 2.43.72 4.13 1.18 5.32.32.83.2 1.35-.69 1.83l-2.5 1.3c-1.15.6-1.02 2.26.2 2.67 1.57.53 2.86.75 4.1 1.43.16 1.6 1.4 2.36 3.27 2.63.67.1 1.07.36 1.07.7 0 .56-1.02 1.03-2.6 1.27.9.88 2.35 1.32 3.98 1.32.96 0 1.75.47 2.38 1.17.63-.7 1.42-1.17 2.38-1.17 1.63 0 3.08-.44 3.98-1.32-1.58-.24-2.6-.71-2.6-1.27 0-.34.4-.6 1.07-.7 1.87-.27 3.11-1.03 3.27-2.63 1.24-.68 2.53-.9 4.1-1.43 1.22-.41 1.35-2.07.2-2.67l-2.5-1.3c-.89-.48-1.01-1-.69-1.83.46-1.19 1.18-2.89 1.18-5.32C34.35 12.5 30.25 7.8 24 7.8Z" fill="#fff" stroke="#111" strokeWidth="2" strokeLinejoin="round" />
     </svg>
   ),
   x: (
@@ -409,7 +409,7 @@ export default function Home() {
           <h2 className="text-2xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent" translate="no">
             تابعني على وسائل التواصل
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-4 gap-2.5 md:gap-4 max-w-3xl mx-auto">
             {socialLinks.map((social) => (
               <a
                 key={social.name}
@@ -418,13 +418,13 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="group relative"
               >
-                <div className={`absolute inset-0 bg-gradient-to-r ${social.color} rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
-                <div className="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 text-center hover:bg-white/20 transition-all duration-300 transform group-hover:scale-105 group-hover:-translate-y-1">
-                  <div className={`bg-gradient-to-r ${social.color} text-white rounded-full p-4 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mx-auto mb-4 group-hover:shadow-lg transition-all duration-300`}>
+                <div className={`absolute inset-0 bg-gradient-to-r ${social.color} rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
+                <div className="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-2.5 md:p-3 text-center hover:bg-white/20 transition-all duration-300 transform group-hover:scale-105 group-hover:-translate-y-1">
+                  <div className={`bg-gradient-to-r ${social.color} text-white rounded-full p-2.5 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center mx-auto mb-2 group-hover:shadow-lg transition-all duration-300 [&>svg]:!w-5 [&>svg]:!h-5`}>
                     {SocialIcons[social.icon as keyof typeof SocialIcons]}
                   </div>
-                  <p className="text-sm md:text-base font-bold text-white mb-2">{social.name}</p>
-                  <p className="text-xs text-gray-400 break-words">{social.username}</p>
+                  <p className="text-[10px] md:text-xs font-bold text-white leading-tight">{social.name}</p>
+                  <p className="hidden md:block mt-1 text-[10px] text-gray-400 break-words">{social.username}</p>
                 </div>
               </a>
             ))}
