@@ -10,6 +10,7 @@ export function Robot3DReal({ onClick }: Robot3DRealProps) {
   const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const robotRef = useRef<THREE.Group | null>(null);
+  const animationStateRef = useRef({ time: 0 });
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -152,15 +153,48 @@ export function Robot3DReal({ onClick }: Robot3DRealProps) {
     let animationId: number;
     const animate = () => {
       animationId = requestAnimationFrame(animate);
+      const state = animationStateRef.current;
+      state.time += 0.016; // ~60fps
 
-      // دوران الروبوت
-      robot.rotation.y += 0.01;
+      // دورة حركات متنوعة (10 ثواني)
+      const cycleTime = state.time % 10;
 
-      // تحريك الذراع (موجة)
-      rightArm.rotation.z = -Math.PI / 6 + Math.sin(Date.now() * 0.003) * 0.3;
+      if (cycleTime < 2) {
+        // المرحلة 1: يسلم بيده (0-2 ثانية)
+        const progress = cycleTime / 2;
+        rightArm.rotation.z = -Math.PI / 6 + Math.sin(progress * Math.PI) * 0.6;
+        rightArm.position.y = 0.6 + Math.sin(progress * Math.PI) * 0.3;
+        head.position.y = 0;
+        body.position.y = 0;
+      } else if (cycleTime < 4) {
+        // المرحلة 2: يختفي (2-4 ثانية)
+        const hideProgress = (cycleTime - 2) / 2;
+        body.position.y = -hideProgress * 0.8;
+        head.position.y = -hideProgress * 0.8;
+        rightArm.rotation.z = -Math.PI / 6;
+        rightArm.position.y = 0.6;
+      } else if (cycleTime < 5.5) {
+        // المرحلة 3: يظهر رأسه (4-5.5 ثانية)
+        const showProgress = (cycleTime - 4) / 1.5;
+        head.position.y = -0.8 + showProgress * 0.8;
+        body.position.y = -0.8;
+      } else if (cycleTime < 7.5) {
+        // المرحلة 4: يسلم بسرعة (5.5-7.5 ثانية)
+        const waveProgress = (cycleTime - 5.5) / 2;
+        rightArm.rotation.z = -Math.PI / 6 + Math.sin(waveProgress * Math.PI * 6) * 0.8;
+        rightArm.position.y = 0.6 + Math.sin(waveProgress * Math.PI * 6) * 0.2;
+        head.position.y = 0;
+        body.position.y = 0;
+      } else {
+        // المرحلة 5: استراحة (7.5-10 ثانية)
+        rightArm.rotation.z = -Math.PI / 6;
+        rightArm.position.y = 0.6;
+        head.position.y = 0;
+        body.position.y = 0;
+      }
 
-      // تحريك الرأس
-      head.rotation.x = Math.sin(Date.now() * 0.002) * 0.1;
+      // دوران خفيف
+      robot.rotation.y += 0.005;
 
       // توهج الزر
       if (button.material instanceof THREE.MeshStandardMaterial) {

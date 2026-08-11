@@ -59,19 +59,22 @@
 
 @keyframes waveHand {
   0% {
-    transform: rotate(0deg);
+    transform: rotate(0deg) translateY(0px);
   }
-  25% {
-    transform: rotate(45deg);
+  20% {
+    transform: rotate(60deg) translateY(-10px);
   }
-  50% {
-    transform: rotate(0deg);
+  40% {
+    transform: rotate(0deg) translateY(0px);
   }
-  75% {
-    transform: rotate(45deg);
+  60% {
+    transform: rotate(60deg) translateY(-10px);
+  }
+  80% {
+    transform: rotate(0deg) translateY(0px);
   }
   100% {
-    transform: rotate(0deg);
+    transform: rotate(0deg) translateY(0px);
   }
 }
 
