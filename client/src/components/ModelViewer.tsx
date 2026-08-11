@@ -57,27 +57,32 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
         }
         .friendly-mascot:focus-visible { outline: 3px solid rgba(103, 232, 249, .95); outline-offset: 5px; border-radius: 18px; }
         .friendly-mascot:active { transform: scale(.97); }
+        .mascot-stage { display: block; width: 100%; height: 100%; transform-origin: 70% 100%; animation: mascotPeek 13.8s cubic-bezier(.77,0,.175,1) infinite; }
         .friendly-mascot svg { display: block; width: 100%; height: calc(100% - 18px); overflow: visible; }
-        .mascot-peek { transform-origin: 70px 124px; animation: mascotPeek 11.5s cubic-bezier(.77,0,.175,1) infinite; }
+        .mascot-peek { transform-origin: 70px 124px; }
         .mascot-float { transform-origin: 70px 118px; animation: mascotFloat 3.4s ease-in-out infinite; }
         .robot-wave-arm { transform-box: fill-box; transform-origin: 20% 55%; animation: robotWave 4.8s ease-in-out infinite; }
         .robot-eye { transform-box: fill-box; transform-origin: center; animation: robotBlink 4.1s steps(1, end) infinite; }
         .robot-antenna { transform-origin: 70px 32px; animation: antennaWiggle 3.4s ease-in-out infinite; }
         .robot-glow { animation: chestGlow 2.4s ease-in-out infinite; }
+        .robot-leg { transform-box: fill-box; transform-origin: 50% 0%; animation: robotLegSway 2.7s ease-in-out infinite alternate; }
+        .robot-leg--right { animation-delay: -.8s; }
         .is-greeting .robot-wave-arm { animation: robotWaveFast .82s ease-in-out 2; }
         .is-greeting .mascot-float { animation: mascotHappyHop .6s cubic-bezier(.23,1,.32,1) 1; }
         .mascot-label { display: block; margin-top: -2px; font: 700 10px/14px Arial, sans-serif; letter-spacing: .06em; text-shadow: 0 1px 3px rgba(0,0,0,.85); }
-        @keyframes mascotFloat { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-5px) rotate(-1deg); } }
-        @keyframes mascotPeek { 0%,72%,100% { opacity:1; transform: translateY(0) scale(1); } 76% { opacity:0; transform: translateY(24px) scale(.8); } 81% { opacity:0; transform: translateY(24px) scale(.8); } 87% { opacity:1; transform: translateY(-5px) scale(1.04); } 92% { opacity:1; transform: translateY(0) scale(1); } }
-        @keyframes robotWave { 0%,14%,100% { transform: rotate(0deg); } 18% { transform: rotate(-21deg); } 23% { transform: rotate(18deg); } 28% { transform: rotate(-18deg); } 34% { transform: rotate(0deg); } }
+        @keyframes mascotFloat { 0%,100% { transform: translateY(0) rotate(0deg); } 35% { transform: translateY(-6px) rotate(-1.5deg); } 64% { transform: translateY(-2px) rotate(1deg); } }
+        @keyframes mascotPeek { 0%,8%,100% { opacity:1; transform: translateY(0) rotate(0deg) scale(1); } 12% { transform: translateY(-8px) rotate(-3deg) scale(1.04); } 16% { transform: translateY(-3px) rotate(3deg) scale(1.03); } 20%,54% { opacity:1; transform: translateY(0) rotate(0deg) scale(1); } 59% { opacity:0; transform: translateY(54px) rotate(9deg) scale(.62); } 69% { opacity:0; transform: translateY(54px) rotate(9deg) scale(.62); } 76% { opacity:1; transform: translateY(17px) rotate(-4deg) scale(1.04); } 83% { opacity:1; transform: translateY(-5px) rotate(2deg) scale(1.02); } 89% { opacity:1; transform: translateY(0) rotate(0deg) scale(1); } }
+        @keyframes robotWave { 0%,12%,100% { transform: rotate(0deg); } 17% { transform: rotate(-25deg); } 22% { transform: rotate(20deg); } 27% { transform: rotate(-22deg); } 32% { transform: rotate(18deg); } 38% { transform: rotate(0deg); } }
         @keyframes robotWaveFast { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(-28deg); } 50% { transform: rotate(24deg); } 75% { transform: rotate(-20deg); } }
         @keyframes robotBlink { 0%,43%,47%,72%,76%,100% { transform: scaleY(1); } 45%,74% { transform: scaleY(.08); } }
         @keyframes antennaWiggle { 0%,100% { transform: rotate(0deg); } 45% { transform: rotate(5deg); } 55% { transform: rotate(-5deg); } }
         @keyframes chestGlow { 0%,100% { opacity:.68; transform: scale(.9); } 50% { opacity:1; transform: scale(1.08); } }
+        @keyframes robotLegSway { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
         @keyframes mascotHappyHop { 0%,100% { transform: translateY(0) rotate(0deg); } 45% { transform: translateY(-9px) rotate(-4deg); } 70% { transform: translateY(-2px) rotate(3deg); } }
-        @media (prefers-reduced-motion: reduce) { .mascot-peek, .mascot-float, .robot-wave-arm, .robot-eye, .robot-antenna, .robot-glow { animation: none !important; } }
+        @media (prefers-reduced-motion: reduce) { .mascot-stage, .mascot-peek, .mascot-float, .robot-wave-arm, .robot-eye, .robot-antenna, .robot-glow, .robot-leg { animation: none !important; } }
       `}</style>
 
+      <span className="mascot-stage">
       <svg viewBox="0 0 140 142" aria-hidden="true" data-testid="programmatic-cute-robot">
         <defs>
           <linearGradient id="headShell" x1="0" x2="1" y1="0" y2="1">
@@ -127,6 +132,16 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
             </g>
 
             <g>
+              <g className="robot-leg">
+                <path d="M51 105 Q55 110 66 109 L65 127 Q58 130 51 126Z" fill="url(#armShell)" stroke="#4c90c5" strokeWidth="1.5" />
+                <path d="M54 111 L62 112" stroke="white" strokeWidth="2" strokeLinecap="round" opacity=".65" />
+                <ellipse cx="58" cy="129" rx="11" ry="4.5" fill="#255c95" />
+              </g>
+              <g className="robot-leg robot-leg--right">
+                <path d="M74 109 Q85 110 89 105 L90 126 Q82 130 75 127Z" fill="url(#armShell)" stroke="#4c90c5" strokeWidth="1.5" />
+                <path d="M78 112 L86 111" stroke="white" strokeWidth="2" strokeLinecap="round" opacity=".65" />
+                <ellipse cx="83" cy="129" rx="11" ry="4.5" fill="#255c95" />
+              </g>
               <path d="M48 79 Q70 73 92 79 L98 111 Q70 121 42 111Z" fill="url(#bodyShell)" stroke="#184e8a" strokeWidth="2" />
               <path d="M49 82 Q63 77 72 80 L67 113 Q52 114 43 110Z" fill="#77eff0" opacity=".38" />
               <rect x="58" y="88" width="24" height="19" rx="8" fill="#0b315d" stroke="#87f5f2" strokeWidth="1.5" />
@@ -136,9 +151,6 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
             <g>
               <path d="M45 86 Q33 90 29 104" fill="none" stroke="url(#armShell)" strokeWidth="10" strokeLinecap="round" />
               <circle cx="28" cy="106" r="7" fill="#e9fbff" stroke="#5594c6" strokeWidth="1.5" />
-              <path d="M37 113 L36 127 M49 114 L50 128" stroke="#79bde8" strokeWidth="10" strokeLinecap="round" />
-              <ellipse cx="35" cy="130" rx="9" ry="4" fill="#2b699d" />
-              <ellipse cx="51" cy="131" rx="9" ry="4" fill="#2b699d" />
             </g>
 
             <g className="robot-wave-arm">
@@ -150,6 +162,7 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
         </g>
       </svg>
       <span className="mascot-label">osamah711x</span>
+      </span>
     </button>
   );
 }

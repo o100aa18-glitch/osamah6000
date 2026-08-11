@@ -27,6 +27,9 @@ describe('programmatic friendly robot assistant', () => {
     expect(component).toContain('@keyframes mascotFloat');
     expect(component).toContain('@keyframes mascotPeek');
     expect(component).toContain('mascotHappyHop');
+    expect(component).toContain('mascot-stage');
+    expect(component).toContain('robot-leg');
+    expect(component).toContain('translateY(54px)');
   });
 
   it('stays opposite the cart and preserves the AI chat click flow', () => {
