@@ -17,6 +17,7 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
   const modelHostRef = useRef<HTMLDivElement>(null);
   const onClickRef = useRef(onClick);
   const restoreAnimationTimerRef = useRef<number | null>(null);
+  const greetingTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     onClickRef.current = onClick;
@@ -115,6 +116,13 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
       });
 
       host.appendChild(viewer);
+
+      const runGreetingCycle = () => {
+        if (disposed) return;
+        playFriendlyReaction();
+        greetingTimerRef.current = window.setTimeout(runGreetingCycle, 6200);
+      };
+      greetingTimerRef.current = window.setTimeout(runGreetingCycle, 1400);
     };
 
     const existingScript = document.getElementById(MODEL_VIEWER_SCRIPT_ID);
@@ -144,6 +152,9 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
       if (restoreAnimationTimerRef.current) {
         window.clearTimeout(restoreAnimationTimerRef.current);
       }
+      if (greetingTimerRef.current) {
+        window.clearTimeout(greetingTimerRef.current);
+      }
       viewer?.remove();
       viewer = null;
     };
@@ -157,6 +168,7 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
       aria-label="فتح مساعد الذكاء الاصطناعي AI OSAMAH711X"
       title="AI OSAMAH711X"
       data-testid="friendly-ai-robot-host"
+      className="friendly-robot-host"
       style={{
         position: 'fixed',
         right: 'max(14px, env(safe-area-inset-right))',
@@ -168,7 +180,56 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
         display: 'block',
       }}
     >
-      <div ref={modelHostRef} style={{ position: 'absolute', inset: 0 }} />
+      <style>{`
+        @keyframes robotFloat {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); }
+        }
+        @keyframes robotGreeting {
+          0%, 9%, 100% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+          15% { transform: translateY(-7px) rotate(-5deg) scale(1.04); }
+          22% { transform: translateY(-3px) rotate(6deg) scale(1.03); }
+          30% { transform: translateY(0) rotate(0deg) scale(1); }
+          64% { opacity: 1; transform: translateY(0) scale(1); }
+          69% { opacity: 0; transform: translateY(10px) scale(0.84); }
+          75% { opacity: 0; transform: translateY(10px) scale(0.84); }
+          82% { opacity: 1; transform: translateY(-4px) scale(1.03); }
+          88% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes robotBlink {
+          0%, 44%, 48%, 100% { transform: scaleY(1); opacity: 0.9; }
+          46% { transform: scaleY(0.08); opacity: 1; }
+          72% { transform: scaleY(0.08); opacity: 1; }
+          74% { transform: scaleY(1); opacity: 0.9; }
+        }
+        .friendly-robot-host { animation: robotFloat 3.1s ease-in-out infinite; }
+        .friendly-robot-model { animation: robotGreeting 10s cubic-bezier(0.77, 0, 0.175, 1) infinite; }
+        .friendly-robot-eye { animation: robotBlink 4.2s ease-in-out infinite; transform-origin: center; }
+        @media (prefers-reduced-motion: reduce) {
+          .friendly-robot-host, .friendly-robot-model, .friendly-robot-eye { animation: none !important; }
+        }
+      `}</style>
+      <div
+        ref={modelHostRef}
+        className="friendly-robot-model"
+        style={{ position: 'absolute', inset: 0 }}
+      />
+      <span
+        aria-hidden="true"
+        data-testid="robot-eyes"
+        style={{
+          position: 'absolute',
+          top: '27px',
+          left: '50%',
+          display: 'flex',
+          gap: '9px',
+          transform: 'translateX(-50%)',
+          pointerEvents: 'none',
+        }}
+      >
+        <i className="friendly-robot-eye" style={{ width: '7px', height: '4px', borderRadius: '999px', background: 'rgba(7, 27, 34, 0.85)' }} />
+        <i className="friendly-robot-eye" style={{ width: '7px', height: '4px', borderRadius: '999px', background: 'rgba(7, 27, 34, 0.85)' }} />
+      </span>
       <span
         aria-hidden="true"
         data-testid="friendly-smile"

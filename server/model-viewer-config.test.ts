@@ -19,6 +19,10 @@ describe('friendly interactive 3D assistant configuration', () => {
     expect(component).toContain("viewer.setAttribute('autoplay', '')");
     expect(component).toContain('playFriendlyReaction');
     expect(component).toContain('viewer.animate(');
+    expect(component).toContain('runGreetingCycle');
+    expect(component).toContain('robotGreeting');
+    expect(component).toContain('robotBlink');
+    expect(component).toContain('data-testid="robot-eyes"');
     expect(component).toContain('data-testid="friendly-smile"');
     expect(component).toContain("borderBottom: '2px solid rgba(255, 255, 255, 0.95)'");
   });
