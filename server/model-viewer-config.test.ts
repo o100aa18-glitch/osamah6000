@@ -30,11 +30,14 @@ describe('programmatic friendly robot assistant', () => {
     expect(component).toContain('mascot-stage');
     expect(component).toContain('robot-leg');
     expect(component).toContain('translateY(54px)');
+    expect(component).toContain('transform-origin: 0% 0%');
+    expect(component).toContain('0%,68%,100%');
   });
 
   it('stays opposite the cart and preserves the AI chat click flow', () => {
     expect(component).toContain('right: max(14px, env(safe-area-inset-right))');
     expect(component).toContain('osamah711x');
+    expect(component).toContain('اسألني');
     expect(assistant).toContain('<ModelViewer onClick={() => setIsOpen(true)} />');
     expect(component).toContain('onClick?.()');
   });

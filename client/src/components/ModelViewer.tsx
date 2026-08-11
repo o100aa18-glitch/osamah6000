@@ -61,7 +61,7 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
         .friendly-mascot svg { display: block; width: 100%; height: calc(100% - 18px); overflow: visible; }
         .mascot-peek { transform-origin: 70px 124px; }
         .mascot-float { transform-origin: 70px 118px; animation: mascotFloat 3.4s ease-in-out infinite; }
-        .robot-wave-arm { transform-box: fill-box; transform-origin: 20% 55%; animation: robotWave 4.8s ease-in-out infinite; }
+        .robot-wave-arm { transform-box: fill-box; transform-origin: 0% 0%; animation: robotWave 8.6s ease-in-out infinite; }
         .robot-eye { transform-box: fill-box; transform-origin: center; animation: robotBlink 4.1s steps(1, end) infinite; }
         .robot-antenna { transform-origin: 70px 32px; animation: antennaWiggle 3.4s ease-in-out infinite; }
         .robot-glow { animation: chestGlow 2.4s ease-in-out infinite; }
@@ -69,10 +69,11 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
         .robot-leg--right { animation-delay: -.8s; }
         .is-greeting .robot-wave-arm { animation: robotWaveFast .82s ease-in-out 2; }
         .is-greeting .mascot-float { animation: mascotHappyHop .6s cubic-bezier(.23,1,.32,1) 1; }
-        .mascot-label { display: block; margin-top: -2px; font: 700 10px/14px Arial, sans-serif; letter-spacing: .06em; text-shadow: 0 1px 3px rgba(0,0,0,.85); }
+        .mascot-ask { display: table; margin: -5px auto 1px; padding: 2px 7px; border: 1px solid rgba(142, 244, 248, .7); border-radius: 999px; background: rgba(6, 41, 70, .82); color: #d8ffff; font: 700 10px/13px Arial, sans-serif; box-shadow: 0 2px 8px rgba(39, 223, 238, .22); }
+        .mascot-label { display: block; margin-top: -1px; font: 700 10px/14px Arial, sans-serif; letter-spacing: .06em; text-shadow: 0 1px 3px rgba(0,0,0,.85); }
         @keyframes mascotFloat { 0%,100% { transform: translateY(0) rotate(0deg); } 35% { transform: translateY(-6px) rotate(-1.5deg); } 64% { transform: translateY(-2px) rotate(1deg); } }
         @keyframes mascotPeek { 0%,8%,100% { opacity:1; transform: translateY(0) rotate(0deg) scale(1); } 12% { transform: translateY(-8px) rotate(-3deg) scale(1.04); } 16% { transform: translateY(-3px) rotate(3deg) scale(1.03); } 20%,54% { opacity:1; transform: translateY(0) rotate(0deg) scale(1); } 59% { opacity:0; transform: translateY(54px) rotate(9deg) scale(.62); } 69% { opacity:0; transform: translateY(54px) rotate(9deg) scale(.62); } 76% { opacity:1; transform: translateY(17px) rotate(-4deg) scale(1.04); } 83% { opacity:1; transform: translateY(-5px) rotate(2deg) scale(1.02); } 89% { opacity:1; transform: translateY(0) rotate(0deg) scale(1); } }
-        @keyframes robotWave { 0%,12%,100% { transform: rotate(0deg); } 17% { transform: rotate(-25deg); } 22% { transform: rotate(20deg); } 27% { transform: rotate(-22deg); } 32% { transform: rotate(18deg); } 38% { transform: rotate(0deg); } }
+        @keyframes robotWave { 0%,68%,100% { transform: rotate(0deg); } 73% { transform: rotate(-18deg); } 77% { transform: rotate(12deg); } 81% { transform: rotate(-13deg); } 85% { transform: rotate(8deg); } 89% { transform: rotate(0deg); } }
         @keyframes robotWaveFast { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(-28deg); } 50% { transform: rotate(24deg); } 75% { transform: rotate(-20deg); } }
         @keyframes robotBlink { 0%,43%,47%,72%,76%,100% { transform: scaleY(1); } 45%,74% { transform: scaleY(.08); } }
         @keyframes antennaWiggle { 0%,100% { transform: rotate(0deg); } 45% { transform: rotate(5deg); } 55% { transform: rotate(-5deg); } }
@@ -153,14 +154,18 @@ export function ModelViewer({ onClick }: ModelViewerProps) {
               <circle cx="28" cy="106" r="7" fill="#e9fbff" stroke="#5594c6" strokeWidth="1.5" />
             </g>
 
-            <g className="robot-wave-arm">
-              <path d="M94 85 Q110 80 114 64" fill="none" stroke="url(#armShell)" strokeWidth="10" strokeLinecap="round" />
-              <circle cx="115" cy="60" r="8" fill="#eaffff" stroke="#5594c6" strokeWidth="1.5" />
-              <path d="M112 53 L111 45 M116 52 L117 43 M120 54 L124 47" fill="none" stroke="#d9faff" strokeWidth="3" strokeLinecap="round" />
+            <g>
+              <circle cx="94" cy="87" r="6" fill="#4b91c6" stroke="#b9efff" strokeWidth="1.5" />
+              <g className="robot-wave-arm">
+                <path d="M95 88 C103 90 108 98 108 108" fill="none" stroke="url(#armShell)" strokeWidth="10" strokeLinecap="round" />
+                <circle cx="108" cy="113" r="8" fill="#eaffff" stroke="#5594c6" strokeWidth="1.5" />
+                <path d="M104 108 L100 103 M109 106 L108 99 M113 107 L116 102" fill="none" stroke="#d9faff" strokeWidth="2.8" strokeLinecap="round" />
+              </g>
             </g>
           </g>
         </g>
       </svg>
+      <span className="mascot-ask">اسألني</span>
       <span className="mascot-label">osamah711x</span>
       </span>
     </button>
