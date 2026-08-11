@@ -189,20 +189,20 @@ const plumbingServices: ServiceItem[] = [
 
 // خدمات التكييف
 const acServices: ServiceItem[] = [
-  { id: "ac1", category: "التكييف", name: "غسيل مكيف سبليت", price: "120 ريال", image: "https://manus-storage.s3.amazonaws.com/manus-storage/ac-03-ac-cleaning_f01a6023.png" },
-  { id: "ac2", category: "التكييف", name: "تعبئة فريون كامل", price: "250 ريال", image: "https://manus-storage.s3.amazonaws.com/manus-storage/ac-04-refrigerant_ece9b064.png" },
-  { id: "ac3", category: "التكييف", name: "تركيب مكيف سبليت", price: "350 ريال", image: "https://manus-storage.s3.amazonaws.com/manus-storage/ac-01-split-unit_ed3c8716.png" },
-  { id: "ac4", category: "التكييف", name: "صيانة مكيف شباك", price: "80 ريال", image: "https://manus-storage.s3.amazonaws.com/manus-storage/ac-02-window-ac_cf816a2b.png" },
-  { id: "ac5", category: "التكييف", name: "تعبئة فريون تكميلي", price: "150 ريال", image: "https://manus-storage.s3.amazonaws.com/manus-storage/ac-05-ac-installation_e2b1f205.png" },
+  { id: "ac1", category: "التكييف", name: "غسيل مكيف سبليت", price: "120 ريال", image: "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/ac-03-ac-cleaning.png" },
+  { id: "ac2", category: "التكييف", name: "تعبئة فريون كامل", price: "250 ريال", image: "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/ac-04-refrigerant.png" },
+  { id: "ac3", category: "التكييف", name: "تركيب مكيف سبليت", price: "350 ريال", image: "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/ac-01-split-unit.png" },
+  { id: "ac4", category: "التكييف", name: "صيانة مكيف شباك", price: "80 ريال", image: "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/ac-02-window-ac.png" },
+  { id: "ac5", category: "التكييف", name: "تعبئة فريون تكميلي", price: "150 ريال", image: "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/ac-05-ac-installation.png" },
 ];
 
 // خدمات الكاميرات والأنظمة
 const cameraServices: ServiceItem[] = [
-  { id: "cam1", category: "الكاميرات", name: "تركيب كاميرة مراقبة داخلية أو خارجية", price: "40 - 70 ريال", image: "https://manus-storage.s3.amazonaws.com/manus-storage/camera-01-cctv_2025efe5.png" },
-  { id: "cam2", category: "الكاميرات", name: "تركيب كاميرة مراقبة متحركة PTZ", price: "80 - 150 ريال", image: "https://manus-storage.s3.amazonaws.com/manus-storage/camera-02-ptz-camera_75e727b3.png" },
-  { id: "cam3", category: "الكاميرات", name: "تركيب كاميرة شحن لاسلكية أو طاقة شمسية", price: "60 - 100 ريال", image: "https://manus-storage.s3.amazonaws.com/manus-storage/camera-03-wireless-camera_743acc53.png" },
-  { id: "cam4", category: "الكاميرات", name: "تركيب جرس باب ذكي مزود بكاميرة", price: "50 - 90 ريال", image: "https://manus-storage.s3.amazonaws.com/manus-storage/camera-04-smart-doorbell_3c0d6aac.png" },
-  { id: "cam5", category: "الكاميرات", name: "تركيب وعرض كاميرات على الشاشة", price: "80 - 150 ريال", image: "https://manus-storage.s3.amazonaws.com/manus-storage/camera-05-dvr-system_ad6ed3e3.png" },
+  { id: "cam1", category: "الكاميرات", name: "تركيب كاميرة مراقبة داخلية أو خارجية", price: "40 - 70 ريال", image: "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/camera-01-cctv.png" },
+  { id: "cam2", category: "الكاميرات", name: "تركيب كاميرة مراقبة متحركة PTZ", price: "80 - 150 ريال", image: "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/camera-02-ptz-camera.png" },
+  { id: "cam3", category: "الكاميرات", name: "تركيب كاميرة شحن لاسلكية أو طاقة شمسية", price: "60 - 100 ريال", image: "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/camera-03-wireless-camera.png" },
+  { id: "cam4", category: "الكاميرات", name: "تركيب جرس باب ذكي مزود بكاميرة", price: "50 - 90 ريال", image: "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/camera-04-smart-doorbell.png" },
+  { id: "cam5", category: "الكاميرات", name: "تركيب وعرض كاميرات على الشاشة", price: "80 - 150 ريال", image: "https://pccpbkevkttjqbqmziji.supabase.co/storage/v1/object/public/images/camera-05-dvr-system.png" },
   { id: "cam6", category: "الكاميرات", name: "تركيب قفل باب ذكي", price: "300 ريال", image: "https://manus-storage.s3.amazonaws.com/manus-storage/camera-06-smart-lock_90cd2fcf.png" },
   { id: "cam7", category: "الكاميرات", name: "تركيب انتركوم منزلي", price: "250 ريال", image: "https://manus-storage.s3.amazonaws.com/manus-storage/camera-07-intercom_97264e27.png" },
 ];
