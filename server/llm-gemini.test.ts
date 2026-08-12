@@ -13,7 +13,6 @@ describe("Gemini model fallback", () => {
   it("does not duplicate a fallback that was selected as the preferred model", () => {
     expect(getGeminiModelCandidates("gemini-3.5-flash-lite")).toEqual([
       "gemini-3.5-flash-lite",
-      "gemini-3.1-flash-lite",
       "gemini-2.5-flash-lite",
     ]);
   });

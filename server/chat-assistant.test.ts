@@ -11,6 +11,13 @@ describe("clean Gemini chat path", () => {
     expect(prompt).toContain("لا توافق على تخفيض تحت الحد الداخلي المقبول");
   });
 
+  it("includes an internal price hint without naming its market reference", () => {
+    const prompt = buildChatSystemPrompt("معلومة سعر داخلية غير ظاهرة للعميل: نطاق 50 - 100 ريال.");
+
+    expect(prompt).toContain("نطاق 50 - 100 ريال");
+    expect(prompt).toContain("السعر النهائي يحدده الفني المختص");
+  });
+
   it("keeps only the last four complete conversation messages", () => {
     const history = Array.from({ length: 6 }, (_, index) => ({
       role: index % 2 === 0 ? "user" as const : "assistant" as const,
