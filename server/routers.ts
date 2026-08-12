@@ -4,10 +4,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { invokeGemini } from "./_core/llm-gemini";
-import { buildChatSystemPrompt, CHAT_MODEL, normalizeConversationHistory, sanitizeClientReply } from "./chatAssistant";
-import { buildCompositePricingReply } from "./compositeOrderPricing";
-import { buildBookingReply } from "./bookingAssistant";
-import { buildTechnicalGuidanceReply } from "./technicalGuidance";
+import { buildChatSystemPrompt, CHAT_MODEL, normalizeConversationHistory, sanitizeClientReply, WHATSAPP_READY_MARKER } from "./chatAssistant";
 
 export const appRouter = router({
   // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -36,37 +33,6 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         const systemPrompt = buildChatSystemPrompt();
         const conversationHistory = normalizeConversationHistory(input.conversationHistory);
-        const technicalGuidanceReply = buildTechnicalGuidanceReply(input.message);
-
-        if (technicalGuidanceReply) {
-          return {
-            success: true,
-            reply: technicalGuidanceReply,
-            timestamp: new Date(),
-            model: CHAT_MODEL,
-          };
-        }
-        const compositePricingReply = buildCompositePricingReply(conversationHistory, input.message);
-
-        if (compositePricingReply) {
-          return {
-            success: true,
-            reply: compositePricingReply,
-            timestamp: new Date(),
-            model: CHAT_MODEL,
-          };
-        }
-
-        const bookingReply = buildBookingReply(conversationHistory, input.message);
-        if (bookingReply) {
-          return {
-            success: true,
-            reply: bookingReply,
-            timestamp: new Date(),
-            model: CHAT_MODEL,
-          };
-        }
-
         const messages = [
           { role: 'system' as const, content: systemPrompt },
           ...conversationHistory,
@@ -77,14 +43,16 @@ export const appRouter = router({
           const response = await invokeGemini(messages as any, CHAT_MODEL);
           
           const rawReply = response?.choices?.[0]?.message?.content || '';
+          const bookingReady = rawReply.includes(WHATSAPP_READY_MARKER);
           const reply = sanitizeClientReply(
-            rawReply || 'لم يصلني رد واضح هذه المرة. اكتب طلبك مرة أخرى بتفصيل بسيط وسأساعدك.',
+            rawReply.replace(WHATSAPP_READY_MARKER, '').trim() || 'لم يصلني رد واضح هذه المرة. اكتب طلبك مرة أخرى بتفصيل بسيط وسأساعدك.',
             response.finishReason,
           );
           
           return {
             success: true,
             reply: reply,
+            bookingReady,
             timestamp: new Date(),
             model: CHAT_MODEL
           };

@@ -4,7 +4,7 @@ import { MessageCircle, X, Send, ExternalLink } from 'lucide-react';
 import { trpc } from '@/lib/trpc';
 import { Streamdown } from 'streamdown';
 import { ModelViewer } from './ModelViewer';
-import { buildBookingWhatsAppText, isBookingCompletionReply, summarizeBookingMessages, type BookingChatItem } from '@/lib/bookingWhatsApp';
+import { buildBookingWhatsAppText, summarizeBookingMessages, type BookingChatItem } from '@/lib/bookingWhatsApp';
 
 const WHATSAPP_NUMBER = '966575442802';
 
@@ -41,7 +41,7 @@ export function AIChatAssistant() {
       });
 
       const conversationForSummary: BookingChatItem[] = [...messages, { role: 'user', content: userMessage }];
-      const bookingSummary = response.success && isBookingCompletionReply(response.reply)
+      const bookingSummary = response.success && response.bookingReady
         ? summarizeBookingMessages(conversationForSummary)
         : undefined;
       setMessages(prev => [...prev, { role: 'assistant', content: response.reply, bookingSummary }]);

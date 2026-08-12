@@ -37,6 +37,18 @@ describe("chat completion guard", () => {
     expect(result.reply).toBe("قد يكون الخلل من اللمبة أو القاعدة. جرّب لمبة سليمة أولاً، وإذا استمر العطل يحتاج فحص التوصيلات.");
   });
 
+  it("lets Gemini control the conversation and exposes WhatsApp only through its hidden readiness signal", async () => {
+    invokeGeminiMock.mockResolvedValue({
+      choices: [{ message: { content: "تم تجهيز طلبك للفني. [[WHATSAPP_READY]]" } }],
+    });
+    const caller = appRouter.createCaller({ req: {}, res: {}, user: null } as any);
+    const result = await caller.chat.sendMessage({ message: "أبي فني", conversationHistory: [] });
+
+    expect(invokeGeminiMock).toHaveBeenCalledOnce();
+    expect(result.bookingReady).toBe(true);
+    expect(result.reply).not.toContain("WHATSAPP_READY");
+  });
+
   it("keeps a useful model reply when its finish reason reaches the output limit", async () => {
     invokeGeminiMock.mockResolvedValue({
       choices: [{ message: { content: "افصل القاطع عن الدائرة المتضررة، ثم يحتاج الأمر فحصاً آمناً من فني." } }],
