@@ -1,18 +1,32 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { MessageCircle, X, Send } from 'lucide-react';
+import { MessageCircle, X, Send, ExternalLink } from 'lucide-react';
 import { trpc } from '@/lib/trpc';
 import { Streamdown } from 'streamdown';
 import { ModelViewer } from './ModelViewer';
 
 export function AIChatAssistant() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant'; content: any }>>([]);
+  const [messages, setMessages] = useState<Array<{
+    role: 'user' | 'assistant';
+    content: string;
+    booking?: {
+      reference: string;
+      serviceSummary: string;
+      requestDescription: string;
+      area: string;
+      appointmentText: string;
+      customerName: string;
+      customerPhone: string;
+    };
+  }>>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const chatMutation = trpc.chat.sendMessage.useMutation();
+  const markWhatsAppOpenedMutation = trpc.booking.markWhatsAppOpened.useMutation();
+  const WHATSAPP_NUMBER = '966575442802';
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -38,7 +52,8 @@ export function AIChatAssistant() {
       });
 
       if (response.success) {
-        setMessages(prev => [...prev, { role: 'assistant', content: response.reply }]);
+        const booking = 'booking' in response ? response.booking : undefined;
+        setMessages(prev => [...prev, { role: 'assistant', content: response.reply, booking }]);
       } else {
         setMessages(prev => [...prev, { role: 'assistant', content: response.reply }]);
       }
@@ -51,6 +66,20 @@ export function AIChatAssistant() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const sendBookingToWhatsApp = (booking: NonNullable<(typeof messages)[number]['booking']>) => {
+    const text = [
+      `طلب خدمة جديد | رقم ${booking.reference}`,
+      `الخدمة: ${booking.serviceSummary}`,
+      `وصف العميل: ${booking.requestDescription}`,
+      `الحي: ${booking.area}`,
+      `الموعد: ${booking.appointmentText}`,
+      `العميل: ${booking.customerName}`,
+      `الجوال: ${booking.customerPhone}`,
+    ].join('\n');
+    void markWhatsAppOpenedMutation.mutateAsync({ reference: booking.reference }).catch(() => undefined);
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -101,7 +130,25 @@ export function AIChatAssistant() {
                   }`}
                 >
                   {msg.role === 'assistant' ? (
-                    <Streamdown>{msg.content}</Streamdown>
+                    <>
+                      <Streamdown>{msg.content}</Streamdown>
+                      {msg.booking && (
+                        <div className="mt-3 rounded-xl border border-white/30 bg-white/15 p-3 text-right text-sm">
+                          <p className="font-bold">ملخص الطلب: {msg.booking.reference}</p>
+                          <p className="mt-1">{msg.booking.serviceSummary}</p>
+                          <p className="text-white/85">{msg.booking.requestDescription}</p>
+                          <p>{msg.booking.area} — {msg.booking.appointmentText}</p>
+                          <button
+                            type="button"
+                            onClick={() => sendBookingToWhatsApp(msg.booking!)}
+                            className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 font-bold text-white transition hover:bg-green-600"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                            <span translate="no">إرسال طلبي إلى واتساب</span>
+                          </button>
+                        </div>
+                      )}
+                    </>
                   ) : (
                     <p className="text-sm">{msg.content}</p>
                   )}
