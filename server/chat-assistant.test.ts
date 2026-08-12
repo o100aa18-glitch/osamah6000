@@ -5,11 +5,9 @@ describe("natural service assistant guidance", () => {
   it("keeps Makkah market as the pricing reference without restricting normal conversation", () => {
     const prompt = buildChatSystemPrompt();
 
-    expect(prompt).toContain("استخدم سوق مكة المكرمة مرجعاً رقمياً للأسعار");
-    expect(prompt).toContain("لا تذكر مكة أو اسم أي مدينة أو «سعر السوق»");
-    expect(prompt).toContain("يمكنك التحدث بصورة طبيعية في الأسئلة العامة");
-    expect(prompt).toContain("افهمها ضمن المجال الأقرب");
-    expect(prompt).toContain("لا تتجاوز 45 كلمة");
+    expect(prompt).toContain("استخدم سوق مكة المكرمة مرجعاً داخلياً للحد المقبول");
+    expect(prompt).toContain("لا تُرسل كلمة مفردة أو جملة مبتورة");
+    expect(prompt).toContain("جملة إلى ثلاث جمل مكتملة وواضحة");
     expect(prompt).not.toContain("رد قصير (جملة أو جملتين فقط)");
   });
 
@@ -21,14 +19,18 @@ describe("natural service assistant guidance", () => {
     expect(sanitized).not.toContain("مكة");
   });
 
-  it("preserves recent context while preventing an overlong prompt", () => {
+  it("keeps only the recent context while preventing an overlong prompt", () => {
     const history = Array.from({ length: 20 }, (_, index) => ({
       role: index % 2 === 0 ? "user" as const : "assistant" as const,
       content: `رسالة ${index}`,
     }));
 
     const normalized = normalizeConversationHistory(history);
-    expect(normalized).toHaveLength(16);
-    expect(normalized[0]?.content).toBe("رسالة 4");
+    expect(normalized).toHaveLength(8);
+    expect(normalized[0]?.content).toBe("رسالة 12");
+  });
+
+  it("turns a one-word reply into a complete short response", () => {
+    expect(sanitizeClientReply("يسعدك")).toBe("يسعدك، وضّح لي طلبك أو مشكلتك وسأعطيك جواباً مباشراً.");
   });
 });
