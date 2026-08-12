@@ -11,13 +11,13 @@ const getApiKey = () => {
   return key;
 };
 
-const FALLBACK_MODELS = ["gemini-flash-latest", "gemini-3.1-flash-lite"];
+const FALLBACK_MODELS = ["gemini-3.1-flash-lite", "gemini-2.5-flash-lite"];
 
 export function getGeminiModelCandidates(preferredModel: string) {
   return [preferredModel, ...FALLBACK_MODELS].filter((model, index, models) => models.indexOf(model) === index);
 }
 
-export async function invokeGemini(messages: any[], model: string = 'gemini-3.5-flash') {
+export async function invokeGemini(messages: any[], model: string = 'gemini-3.5-flash-lite') {
   const apiKey = getApiKey();
   
   // تحويل صيغة الرسائل من OpenAI إلى Gemini
@@ -41,8 +41,8 @@ export async function invokeGemini(messages: any[], model: string = 'gemini-3.5-
       temperature: 0.45,
       topP: 0.95,
       topK: 40,
-      // مساحة كافية لرد مكتمل عند الحاجة، من دون فرض طول معين على المساعد.
-      maxOutputTokens: 1024
+      // سقف معقول لجواب قصير ومكتمل؛ لا يحجز Tokens غير مستخدمة.
+      maxOutputTokens: 384
     }
   };
 
