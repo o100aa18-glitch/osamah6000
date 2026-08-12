@@ -4,7 +4,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { invokeGemini } from "./_core/llm-gemini";
-import { buildChatSystemPrompt, CHAT_MODEL, normalizeConversationHistory, sanitizeClientReply, WHATSAPP_READY_MARKER } from "./chatAssistant";
+import { buildChatSystemPrompt, CHAT_MODEL, normalizeConversationHistory, WHATSAPP_READY_MARKER } from "./chatAssistant";
 
 export const appRouter = router({
   // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -44,7 +44,7 @@ export const appRouter = router({
           
           const rawReply = response?.choices?.[0]?.message?.content || '';
           const bookingReady = rawReply.includes(WHATSAPP_READY_MARKER);
-          const reply = sanitizeClientReply(rawReply.replace(WHATSAPP_READY_MARKER, '').trim());
+          const reply = rawReply.replace(WHATSAPP_READY_MARKER, '').trim();
 
           if (!reply) {
             throw new Error("Gemini returned an empty reply");

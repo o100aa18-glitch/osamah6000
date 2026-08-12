@@ -3,12 +3,6 @@ export type BookingChatItem = {
   content: string;
 };
 
-const BOOKING_COMPLETE_REPLY = /(?:تم\s+تأكيد\s+حجزك|حجزك\s+بنجاح|تأكيد\s+الحجز)/i;
-
-export function isBookingCompletionReply(reply: string) {
-  return BOOKING_COMPLETE_REPLY.test(reply);
-}
-
 export function summarizeBookingMessages(messages: BookingChatItem[]) {
   return messages
     .filter(message => message.role === "user")

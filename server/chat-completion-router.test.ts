@@ -1,63 +1,33 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { invokeGeminiMock } = vi.hoisted(() => ({
-  invokeGeminiMock: vi.fn(),
-}));
+const { invokeGeminiMock } = vi.hoisted(() => ({ invokeGeminiMock: vi.fn() }));
 
-vi.mock("./_core/llm-gemini", () => ({
-  invokeGemini: invokeGeminiMock,
-}));
+vi.mock("./_core/llm-gemini", () => ({ invokeGemini: invokeGeminiMock }));
 
 import { appRouter } from "./routers";
 
-describe("chat completion guard", () => {
-  beforeEach(() => {
-    invokeGeminiMock.mockReset();
-  });
+describe("Gemini chat gateway", () => {
+  beforeEach(() => invokeGeminiMock.mockReset());
 
-  it("does not expose a draft label or replace a model reply with canned wording", async () => {
+  it("returns Gemini wording directly instead of replacing it with a canned prompt", async () => {
     invokeGeminiMock.mockResolvedValue({
-      choices: [{ message: { content: "**Draft 1:** تبدأ التكلفة من 100 ريال وتصل إلى 2." } }],
+      choices: [{ message: { content: "القاطع يفصل غالباً بسبب حمل زائد أو جهاز فيه خلل." } }],
     });
     const caller = appRouter.createCaller({ req: {}, res: {}, user: null } as any);
-    const result = await caller.chat.sendMessage({ message: "أحتاج مساعدة", conversationHistory: [] });
+    const result = await caller.chat.sendMessage({ message: "ليش القاطع يفصل؟", conversationHistory: [] });
 
-    expect(result.reply).toBe("تبدأ التكلفة من 100 ريال وتصل إلى 2.");
-    expect(result.reply).not.toMatch(/Draft|\*/);
+    expect(result.reply).toBe("القاطع يفصل غالباً بسبب حمل زائد أو جهاز فيه خلل.");
+    expect(result.success).toBe(true);
   });
 
-  it("sends an ordinary technical description to the flexible professional assistant", async () => {
-    invokeGeminiMock.mockResolvedValue({
-      choices: [{ message: { content: "قد يكون الخلل من اللمبة أو القاعدة. جرّب لمبة سليمة أولاً، وإذا استمر العطل يحتاج فحص التوصيلات." } }],
-    });
-    const caller = appRouter.createCaller({ req: {}, res: {}, user: null } as any);
-    const result = await caller.chat.sendMessage({ message: "عندي لمبة خربانة", conversationHistory: [] });
-
-    expect(invokeGeminiMock).toHaveBeenCalledOnce();
-    expect(result.reply).toBe("قد يكون الخلل من اللمبة أو القاعدة. جرّب لمبة سليمة أولاً، وإذا استمر العطل يحتاج فحص التوصيلات.");
-  });
-
-  it("lets Gemini control the conversation and exposes WhatsApp only through its hidden readiness signal", async () => {
+  it("strips only the invisible WhatsApp signal and leaves the natural reply intact", async () => {
     invokeGeminiMock.mockResolvedValue({
       choices: [{ message: { content: "تم تجهيز طلبك للفني. [[WHATSAPP_READY]]" } }],
     });
     const caller = appRouter.createCaller({ req: {}, res: {}, user: null } as any);
-    const result = await caller.chat.sendMessage({ message: "أبي فني", conversationHistory: [] });
+    const result = await caller.chat.sendMessage({ message: "أبي أرسل الطلب", conversationHistory: [] });
 
-    expect(invokeGeminiMock).toHaveBeenCalledOnce();
     expect(result.bookingReady).toBe(true);
-    expect(result.reply).not.toContain("WHATSAPP_READY");
-  });
-
-  it("keeps a useful model reply without post-processing it into a generic response", async () => {
-    invokeGeminiMock.mockResolvedValue({
-      choices: [{ message: { content: "افصل القاطع عن الدائرة المتضررة، ثم يحتاج الأمر فحصاً آمناً من فني." } }],
-      finishReason: "MAX_TOKENS",
-    });
-    const caller = appRouter.createCaller({ req: {}, res: {}, user: null } as any);
-    const result = await caller.chat.sendMessage({ message: "عندي شورت", conversationHistory: [] });
-
-    expect(result.reply).toContain("افصل القاطع");
-    expect(result.reply).not.toContain("لم تكتمل التفاصيل لدي");
+    expect(result.reply).toBe("تم تجهيز طلبك للفني.");
   });
 });

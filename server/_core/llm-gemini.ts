@@ -41,9 +41,8 @@ export async function invokeGemini(messages: any[], model: string = 'gemini-3.5-
       temperature: 0.45,
       topP: 0.95,
       topK: 40,
-      // سقف أعلى من الرد القصير المعتاد لمنع توقف الجملة عند حد الإخراج.
-      // لا يعني ذلك أن النموذج سيكتب أو يستهلك هذا العدد ما لم يخرج نصاً أطول.
-      maxOutputTokens: 480
+      // مساحة كافية لرد مكتمل عند الحاجة، من دون فرض طول معين على المساعد.
+      maxOutputTokens: 1024
     }
   };
 
