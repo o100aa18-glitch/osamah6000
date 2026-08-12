@@ -7,6 +7,7 @@ import { invokeGemini } from "./_core/llm-gemini";
 import { buildChatSystemPrompt, CHAT_MODEL, normalizeConversationHistory, sanitizeClientReply } from "./chatAssistant";
 import { buildCompositePricingReply } from "./compositeOrderPricing";
 import { buildBookingReply } from "./bookingAssistant";
+import { buildTechnicalGuidanceReply } from "./technicalGuidance";
 
 export const appRouter = router({
   // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -35,6 +36,16 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         const systemPrompt = buildChatSystemPrompt();
         const conversationHistory = normalizeConversationHistory(input.conversationHistory);
+        const technicalGuidanceReply = buildTechnicalGuidanceReply(input.message);
+
+        if (technicalGuidanceReply) {
+          return {
+            success: true,
+            reply: technicalGuidanceReply,
+            timestamp: new Date(),
+            model: CHAT_MODEL,
+          };
+        }
         const compositePricingReply = buildCompositePricingReply(conversationHistory, input.message);
 
         if (compositePricingReply) {
@@ -65,8 +76,10 @@ export const appRouter = router({
         try {
           const response = await invokeGemini(messages as any, CHAT_MODEL);
           
-          const rawReply = response?.choices?.[0]?.message?.content || 'لم يصلني رد واضح هذه المرة. اكتب طلبك مرة أخرى بتفصيل بسيط وسأساعدك.';
-          const reply = sanitizeClientReply(rawReply);
+          const rawReply = response?.choices?.[0]?.message?.content || '';
+          const reply = response?.finishReason === 'MAX_TOKENS'
+            ? 'لم تكتمل التفاصيل لدي. اكتب طلبك مرة أخرى باختصار وسأجيبك بجملة واضحة.'
+            : sanitizeClientReply(rawReply || 'لم يصلني رد واضح هذه المرة. اكتب طلبك مرة أخرى بتفصيل بسيط وسأساعدك.');
           
           return {
             success: true,

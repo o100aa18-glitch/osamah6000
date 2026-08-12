@@ -6,6 +6,8 @@ describe("natural service assistant guidance", () => {
     const prompt = buildChatSystemPrompt();
 
     expect(prompt).toContain("استخدم سوق مكة المكرمة مرجعاً داخلياً للحد المقبول");
+    expect(prompt).toContain("لا تحوّل أمثلة مثل لمبة خربانة أو شورت أو مكيف لا يبرد إلى ردود ثابتة");
+    expect(prompt).toContain("لا تبدأ بتحية روتينية في كل رسالة");
     expect(prompt).toContain("لا تُرسل كلمة مفردة أو جملة مبتورة");
     expect(prompt).toContain("جملة إلى ثلاث جمل مكتملة وواضحة");
     expect(prompt).not.toContain("رد قصير (جملة أو جملتين فقط)");
@@ -32,5 +34,13 @@ describe("natural service assistant guidance", () => {
 
   it("turns a one-word reply into a complete short response", () => {
     expect(sanitizeClientReply("يسعدك")).toBe("يسعدك، وضّح لي طلبك أو مشكلتك وسأعطيك جواباً مباشراً.");
+  });
+
+  it("removes draft formatting and rejects an incomplete price ending", () => {
+    expect(sanitizeClientReply("**Draft 1:** تكلفة الفحص هي 50 ريال."))
+      .toBe("تكلفة الفحص هي 50 ريال.");
+    const sanitized = sanitizeClientReply("تبدأ تكلفة الإصلاح من 100 ريال وتصل إلى 2.");
+    expect(sanitized).toBe("أبشر، وضّح لي طلبك أو مشكلتك وسأعطيك جواباً مباشراً.");
+    expect(sanitized).not.toContain("2");
   });
 });
