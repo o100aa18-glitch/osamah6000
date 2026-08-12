@@ -18,7 +18,7 @@ function getServiceQuantity(service: ServiceCatalogItem, text: string) {
   return match ? Number(match[1]) : null;
 }
 
-const STOP_WORDS = new Set(["ابي", "ابغى", "اريد", "احتاج", "تركيب", "تغيير", "اصلاح", "او", "من", "الى", "على", "في", "مع", "عن", "هذا", "هذه", "عادي"]);
+const STOP_WORDS = new Set(["ابي", "ابغى", "اريد", "احتاج", "او", "من", "الى", "على", "في", "مع", "عن", "هذا", "هذه", "عادي"]);
 
 function normalizeArabic(text: string) {
   return text
@@ -27,26 +27,41 @@ function normalizeArabic(text: string) {
     .replace(/ة/g, "ه")
     .replace(/ى/g, "ي")
     .replace(/[ًٌٍَُِّْـ]/g, "")
+    .replace(/[؟،؛]/g, " ")
     .replace(/[^a-z0-9\u0600-\u06ff\s]/gi, " ");
 }
 
 function getKeywords(text: string) {
-  return normalizeArabic(text).split(/\s+/).filter(word => word.length > 2 && !STOP_WORDS.has(word));
+  return normalizeArabic(text)
+    .split(/\s+/)
+    .map(word => word.startsWith("ال") && word.length > 4 ? word.slice(2) : word)
+    .filter(word => word.length > 2 && !STOP_WORDS.has(word));
 }
 
-function serviceMatchScore(service: ServiceCatalogItem, orderWords: Set<string>) {
+function serviceMatchScore(service: ServiceCatalogItem, orderWords: Set<string>, orderPhrase: string) {
   const candidates = [service.name, ...(service.aliases ?? [])];
-  return Math.max(...candidates.map(candidate => getKeywords(candidate).filter(word => orderWords.has(word)).length));
+  return Math.max(...candidates.map(candidate => {
+    const candidateWords = getKeywords(candidate);
+    const candidatePhrase = candidateWords.join(" ");
+    if (candidateWords.length > 1 && orderPhrase.includes(candidatePhrase)) {
+      return 100 + candidateWords.length;
+    }
+    return candidateWords.filter(word => orderWords.has(word)).length;
+  }));
 }
 
 export function getRequestedPricedServices(history: ChatHistoryItem[] | undefined, message: string) {
   const orderText = [...(history ?? []).filter(item => item.role === "user").map(item => item.content), message].join("\n");
-  const orderWords = new Set(getKeywords(orderText));
+  const orderKeywords = getKeywords(orderText);
+  const orderWords = new Set(orderKeywords);
+  const orderPhrase = orderKeywords.join(" ");
   const matches = serviceCatalog
-    .map(service => ({ service, score: serviceMatchScore(service, orderWords) }))
+    .map(service => ({ service, score: serviceMatchScore(service, orderWords, orderPhrase) }))
     .filter(({ score }) => score > 0)
     .sort((left, right) => right.score - left.score);
-  const minimumScore = matches.some(({ score }) => score >= 2) ? 2 : 1;
+  const minimumScore = matches.some(({ score }) => score >= 100)
+    ? 100
+    : matches.some(({ score }) => score >= 2) ? 2 : 1;
   return matches
     .filter(({ score }) => score >= minimumScore)
     .map(({ service }) => service);

@@ -1,1 +1,0 @@
-ALTER TABLE `service_booking_requests` ADD `request_description` text NOT NULL;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildBookingReply, extractCompletedBookingDetails } from "./bookingAssistant";
+import { buildBookingReply } from "./bookingAssistant";
 
 describe("short booking guidance", () => {
   it("asks only for the next missing booking detail", () => {
@@ -18,23 +18,19 @@ describe("short booking guidance", () => {
     expect(reply).toContain("أرسل اسمك ورقمك للتأكيد");
   });
 
-  it("extracts a complete booking only after the customer confirms name and phone", () => {
-    const history = [
-      { role: "user" as const, content: "أبي أحجز تركيب خلاط مغسلة" },
-      { role: "assistant" as const, content: "أي حي مناسب لك؟" },
-      { role: "user" as const, content: "حي الصفا غداً مساء" },
-      { role: "assistant" as const, content: "أرسل اسمك ورقمك للتأكيد." },
-      { role: "user" as const, content: "أسامة" },
-      { role: "assistant" as const, content: "أرسل رقم جوالك." },
-    ];
+  it("confirms the existing booking flow after the customer supplies name and phone", () => {
+    const reply = buildBookingReply(
+      [
+        { role: "user", content: "أبي أحجز تركيب خلاط مغسلة" },
+        { role: "assistant", content: "أي حي مناسب لك؟" },
+        { role: "user", content: "حي الصفا غداً مساء" },
+        { role: "assistant", content: "أرسل اسمك ورقمك للتأكيد." },
+        { role: "user", content: "أسامة" },
+      ],
+      "0550309736",
+    );
 
-    expect(extractCompletedBookingDetails(history, "0550309736")).toEqual({
-      serviceSummary: "تركيب خلاط مغسلة",
-      requestDescription: "أبي أحجز تركيب خلاط مغسلة",
-      area: "حي الصفا",
-      appointmentText: "غداً مساء",
-      customerName: "أسامة",
-      customerPhone: "0550309736",
-    });
+    expect(reply).toContain("تم تأكيد حجزك");
+    expect(reply).toContain("واتساب");
   });
 });

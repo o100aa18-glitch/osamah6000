@@ -25,6 +25,15 @@ describe("composite service order pricing", () => {
     expect(reply!.length).toBeLessThan(180);
   });
 
+  it("understands the common defined form of a service name such as الفيش", () => {
+    const reply = buildCompositePricingReply([], "بكم تركيب الفيش؟");
+
+    expect(reply).toContain("تركيب مفتاح أو فيش عادي");
+    expect(reply).toContain("20 ريال");
+    expect(reply).not.toContain("غطاء فيش");
+    expect(reply).not.toContain("لم تكتمل التفاصيل");
+  });
+
   it("calculates the final total when the client supplies the missing quantity", () => {
     const reply = buildCompositePricingReply(
       [...history, { role: "assistant", content: "كم نقطة تحتاج بالغرفة؟" }],

@@ -36,4 +36,16 @@ describe("chat completion guard", () => {
     expect(invokeGeminiMock).toHaveBeenCalledOnce();
     expect(result.reply).toBe("قد يكون الخلل من اللمبة أو القاعدة. جرّب لمبة سليمة أولاً، وإذا استمر العطل يحتاج فحص التوصيلات.");
   });
+
+  it("keeps a useful model reply when its finish reason reaches the output limit", async () => {
+    invokeGeminiMock.mockResolvedValue({
+      choices: [{ message: { content: "افصل القاطع عن الدائرة المتضررة، ثم يحتاج الأمر فحصاً آمناً من فني." } }],
+      finishReason: "MAX_TOKENS",
+    });
+    const caller = appRouter.createCaller({ req: {}, res: {}, user: null } as any);
+    const result = await caller.chat.sendMessage({ message: "عندي شورت", conversationHistory: [] });
+
+    expect(result.reply).toContain("افصل القاطع");
+    expect(result.reply).not.toContain("لم تكتمل التفاصيل لدي");
+  });
 });

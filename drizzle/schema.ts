@@ -25,20 +25,4 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-export const serviceBookingRequests = mysqlTable("service_booking_requests", {
-  id: int("id").autoincrement().primaryKey(),
-  reference: varchar("reference", { length: 40 }).notNull().unique(),
-  requestKey: varchar("request_key", { length: 64 }).notNull().unique(),
-  serviceSummary: text("service_summary").notNull(),
-  requestDescription: text("request_description").notNull(),
-  area: varchar("area", { length: 255 }).notNull(),
-  appointmentText: varchar("appointment_text", { length: 255 }).notNull(),
-  customerName: varchar("customer_name", { length: 120 }).notNull(),
-  customerPhone: varchar("customer_phone", { length: 32 }).notNull(),
-  status: mysqlEnum("status", ["pending_whatsapp", "whatsapp_opened"]).default("pending_whatsapp").notNull(),
-  whatsappOpenedAt: timestamp("whatsapp_opened_at"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
-});
-
-export type ServiceBookingRequest = typeof serviceBookingRequests.$inferSelect;
+// TODO: Add your tables here

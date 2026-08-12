@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, serviceBookingRequests, users } from "../drizzle/schema";
+import { InsertUser, users } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,37 +89,4 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-export type CreateBookingRequestInput = {
-  reference: string;
-  requestKey: string;
-  serviceSummary: string;
-  requestDescription: string;
-  area: string;
-  appointmentText: string;
-  customerName: string;
-  customerPhone: string;
-};
-
-export async function createOrGetBookingRequest(input: CreateBookingRequestInput) {
-  const db = await getDb();
-  if (!db) throw new Error("قاعدة بيانات الطلبات غير متاحة حالياً");
-
-  const existing = await db.select().from(serviceBookingRequests)
-    .where(eq(serviceBookingRequests.requestKey, input.requestKey)).limit(1);
-  if (existing[0]) return existing[0];
-
-  await db.insert(serviceBookingRequests).values(input);
-  const created = await db.select().from(serviceBookingRequests)
-    .where(eq(serviceBookingRequests.reference, input.reference)).limit(1);
-  if (!created[0]) throw new Error("تعذر إنشاء سجل الطلب");
-  return created[0];
-}
-
-export async function markBookingWhatsAppOpened(reference: string) {
-  const db = await getDb();
-  if (!db) throw new Error("قاعدة بيانات الطلبات غير متاحة حالياً");
-
-  await db.update(serviceBookingRequests)
-    .set({ status: "whatsapp_opened", whatsappOpenedAt: new Date() })
-    .where(eq(serviceBookingRequests.reference, reference));
-}
+// TODO: add feature queries here as your schema grows.

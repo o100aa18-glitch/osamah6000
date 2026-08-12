@@ -1,4 +1,4 @@
-export const CHAT_MODEL = "gemini-3.5-flash";
+export const CHAT_MODEL = "gemini-2.5-flash";
 
 export type ChatHistoryItem = {
   role: "user" | "assistant";
