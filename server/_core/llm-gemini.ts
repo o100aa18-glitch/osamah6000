@@ -17,7 +17,7 @@ export function getGeminiModelCandidates(preferredModel: string) {
   return [preferredModel, ...FALLBACK_MODELS].filter((model, index, models) => models.indexOf(model) === index);
 }
 
-export async function invokeGemini(messages: any[], model: string = 'gemini-2.5-flash') {
+export async function invokeGemini(messages: any[], model: string = 'gemini-3.5-flash') {
   const apiKey = getApiKey();
   
   // تحويل صيغة الرسائل من OpenAI إلى Gemini
@@ -38,10 +38,10 @@ export async function invokeGemini(messages: any[], model: string = 'gemini-2.5-
     },
     contents: contents,
     generationConfig: {
-      temperature: 0.55,
+      temperature: 0.45,
       topP: 0.95,
       topK: 40,
-      maxOutputTokens: 480
+      maxOutputTokens: 320
     }
   };
 

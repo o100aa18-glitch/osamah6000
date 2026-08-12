@@ -1,5 +1,5 @@
 import type { ChatHistoryItem } from "./chatAssistant";
-import { getRequestedPricedServices, getServiceDisplayLabel } from "./compositeOrderPricing";
+import { getRequestedPricedServices } from "./compositeOrderPricing";
 
 const BOOKING_INTENT = /(?:احجز|حجز|موعد|زيارة|أرسل.{0,8}فني|ابغى.{0,12}(?:فني|موعد)|أبي.{0,12}(?:فني|موعد)|أريد.{0,12}(?:فني|موعد))/i;
 const TIME_PATTERN = /(?:اليوم|بكر(?:ه|ة)|غد(?:اً|ا)?|صباح(?:اً)?|مساء(?:ً)?|بعد\s+الظهر|\d{1,2}\s*(?:ص|م|صباحاً?|مساءً?))/i;
@@ -26,7 +26,7 @@ export function buildBookingReply(history: ChatHistoryItem[] | undefined, messag
     return "تمام، وش الخدمة اللي تحتاجها؟";
   }
 
-  const serviceNames = services.map(service => getServiceDisplayLabel(service, conversation)).join("، ");
+  const serviceNames = services.map(service => service.displayName ?? service.name).join("، ");
   if (!location) {
     return `تمام، طلبك: ${serviceNames}. أي حي مناسب لك؟`;
   }
