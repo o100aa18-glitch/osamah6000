@@ -15,15 +15,15 @@ describe("chat completion guard", () => {
     invokeGeminiMock.mockReset();
   });
 
-  it("does not expose a draft label or incomplete price from a model reply", async () => {
+  it("does not expose a draft label or replace a model reply with canned wording", async () => {
     invokeGeminiMock.mockResolvedValue({
       choices: [{ message: { content: "**Draft 1:** تبدأ التكلفة من 100 ريال وتصل إلى 2." } }],
     });
     const caller = appRouter.createCaller({ req: {}, res: {}, user: null } as any);
     const result = await caller.chat.sendMessage({ message: "أحتاج مساعدة", conversationHistory: [] });
 
-    expect(result.reply).toBe("أبشر، وضّح لي طلبك أو مشكلتك وسأعطيك جواباً مباشراً.");
-    expect(result.reply).not.toMatch(/Draft|\*|\b2\b/);
+    expect(result.reply).toBe("تبدأ التكلفة من 100 ريال وتصل إلى 2.");
+    expect(result.reply).not.toMatch(/Draft|\*/);
   });
 
   it("sends an ordinary technical description to the flexible professional assistant", async () => {
@@ -49,7 +49,7 @@ describe("chat completion guard", () => {
     expect(result.reply).not.toContain("WHATSAPP_READY");
   });
 
-  it("keeps a useful model reply when its finish reason reaches the output limit", async () => {
+  it("keeps a useful model reply without post-processing it into a generic response", async () => {
     invokeGeminiMock.mockResolvedValue({
       choices: [{ message: { content: "افصل القاطع عن الدائرة المتضررة، ثم يحتاج الأمر فحصاً آمناً من فني." } }],
       finishReason: "MAX_TOKENS",

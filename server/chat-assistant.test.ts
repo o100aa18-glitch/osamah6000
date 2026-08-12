@@ -26,33 +26,24 @@ describe("natural service assistant guidance", () => {
     }));
 
     const normalized = normalizeConversationHistory(history);
-    expect(normalized).toHaveLength(6);
-    expect(normalized[0]?.content).toBe("رسالة 14");
+    expect(normalized).toHaveLength(4);
+    expect(normalized[0]?.content).toBe("رسالة 16");
   });
 
   it("keeps a natural short reply instead of replacing it with a canned answer", () => {
     expect(sanitizeClientReply("يسعدك")).toBe("يسعدك");
   });
 
-  it("removes draft formatting and rejects an incomplete price ending", () => {
+  it("removes draft formatting without replacing Gemini text with a canned response", () => {
     expect(sanitizeClientReply("**Draft 1:** تكلفة الفحص هي 50 ريال."))
       .toBe("تكلفة الفحص هي 50 ريال.");
     const sanitized = sanitizeClientReply("تبدأ تكلفة الإصلاح من 100 ريال وتصل إلى 2.");
-    expect(sanitized).toBe("أبشر، وضّح لي طلبك أو مشكلتك وسأعطيك جواباً مباشراً.");
-    expect(sanitized).not.toContain("2");
+    expect(sanitized).toBe("تبدأ تكلفة الإصلاح من 100 ريال وتصل إلى 2.");
   });
 
-  it("never shows an answer that ends with a partial Arabic word", () => {
+  it("does not replace a model reply with a generic clarification prompt", () => {
     const sanitized = sanitizeClientReply("الشورت الكهربائي يحدث عادة بسبب تلامس الأسلاك أو وجود جهاز ت");
 
-    expect(sanitized).toBe("أبشر، وضّح لي طلبك أو مشكلتك وسأعطيك جواباً مباشراً.");
-    expect(sanitized).not.toContain("جهاز ت");
-  });
-
-  it("keeps only complete sentences when Gemini reaches its output limit", () => {
-    const sanitized = sanitizeClientReply("افصل القاطع أولاً. لا تلمس السلك المكشوف لأن", "MAX_TOKENS");
-
-    expect(sanitized).toBe("افصل القاطع أولاً.");
-    expect(sanitized).not.toContain("لأن");
+    expect(sanitized).toBe("الشورت الكهربائي يحدث عادة بسبب تلامس الأسلاك أو وجود جهاز ت");
   });
 });

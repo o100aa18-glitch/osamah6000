@@ -44,10 +44,11 @@ export const appRouter = router({
           
           const rawReply = response?.choices?.[0]?.message?.content || '';
           const bookingReady = rawReply.includes(WHATSAPP_READY_MARKER);
-          const reply = sanitizeClientReply(
-            rawReply.replace(WHATSAPP_READY_MARKER, '').trim() || 'لم يصلني رد واضح هذه المرة. اكتب طلبك مرة أخرى بتفصيل بسيط وسأساعدك.',
-            response.finishReason,
-          );
+          const reply = sanitizeClientReply(rawReply.replace(WHATSAPP_READY_MARKER, '').trim());
+
+          if (!reply) {
+            throw new Error("Gemini returned an empty reply");
+          }
           
           return {
             success: true,
