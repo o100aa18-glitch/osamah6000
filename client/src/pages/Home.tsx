@@ -337,7 +337,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-right font-sans" dir="rtl">
+    <div id="home" className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-right font-sans" dir="rtl">
       {/* AI Chat Assistant */}
       <AIChatAssistant />
       {/* خلفية متحركة */}
@@ -346,6 +346,15 @@ export default function Home() {
         <div className="absolute top-40 right-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
         <div className="absolute -bottom-8 left-1/2 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
       </div>
+
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/75 backdrop-blur-xl shadow-lg shadow-slate-950/20">
+        <nav className="container mx-auto flex min-h-14 items-center justify-center gap-1 px-3 sm:min-h-16 sm:gap-2" aria-label="التنقل الرئيسي">
+          <a href="#home" className="rounded-lg px-2.5 py-2 text-xs font-bold text-white transition-colors hover:bg-white/10 hover:text-blue-200 sm:px-4 sm:text-sm">الرئيسية</a>
+          <a href="#about" className="rounded-lg px-2.5 py-2 text-xs font-bold text-white transition-colors hover:bg-white/10 hover:text-blue-200 sm:px-4 sm:text-sm">عني</a>
+          <a href="#services" className="rounded-lg px-2.5 py-2 text-xs font-bold text-white transition-colors hover:bg-white/10 hover:text-blue-200 sm:px-4 sm:text-sm">خدماتنا</a>
+          <a href="#contact" className="rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-2.5 py-2 text-xs font-bold text-white shadow-md transition-transform hover:scale-105 sm:px-4 sm:text-sm">تواصل</a>
+        </nav>
+      </header>
 
       {/* زر السلة العائم */}
       <button 
@@ -401,7 +410,7 @@ export default function Home() {
 
         {/* قسم من نحن */}
         <div className="relative z-10 max-w-4xl mx-auto mb-16 md:mb-24 bg-white/5 backdrop-blur-md border border-white/10 rounded-[2.5rem] p-8 md:p-12 text-center shadow-2xl">
-          <h2 className="text-2xl md:text-4xl font-bold mb-8 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent" translate="no">عني</h2>
+          <h2 id="about" className="scroll-mt-20 text-2xl md:text-4xl font-bold mb-8 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent" translate="no">عني</h2>
           <p className="text-gray-200 text-lg md:text-xl leading-relaxed" translate="no">مهندس متخصص في المشاريع الإنشائية والإشراف على المواقع. أتمتع بخبرة واسعة في تنفيذ المشاريع الكبرى وضمان الالتزام بمعايير الهندسة والسلامة. أعمل على تقديم حلول فعالة وموثوقة لكل مشروع.</p>
         </div>
 
@@ -434,7 +443,7 @@ export default function Home() {
 
         {/* قسم الخدمات - في الأسفل */}
         <div className="relative z-10 max-w-7xl mx-auto mb-16 md:mb-24">
-          <h2 className="text-3xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent" translate="no">
+          <h2 id="services" className="scroll-mt-20 text-3xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent" translate="no">
             اطلب خدماتنا
           </h2>
 
@@ -518,7 +527,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto bg-gradient-to-r from-blue-600 to-purple-600 rounded-[3rem] p-8 md:p-16 text-center text-white mb-12 shadow-2xl relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/50 to-purple-600/50 blur-xl"></div>
           <div className="relative z-10">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6" translate="no">تواصل معي</h2>
+            <h2 id="contact" className="scroll-mt-20 text-3xl md:text-5xl font-bold mb-6" translate="no">تواصل معي</h2>
             <p className="text-lg md:text-2xl mb-10 text-blue-100" translate="no">تواصل معي عبر أي من قنوات التواصل الاجتماعية أو البريد الإلكتروني</p>
             <Button
               className="bg-yellow-400 text-gray-900 hover:bg-yellow-500 font-bold px-12 py-4 text-lg md:text-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
