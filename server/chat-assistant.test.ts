@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildChatSystemPrompt, normalizeConversationHistory } from "./chatAssistant";
+import { buildChatSystemPrompt, hasExplicitTechnicianRequest, normalizeConversationHistory } from "./chatAssistant";
 
 describe("clean Gemini chat path", () => {
   it("uses one concise assistant identity without a fixed booking or pricing flow", () => {
@@ -20,5 +20,16 @@ describe("clean Gemini chat path", () => {
     const normalized = normalizeConversationHistory(history);
     expect(normalized).toHaveLength(4);
     expect(normalized[0]?.content).toBe("رسالة 2");
+  });
+
+  it("does not treat a price enquiry as a technician request", () => {
+    expect(hasExplicitTechnicianRequest([], "بكم تركيب شاشة 60 بوصة؟")).toBe(false);
+  });
+
+  it("accepts an explicit technician request or confirmation after an offer", () => {
+    expect(hasExplicitTechnicianRequest([], "أرسل لي فني لتركيب الشاشة")).toBe(true);
+    expect(hasExplicitTechnicianRequest([
+      { role: "assistant", content: "إذا تحب أرسل لك فني." },
+    ], "تمام")).toBe(true);
   });
 });
