@@ -43,4 +43,18 @@ describe("natural service assistant guidance", () => {
     expect(sanitized).toBe("أبشر، وضّح لي طلبك أو مشكلتك وسأعطيك جواباً مباشراً.");
     expect(sanitized).not.toContain("2");
   });
+
+  it("never shows an answer that ends with a partial Arabic word", () => {
+    const sanitized = sanitizeClientReply("الشورت الكهربائي يحدث عادة بسبب تلامس الأسلاك أو وجود جهاز ت");
+
+    expect(sanitized).toBe("أبشر، وضّح لي طلبك أو مشكلتك وسأعطيك جواباً مباشراً.");
+    expect(sanitized).not.toContain("جهاز ت");
+  });
+
+  it("keeps only complete sentences when Gemini reaches its output limit", () => {
+    const sanitized = sanitizeClientReply("افصل القاطع أولاً. لا تلمس السلك المكشوف لأن", "MAX_TOKENS");
+
+    expect(sanitized).toBe("افصل القاطع أولاً.");
+    expect(sanitized).not.toContain("لأن");
+  });
 });

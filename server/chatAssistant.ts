@@ -22,7 +22,25 @@ export function normalizeConversationHistory(history: ChatHistoryItem[] | undefi
     .map(item => ({ ...item, content: item.content.trim().slice(-500) }));
 }
 
-export function sanitizeClientReply(reply: string) {
+const FALLBACK_COMPLETE_REPLY = "أبشر، وضّح لي طلبك أو مشكلتك وسأعطيك جواباً مباشراً.";
+
+function lastCompleteSentence(reply: string) {
+  const sentenceEndingPattern = /[.!؟?…]+/g;
+  let lastEndingIndex = -1;
+  let lastEndingLength = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = sentenceEndingPattern.exec(reply)) !== null) {
+    lastEndingIndex = match.index;
+    lastEndingLength = match[0].length;
+  }
+
+  return lastEndingIndex >= 0
+    ? reply.slice(0, lastEndingIndex + lastEndingLength).trim()
+    : "";
+}
+
+export function sanitizeClientReply(reply: string, finishReason?: string) {
   const cleanedReply = reply
     .replace(/\*{1,3}\s*draft\s*\d*\s*[:：-]?\s*\*{0,3}/gi, "")
     .replace(/[`*_#]/g, "")
@@ -37,14 +55,25 @@ export function sanitizeClientReply(reply: string) {
 
   const wordCount = cleanedReply.split(/\s+/).filter(Boolean).length;
   const replyWithoutFinalPunctuation = cleanedReply.replace(/[.!؟?…]+$/, "").trim();
+  const lastWord = replyWithoutFinalPunctuation.split(/\s+/).at(-1) ?? "";
   const endsWithIncompleteConnector = /(?:\b(?:من|إلى|الى|عن|مع|في|أو|او|و)\s*|\d{1,2}\s*)$/i.test(replyWithoutFinalPunctuation);
-  const hasPartialPriceRange = /(?:يصل|تصل|من|إلى|الى)\s+(?:[.،]\s*)?\d{1,2}$/i.test(replyWithoutFinalPunctuation);
+  const hasPartialPriceRange = /(?:(?:يصل|تصل)\s+(?:إلى|الى)\s*|(?:من|إلى|الى)\s+)\d{1,2}$/i.test(replyWithoutFinalPunctuation);
+  const endsWithPartialArabicWord = /^[\u0621-\u064A]{1,2}$/.test(lastWord);
+  const outputReachedLimit = finishReason === "MAX_TOKENS";
   const hasArabicText = /[\u0600-\u06ff]/.test(cleanedReply);
-  if (wordCount <= 2 || endsWithIncompleteConnector || hasPartialPriceRange || !hasArabicText) {
-    const opening = wordCount <= 2 && hasArabicText
-      ? cleanedReply.replace(/[،,:؛.!…\-]+$/, "")
-      : "أبشر";
-    return `${opening}، وضّح لي طلبك أو مشكلتك وسأعطيك جواباً مباشراً.`;
+  const endsWithIncompleteFragment = endsWithIncompleteConnector || hasPartialPriceRange || endsWithPartialArabicWord;
+  if (endsWithIncompleteFragment) {
+    return FALLBACK_COMPLETE_REPLY;
+  }
+
+  if (outputReachedLimit) {
+    return lastCompleteSentence(cleanedReply) || FALLBACK_COMPLETE_REPLY;
+  }
+
+  if (wordCount <= 2 || !hasArabicText) {
+    return wordCount <= 2 && hasArabicText
+      ? `${cleanedReply.replace(/[،,:؛.!…\-]+$/, "")}، وضّح لي طلبك أو مشكلتك وسأعطيك جواباً مباشراً.`
+      : FALLBACK_COMPLETE_REPLY;
   }
 
   return /[.!؟?…]$/.test(cleanedReply) ? cleanedReply : `${cleanedReply}.`;

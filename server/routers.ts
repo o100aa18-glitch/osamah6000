@@ -77,7 +77,10 @@ export const appRouter = router({
           const response = await invokeGemini(messages as any, CHAT_MODEL);
           
           const rawReply = response?.choices?.[0]?.message?.content || '';
-          const reply = sanitizeClientReply(rawReply || 'لم يصلني رد واضح هذه المرة. اكتب طلبك مرة أخرى بتفصيل بسيط وسأساعدك.');
+          const reply = sanitizeClientReply(
+            rawReply || 'لم يصلني رد واضح هذه المرة. اكتب طلبك مرة أخرى بتفصيل بسيط وسأساعدك.',
+            response.finishReason,
+          );
           
           return {
             success: true,
