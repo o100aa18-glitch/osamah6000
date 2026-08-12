@@ -5,7 +5,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { invokeGemini } from "./_core/llm-gemini";
 import { buildChatSystemPrompt, CHAT_MODEL, normalizeConversationHistory, sanitizeClientReply } from "./chatAssistant";
-import { buildCompositePricingReply } from "./compositeOrderPricing";
+import { buildCompositePricingReply, buildContextualPricingReply, buildPriceObjectionReply } from "./compositeOrderPricing";
 import { buildBookingReply } from "./bookingAssistant";
 
 export const appRouter = router({
@@ -41,6 +41,26 @@ export const appRouter = router({
           return {
             success: true,
             reply: compositePricingReply,
+            timestamp: new Date(),
+            model: CHAT_MODEL,
+          };
+        }
+
+        const contextualPricingReply = buildContextualPricingReply(conversationHistory, input.message);
+        if (contextualPricingReply) {
+          return {
+            success: true,
+            reply: contextualPricingReply,
+            timestamp: new Date(),
+            model: CHAT_MODEL,
+          };
+        }
+
+        const priceObjectionReply = buildPriceObjectionReply(conversationHistory, input.message);
+        if (priceObjectionReply) {
+          return {
+            success: true,
+            reply: priceObjectionReply,
             timestamp: new Date(),
             model: CHAT_MODEL,
           };

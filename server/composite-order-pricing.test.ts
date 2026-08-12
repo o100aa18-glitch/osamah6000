@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildCompositePricingReply, getRequestedPricedServices } from "./compositeOrderPricing";
+import { buildCompositePricingReply, buildContextualPricingReply, buildPriceObjectionReply, getRequestedPricedServices } from "./compositeOrderPricing";
 
 describe("composite service order pricing", () => {
   const history = [{
@@ -34,5 +34,30 @@ describe("composite service order pricing", () => {
     expect(reply).toContain("تأسيس كهرباء الغرفة: 180 ريال (4 نقاط)");
     expect(reply).toContain("تركيب خلاط مغسلة: 65 ريال");
     expect(reply).toContain("الإجمالي: 245 ريال");
+  });
+
+  it("switches the displayed mixer type when the client moves from basin to shower", () => {
+    const reply = buildContextualPricingReply(
+      [
+        { role: "user", content: "تركيب خلاط مغسلة" },
+        { role: "assistant", content: "تركيب خلاط مغسلة: 65 ريال." },
+      ],
+      "وخلاط دش",
+    );
+
+    expect(reply).toBe("تركيب خلاط دش: 65 ريال.");
+    expect(reply).not.toContain("مغسلة");
+  });
+
+  it("treats a short price objection as negotiation on the current service", () => {
+    const reply = buildPriceObjectionReply(
+      [
+        { role: "user", content: "وخلاط دش" },
+        { role: "assistant", content: "تركيب خلاط دش: 65 ريال." },
+      ],
+      "السعر غالي",
+    );
+
+    expect(reply).toBe("أبشر، إذا الخلاط جاهز والتركيب عادي أقدر أرتبه لك بـ55 ريال. يناسبك؟");
   });
 });
