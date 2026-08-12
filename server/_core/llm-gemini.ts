@@ -11,7 +11,7 @@ const getApiKey = () => {
   return key;
 };
 
-const FALLBACK_MODELS = ["gemini-2.5-flash", "gemini-flash-latest"];
+const FALLBACK_MODELS = ["gemini-flash-latest", "gemini-3.1-flash-lite"];
 
 export function getGeminiModelCandidates(preferredModel: string) {
   return [preferredModel, ...FALLBACK_MODELS].filter((model, index, models) => models.indexOf(model) === index);
@@ -67,7 +67,7 @@ export async function invokeGemini(messages: any[], model: string = 'gemini-3.5-
       const errorData = await response.json();
       console.error('[Gemini Error]', errorData);
       const error = new Error(`Gemini API error: ${response.status} - ${JSON.stringify(errorData)}`);
-      if (response.status === 429 || response.status >= 500) {
+      if (response.status === 404 || response.status === 429 || response.status >= 500) {
         lastError = error;
         console.warn(`[Gemini] Retrying with a fallback after ${candidateModel} was unavailable.`);
         continue;

@@ -5,8 +5,8 @@ describe("Gemini model fallback", () => {
   it("keeps the preferred model first and includes reliable fallbacks", () => {
     expect(getGeminiModelCandidates("gemini-3.5-flash")).toEqual([
       "gemini-3.5-flash",
-      "gemini-2.5-flash",
       "gemini-flash-latest",
+      "gemini-3.1-flash-lite",
     ]);
   });
 
@@ -14,6 +14,7 @@ describe("Gemini model fallback", () => {
     expect(getGeminiModelCandidates("gemini-2.5-flash")).toEqual([
       "gemini-2.5-flash",
       "gemini-flash-latest",
+      "gemini-3.1-flash-lite",
     ]);
   });
 });
